@@ -1,0 +1,42 @@
+site_name: Introduction to containers
+nav:
+    - Home: index.md
+    - Precourse preparations: precourse.md
+    - Course schedule: course_schedule.md
+    - Course material:
+      - Introduction to containers: course_material/introduction_containers.md
+      - Running a container: course_material/running.md
+      - Working with dockerfiles: course_material/dockerfiles.md
+      - Running containers with singularity: course_material/singularity.md
+
+theme:
+  name: material
+  logo: assets/images/SIB_logo.svg
+  favicon: assets/images/SIB_logo.svg
+
+# Repository
+repo_name: GeertvanGeest/course_website_template
+repo_url: https://github.com/GeertvanGeest/course_website_template
+edit_uri: ""
+
+markdown_extensions:
+  - abbr
+  - def_list
+  - footnotes
+  - tables
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - sane_lists
+  - smarty
+  - toc
+  - pymdownx.superfences
+  - attr_list
+  - pymdownx.tabbed
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+extra_css:
+  - stylesheets/extra.css
