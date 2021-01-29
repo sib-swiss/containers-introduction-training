@@ -5,11 +5,35 @@
 
 ## Exercises
 
+### Login to remote
+
+If you are enrolled in the course, you have received an e-mail with an IP, username, private key and password. To do the Singularity exercises we will login to a remote server. Below you can find instructions on how to login.
+
+=== "mac OS/Linux"
+    Open a terminal, and `cd` to the directory where you have stored your private key. After that, change the file permissions of the key:
+
+    ```sh
+    chmod 400 key_<username>.pem
+    ```
+
+    Then, login like this:
+
+    ```sh
+    ssh -i key_<username>.pem <username>@<IP>
+    ```
+
+=== "Windows"
+    Below you can find video tutorials and information to log in with MobaXterm.
+
+    MobaXterm is an SSH client for Windows. You can use it to connect to the remote host and edit remote scripts. With MobaXterm, you will automatically login to the remote server once you've started the SSH session. Set it up on your own computer using your own credentials and the video below.
+
+    <iframe src="https://player.vimeo.com/video/473838657" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+
 ### Pulling an image
 
-Singularity can take many several image formats (e.g. a `docker` image), and convert them into it's own `.sif` format. Unlike `docker` this image doesn't live in a local image cache, but it's stored as an actual file.
+Singularity can take several image formats (e.g. a `docker` image), and convert them into it's own `.sif` format. Unlike `docker` this image doesn't live in a local image cache, but it's stored as an actual file.
 
-Pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](../dockerfiles/#using-cmd) (`ubuntu-figlet-df:v2`) with `singularity pull`. The syntax is:
+**Exercise:** On the remote server, pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](../dockerfiles/#using-cmd) (`ubuntu-figlet-df:v2`) with `singularity pull`. The syntax is:
 
 ```sh
 singularity pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
