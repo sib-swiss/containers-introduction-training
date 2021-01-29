@@ -1,5 +1,11 @@
+## Material
 
-## Restarting an exited container
+* [More on bind mounts](https://docs.docker.com/storage/bind-mounts/)
+* [Docker volumes in general](https://docs.docker.com/storage/volumes/)
+
+## Exercises
+
+### Restarting an exited container
 
 If you would like to go back to your container with the `figlet` installation, you could try to run again:
 
@@ -28,7 +34,7 @@ docker run -it ubuntu
 
     In this case the container `great_moser` contains the `figlet` installation. But we have exited that container. We created a new container (`kind_mendel` in this case) with a fresh environment created from the original `ubuntu` image.
 
-To restart your first created container, you'll have to look up it's name. You can find it in the Docker dashboard, or with `docker container ls -a`.
+To restart your first created container, you'll have to look up its name. You can find it in the Docker dashboard, or with `docker container ls -a`.
 
 !!! hint "Container names"
     The container name is the funny combination of two words separated by `_`, e.g.: `nifty_sinoussi`. Alternatively you can use the container ID (the first column of the output of `docker container ls`)
@@ -58,7 +64,16 @@ And you're back in the container shell.
 
     Should give you output.
 
-## Creating a new image
+!!! note "`docker attach` and `docker exec`"
+    In addition to `docker attach`, you can also "re-attach" a container with `docker exec`. However, these two are quite different. While `docker attach` gets you back to your stopped shell process, `docker exec` creates a new one (more information on [stackoverflow](https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec)). The command `docker exec` enables you therefore to have multiple shells open in the same container. That can be convenient if you have one shell open with a program running in the foreground, and another one for e.g. monitoring. An example for using `docker exec` on a running container:
+
+    ```sh
+    docker exec -it [CONTAINER NAME] /bin/bash
+    ```
+
+    Note that  `docker exec` requires a CMD, it doesn't take a default.
+
+### Creating a new image
 
 You can store your changes and create a new image based on the `ubuntu` image like this:
 
@@ -89,9 +104,9 @@ docker run -it ubuntu-figlet
 ??? done "Answer"
     yes
 
-## Commands
+### Commands
 
-The second positional argument of `docker run` can be a command followed by it's arguments. So, we could run a container non-interactively (without `-it`), and just let it run a single command:
+The second positional argument of `docker run` can be a command followed by its arguments. So, we could run a container non-interactively (without `-it`), and just let it run a single command:
 
 ```sh
 docker run ubuntu-figlet figlet "non-interactive run"
@@ -115,7 +130,7 @@ In the previous exercises we have run containers without a command as positional
     ```
     The first part in the list following `"Cmd":` is the shell in which the command is executed (`/bin/sh -c`; i.e. *Bourne shell*), the second part, following `CMD`, is the default command. In the case of the ubuntu image this is `/bin/bash`, returning a shell in `bash` (i.e. *Bourne again shell* in stead of `sh`). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](dockerfiles.md).
 
-## Removing containers
+### Removing containers
 
 In the meantime, with every call of `docker run` we have created a new container (check your containers with `docker container ls -a`). You probably don't want to remove those one-by-one. The commands `docker container prune` and `docker image prune` removes stopped containers and dangling images respectively. So, remove your stopped containers with:
 
@@ -128,3 +143,76 @@ Unless you're developing further on a container, or you're using it for an analy
 ```sh
 docker run --rm ubuntu-figlet figlet "non-interactive run"
 ```
+
+### Pushing to dockerhub
+
+Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.
+
+Before pushing an image to dockerhub, `docker` has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: `user/imagename`. We can rename an image with `docker tag` (which is a bit of misleading name for the command). So we could push to dockerhub like this:
+
+```
+docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
+docker push [USER NAME]/ubuntu-figlet
+```
+
+We didn't specify the tag for our new image. That's why `docker tag` gave it the default tag called `latest`. Pushing an image without a tag will overwrite the current image with the tag `latest` (more on (not) using `latest` [here](https://vsupalov.com/docker-latest-tag/)). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to dockerhub:
+
+```
+docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet:v1
+docker push [USER NAME]/ubuntu-figlet:v1
+```
+
+### Mounting a directory
+
+For many analyses you do calculations with files or scripts that are on your local computer. But how do you make them available to a docker container? You can do that in several ways, but here we will use bind-mount. You can bind-mount a directory with `-v` (`--volume`) or `--mount`. Most old-school `docker` users will use `-v`, but `--mount` syntax is easier to understand and now recommended, so we will use the latter here:
+
+```sh
+docker run \
+--mount type=bind,source=/local/source/path,target=/path/in/container \
+image_name
+```
+
+The target directory will be created if it does not yet exist. The source directory should exist.
+
+!!! note "Using docker from Windows PowerShell"
+    Most of the syntax for `docker` is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by `\` instead of `/`. Also, line breaks are not escaped by `\` but by `.
+
+**Exercise:** Mount a local directory to a target directory `/working_dir` in a container created from the `ubuntu-figlet` image and run it interactively. Check whether the target directory has been created.
+
+??? done "Answer"
+    e.g. on Mac OS this would be:
+
+    ```sh
+    docker run \
+    -it \
+    --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
+    ubuntu-figlet
+    ```
+
+    This creates a directory called `working_dir` in the root directory (`/`):
+
+    ```
+    root@8d80a8698865:/# ls
+    bin   dev  home  lib32  libx32  mnt  proc  run   srv  tmp  var
+    boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
+    ```
+
+This mounted directory is both available locally and for the container. You can therefore e.g. copy files in there, and write output generated by the container.
+
+**Exercise:** Write the output of `figlet "testing mounted dir"` to a file in `/working_dir`. Check whether it is available locally in the source directory.
+
+!!! hint
+    You can write the output of `figlet` to a file like this:
+    ```sh
+    figlet "some string" > file.txt
+    ```
+
+??? done "Answer"
+    ```
+    root@8d80a8698865:/# figlet "testing mounted dir" > /working_dir/figlet_output.txt
+    ```
+
+    This should create a file in both your local source directory and the target directory in the container called `figlet_output.txt`.
+
+!!! note "Using local files"
+    This of course also works the other way around. If you would have a file locally with e.g. a text, you can copy it into your local mounted directory, and it would be available to the container.
