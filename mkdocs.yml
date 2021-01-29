@@ -5,7 +5,7 @@ nav:
     - Course schedule: course_schedule.md
     - Course material:
       - Introduction to containers: course_material/introduction_containers.md
-      - Managing containers and images: course_material/running.md
+      - Managing containers and images: course_material/managing_docker.md
       - Working with dockerfiles: course_material/dockerfiles.md
       - Running containers with singularity: course_material/singularity.md
 

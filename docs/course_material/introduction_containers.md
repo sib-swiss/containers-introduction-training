@@ -1,4 +1,4 @@
-## Material 
+## Material
 
 ## Exercises
 
@@ -35,7 +35,7 @@ This will give you an interactive shell into the created container (this interac
 !!! note "Where does the image come from?"
     If the image `ubuntu` was not on your computer yet, `docker` will search and try to get them from [dockerhub](https://hub.docker.com/), and download it.
 
-Check out the container panel at the Docker dashboard or open another local shell and type:
+Check out the container panel at the Docker dashboard or open another host terminal and type:
 
 ```
 docker container ls -a
@@ -75,7 +75,7 @@ Now let's try it out:
 figlet "SIB courses are great!"
 ```
 
-Now you have installed and used software `figlet` in an `ubuntu` environment completely separated from your local computer. This already gives you an idea of the power of containerization.
+Now you have installed and used software `figlet` in an `ubuntu` environment completely separated from your host computer. This already gives you an idea of the power of containerization.
 
 Exit the shell by typing `exit`. Check out the container panel of Docker dashboard or type:
 

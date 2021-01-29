@@ -81,17 +81,17 @@ Running the command `pwd` (full name of current working directory) will therefor
 ./ubuntu-figlet-df_v2.sif pwd
 ```
 
-**Exercise:** Run the above command. What is the output? How would the output look from a Docker container?
+**Exercise:** Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?
 
 !!! hint
-    You can also just test what the output is of the docker container (run this on your local computer):
+    A similar Docker command would look like (run this on your local computer):
 
     ```sh
     docker run --rm ubuntu-figlet-df:v2 pwd
     ```
 
 ??? done "Answer"
-    The output of `./ubuntu-figlet-df_v2.sif pwd` is the current directory on the host: `/home/username` if you have it in your home directory. The output of `docker run --rm ubuntu-figlet-df:v2 pwd` (on the local host) would be `/`, which is the default workdir (root directory) of the container, and is path within the container (i.e. separated from the host).
+    The output of `./ubuntu-figlet-df_v2.sif pwd` is the current directory on the host: i.e. `/home/username` if you have it in your home directory. The output of `docker run --rm ubuntu-figlet-df:v2 pwd` (on the local host) would be `/`, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).
 
 ### Interactive shell
 
@@ -118,7 +118,7 @@ singularity shell ubuntu-figlet-df_v2.sif
 
     ```
 
-### A more bioinformatics example
+### A bioinformatics example (extra)
 
 Pull an image that contains some bioinformatics tools (this will take a few minutes):
 

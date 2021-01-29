@@ -8,7 +8,7 @@ To make your images shareable and adjustable, it's good practice to work with a 
 
 ### Basic `Dockerfile`
 
-You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with **`FROM`** that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with **`RUN`**.  In our `figlet` example that would be:
+You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with `FROM` that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with `RUN`.  In our `figlet` example that would be:
 
 ```dockerfile
 FROM ubuntu
@@ -55,7 +55,7 @@ What has happened? What is the name of the build image?
 
 ### Using `CMD`
 
-As you might remember the second positional argument of `docker run` is a command. If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
+As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
 FROM ubuntu
@@ -127,7 +127,7 @@ CMD figlet "My image works!"
     docker push [USER NAME]/ubuntu-figlet-df:v2
     ```
 
-### A more real-world example
+### A more real-world example (extra)
 
 You might have gotten enough of `figlet`. Let's do something more fancy. Check out this `Dockerfile`:
 
