@@ -1,0 +1,710 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.2">
+    
+    
+      
+        <title>Managing containers and images - Introduction to containers</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f72e892.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#material" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Introduction to containers" class="md-header-nav__button md-logo" aria-label="Introduction to containers">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Introduction to containers
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Managing containers and images
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introduction to containers" class="md-nav__button md-logo" aria-label="Introduction to containers">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to containers
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../precourse/" class="md-nav__link">
+      Precourse preparations
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../course_schedule/" class="md-nav__link">
+      Course schedule
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Course material
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Course material" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Course material
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../introduction_containers/" class="md-nav__link">
+      Introduction to containers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Managing containers and images
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Managing containers and images
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restarting-an-exited-container" class="md-nav__link">
+    Restarting an exited container
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-image" class="md-nav__link">
+    Creating a new image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-containers" class="md-nav__link">
+    Removing containers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pushing-to-dockerhub" class="md-nav__link">
+    Pushing to dockerhub
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-a-directory" class="md-nav__link">
+    Mounting a directory
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../dockerfiles/" class="md-nav__link">
+      Working with dockerfiles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../singularity/" class="md-nav__link">
+      Running containers with singularity
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restarting-an-exited-container" class="md-nav__link">
+    Restarting an exited container
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-image" class="md-nav__link">
+    Creating a new image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-containers" class="md-nav__link">
+    Removing containers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pushing-to-dockerhub" class="md-nav__link">
+    Pushing to dockerhub
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-a-directory" class="md-nav__link">
+    Mounting a directory
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Managing containers and images</h1>
+                
+                <h2 id="material">Material</h2>
+<ul>
+<li><a href="https://docs.docker.com/storage/bind-mounts/">More on bind mounts</a></li>
+<li><a href="https://docs.docker.com/storage/volumes/">Docker volumes in general</a></li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<h3 id="restarting-an-exited-container">Restarting an exited container</h3>
+<p>If you would like to go back to your container with the <code>figlet</code> installation, you could try to run again:</p>
+<div class="highlight"><pre><span></span><code>docker run -it ubuntu
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command. Is your <code>figlet</code> installation still there? Why?</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Check the status of your containers:</p>
+<div class="highlight"><pre><span></span><code>docker container ls -a
+</code></pre></div>
+</div>
+<details class="done"><summary>Answer</summary><p>No, the installation is gone. Another container was created from the same ubuntu image, without the <code>figlet</code> installation.
+Running the command <code>docker container ls -a</code> results in:</p>
+<div class="highlight"><pre><span></span><code>CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
+8d7c4c611b70   ubuntu    &quot;/bin/bash&quot;   About a minute ago   Up About a minute                    kind_mendel
+27f7d11608de   ubuntu    &quot;/bin/bash&quot;   27 minutes ago       Exited (0) 2 minutes ago             great_moser
+</code></pre></div>
+<p>In this case the container <code>great_moser</code> contains the <code>figlet</code> installation. But we have exited that container. We created a new container (<code>kind_mendel</code> in this case) with a fresh environment created from the original <code>ubuntu</code> image.</p>
+</details>
+<p>To restart your first created container, you&rsquo;ll have to look up its name. You can find it in the Docker dashboard, or with <code>docker container ls -a</code>.</p>
+<div class="admonition hint">
+<p class="admonition-title">Container names</p>
+<p>The container name is the funny combination of two words separated by <code>_</code>, e.g.: <code>nifty_sinoussi</code>. Alternatively you can use the container ID (the first column of the output of <code>docker container ls</code>)</p>
+</div>
+<p>To restart a container you can use:</p>
+<div class="highlight"><pre><span></span><code>docker start <span class="o">[</span>CONTAINER NAME<span class="o">]</span>
+</code></pre></div>
+<p>And after that to re-attach to the shell:</p>
+<div class="highlight"><pre><span></span><code>docker attach <span class="o">[</span>CONTAINER NAME<span class="o">]</span>
+</code></pre></div>
+<p>And you&rsquo;re back in the container shell.</p>
+<p><strong>Exercise:</strong> Run the <code>docker start</code> and <code>docker attach</code> commands for the container that is supposed to contain the <code>figlet</code> installation. Is the installation of <code>figlet</code> still there?</p>
+<details class="done"><summary>Answer</summary><p>yes:</p>
+<div class="highlight"><pre><span></span><code>figlet <span class="s1">&#39;try some more text!&#39;</span>
+</code></pre></div>
+<p>Should give you output.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title"><code>docker attach</code> and <code>docker exec</code></p>
+<p>In addition to <code>docker attach</code>, you can also &ldquo;re-attach&rdquo; a container with <code>docker exec</code>. However, these two are quite different. While <code>docker attach</code> gets you back to your stopped shell process, <code>docker exec</code> creates a new one (more information on <a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec">stackoverflow</a>). The command <code>docker exec</code> enables you therefore to have multiple shells open in the same container. That can be convenient if you have one shell open with a program running in the foreground, and another one for e.g. monitoring. An example for using <code>docker exec</code> on a running container:</p>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> -it <span class="o">[</span>CONTAINER NAME<span class="o">]</span> /bin/bash
+</code></pre></div>
+<p>Note that  <code>docker exec</code> requires a CMD, it doesn&rsquo;t use the default.</p>
+</div>
+<h3 id="creating-a-new-image">Creating a new image</h3>
+<p>You can store your changes and create a new image based on the <code>ubuntu</code> image like this:</p>
+<div class="highlight"><pre><span></span><code>docker commit <span class="o">[</span>CONTAINER NAME<span class="o">]</span> ubuntu-figlet
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command with the name of the container containing the <code>figlet</code> installation. Check out <code>docker image ls</code>. What have we just created?</p>
+<details class="done"><summary>Answer</summary><p>A new image called <code>ubuntu-figlet</code> based on the status of the container.
+The output of <code>docker image ls</code> should look like:</p>
+<div class="highlight"><pre><span></span><code>REPOSITORY                        TAG       IMAGE ID       CREATED         SIZE
+ubuntu-figlet                     latest    e08b999c7978   4 seconds ago   101MB
+ubuntu                            latest    f63181f19b2f   29 hours ago    72.9MB
+</code></pre></div>
+</details>
+<p>Now you can generate a new container based on the new image:</p>
+<div class="highlight"><pre><span></span><code>docker run -it ubuntu-figlet
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command. Is the <code>figlet</code> installation in the created container?</p>
+<details class="done"><summary>Answer</summary><p>yes</p>
+</details>
+<h3 id="commands">Commands</h3>
+<p>The second positional argument of <code>docker run</code> can be a command followed by its arguments. So, we could run a container non-interactively (without <code>-it</code>), and just let it run a single command:</p>
+<div class="highlight"><pre><span></span><code>docker run ubuntu-figlet figlet <span class="s1">&#39;non-interactive run&#39;</span>
+</code></pre></div>
+<p>Resulting in just the output of the <code>figlet</code> command.</p>
+<p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
+<p><strong>Exercise:</strong> What is the default command (<code>CMD</code>) of the ubuntu image?</p>
+<details class="done"><summary>Answer</summary><p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):
+<div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
+           &quot;/bin/sh&quot;,
+           &quot;-c&quot;,
+           &quot;#(nop) &quot;,
+           &quot;CMD [\&quot;/bin/bash\&quot;]&quot;
+       ],
+</code></pre></div>
+The first part in the list following <code>"Cmd":</code> is the shell in which the command is executed (<code>/bin/sh -c</code>; i.e. <em>Bourne shell</em>), the second part, following <code>CMD</code>, is the default command. In the case of the ubuntu image this is <code>/bin/bash</code>, returning a shell in <code>bash</code> (i.e. <em>Bourne again shell</em> in stead of <code>sh</code>). Adding the options <code>-i</code> and <code>-t</code> (<code>-it</code>) to your <code>docker run</code> command will therefore result in an interactive <code>bash</code> shell. You can modify this default behaviour. More on that later, when we will work on <a href="../dockerfiles/">Dockerfiles</a>.</p>
+</details>
+<h3 id="removing-containers">Removing containers</h3>
+<p>In the meantime, with every call of <code>docker run</code> we have created a new container (check your containers with <code>docker container ls -a</code>). You probably don&rsquo;t want to remove those one-by-one. These two commands are very useful to clean up your Docker cache:</p>
+<ul>
+<li><code>docker container prune</code>: removes stopped containers</li>
+<li><code>docker image prune</code>: removes dangling images (i.e. images without a name)</li>
+</ul>
+<p>So, remove your stopped containers with:</p>
+<div class="highlight"><pre><span></span><code>docker container prune
+</code></pre></div>
+<p>Unless you&rsquo;re developing further on a container, or you&rsquo;re using it for an analysis, you probably want to get rid of it once you have exited the container. You can do this with adding <code>--rm</code> to your <code>docker run</code> command, e.g.:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet figlet <span class="s1">&#39;non-interactive run&#39;</span>
+</code></pre></div>
+<h3 id="pushing-to-dockerhub">Pushing to dockerhub</h3>
+<p>Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.</p>
+<p>Before pushing an image to dockerhub, <code>docker</code> has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: <code>user/imagename</code>. We can rename an image with <code>docker tag</code> (which is a bit of misleading name for the command). So we could push to dockerhub like this:</p>
+<div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
+docker push [USER NAME]/ubuntu-figlet
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">How docker makes money</p>
+<p>All images pushed to dockerhub are open to the world. With a free account you can have one image on dockerhub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to dockerhub, you can store images locally with <a href="https://docs.docker.com/engine/reference/commandline/save/"><code>docker save</code></a>.</p>
+</div>
+<p>We didn&rsquo;t specify the tag for our new image. That&rsquo;s why <code>docker tag</code> gave it the default tag called <code>latest</code>. Pushing an image without a tag will overwrite the current image with the tag <code>latest</code> (more on (not) using <code>latest</code> <a href="https://vsupalov.com/docker-latest-tag/">here</a>). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to dockerhub:</p>
+<div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet:v1
+docker push [USER NAME]/ubuntu-figlet:v1
+</code></pre></div>
+<h3 id="mounting-a-directory">Mounting a directory</h3>
+<p>For many analyses you do calculations with files or scripts that are on your host (local) computer. But how do you make them available to a docker container? You can do that in several ways, but here we will use bind-mount. You can bind-mount a directory with <code>-v</code> (<code>--volume</code>) or <code>--mount</code>. Most old-school <code>docker</code> users will use <code>-v</code>, but <code>--mount</code> syntax is easier to understand and now recommended, so we will use the latter here:</p>
+<div class="highlight"><pre><span></span><code>docker run <span class="se">\</span>
+--mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/host/source/path,target<span class="o">=</span>/path/in/container <span class="se">\</span>
+<span class="o">[</span>IMAGE<span class="o">]</span>
+</code></pre></div>
+<p>The target directory will be created if it does not yet exist. The source directory should exist.</p>
+<div class="admonition note">
+<p class="admonition-title">Using docker from Windows PowerShell</p>
+<p>Most of the syntax for <code>docker</code> is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by <code>\</code> instead of <code>/</code>. Also, line breaks are not escaped by <code>\</code> but by `.</p>
+</div>
+<p><strong>Exercise:</strong> Mount a host (local) directory to a target directory <code>/working_dir</code> in a container created from the <code>ubuntu-figlet</code> image and run it interactively. Check whether the target directory has been created.</p>
+<details class="done"><summary>Answer</summary><p>e.g. on Mac OS this would be:</p>
+<div class="highlight"><pre><span></span><code>docker run <span class="se">\</span>
+-it <span class="se">\</span>
+--mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/Users/myusername/working_dir,target<span class="o">=</span>/working_dir/ <span class="se">\</span>
+ubuntu-figlet
+</code></pre></div>
+<p>This creates a directory called <code>working_dir</code> in the root directory (<code>/</code>):</p>
+<div class="highlight"><pre><span></span><code>root@8d80a8698865:/# ls
+bin   dev  home  lib32  libx32  mnt  proc  run   srv  tmp  var
+boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
+</code></pre></div>
+</details>
+<p>This mounted directory is both available for the host (locally) and for the container. You can therefore e.g. copy files in there, and write output generated by the container.</p>
+<p><strong>Exercise:</strong> Write the output of <code>figlet "testing mounted dir"</code> to a file in <code>/working_dir</code>. Check whether it is available on the host (locally) in the source directory.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can write the output of <code>figlet</code> to a file like this:
+<div class="highlight"><pre><span></span><code>figlet <span class="s1">&#39;some string&#39;</span> &gt; file.txt
+</code></pre></div></p>
+</div>
+<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>root@8d80a8698865:/# figlet &quot;testing mounted dir&quot; &gt; /working_dir/figlet_output.txt
+</code></pre></div>
+<p>This should create a file in both your host (local) source directory and the target directory in the container called <code>figlet_output.txt</code>.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Using files on the host</p>
+<p>This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../introduction_containers/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Introduction to containers
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../dockerfiles/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Working with dockerfiles
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../../assets/javascripts/bundle.9554a270.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
