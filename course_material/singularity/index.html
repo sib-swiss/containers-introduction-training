@@ -561,24 +561,20 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <p class="admonition-title">Note</p>
 <p>To exit the shell type <code>exit</code>.</p>
 </div>
-<p><strong>Exercise:</strong> Can you run figlet inside this shell?</p>
+<p><strong>Exercise:</strong> Can you run <code>figlet</code> inside this shell?</p>
 <details class="done"><summary>Answer</summary><p>Yes:
-<div class="highlight"><pre><span></span><code>Singularity&gt; figlet <span class="nb">test</span>
+<div class="highlight"><pre><span></span><code>Singularity&gt; figlet test
  _            _
-<span class="p">|</span> <span class="p">|</span>_ ___  ___<span class="p">|</span> <span class="p">|</span>_
-<span class="p">|</span> __/ _ <span class="se">\/</span> __<span class="p">|</span> __<span class="p">|</span>
-<span class="p">|</span> <span class="o">||</span>  __/<span class="se">\_</span>_ <span class="se">\ </span><span class="p">|</span>_
- <span class="se">\_</span>_<span class="se">\_</span>__<span class="o">||</span>___/<span class="se">\_</span>_<span class="p">|</span>
+| |_ ___  ___| |_
+| __/ _ \/ __| __|
+| ||  __/\__ \ |_
+ \__\___||___/\__|
 </code></pre></div></p>
 </details>
 <h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
-<p>Pull an image that contains some bioinformatics tools (this will take a few minutes):</p>
+<p>Pull the image <code>geertvangeest/fastqc:v1</code> that contains an installation of <a href="https://docs.conda.io/en/latest/"><code>conda</code></a> and <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"><code>fastqc</code></a> (this will take a few minutes):</p>
 <div class="highlight"><pre><span></span><code>singularity pull docker://geertvangeest/fastqc:v1
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The above image contains an installation of <a href="https://docs.conda.io/en/latest/"><code>conda</code></a> and <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"><code>fastqc</code></a>.</p>
-</div>
 <p>Download some sample reads to test the image:</p>
 <div class="highlight"><pre><span></span><code>mkdir reads
 <span class="nb">cd</span> reads
