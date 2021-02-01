@@ -61,7 +61,7 @@ As you might remember the second positional argument of `docker run` is a comman
 FROM ubuntu
 RUN apt-get update
 RUN apt-get install figlet
-CMD figlet "My image works!"
+CMD figlet 'My image works!'
 ```
 
 **Exercise:** Build a new image based on the above `Dockerfile`. Can you validate the change using `docker image inspect`? Can you overwrite this default with `docker run`?
@@ -77,13 +77,13 @@ CMD figlet "My image works!"
 
     ```
     "Cmd": [
-                "/bin/sh",
-                "-c",
-                "figlet \"My image works!\""
-            ],
+        "/bin/sh",
+        "-c",
+        "figlet 'My image works!'"
+    ]
     ```
 
-    So the default command (`/bin/bash`) has changed to `figlet \"My image works!\"`
+    So the default command (`/bin/bash`) has changed to `figlet 'My image works!'`
 
     Running the image (with clean-up (`--rm`)):
 
@@ -105,7 +105,7 @@ CMD figlet "My image works!"
     And of course you can overwrite the default command:
 
     ```sh
-    docker run --rm ubuntu-figlet-df:v2 figlet "another text"
+    docker run --rm ubuntu-figlet-df:v2 figlet 'another text'
     ```
 
     Resulting in:
@@ -119,7 +119,26 @@ CMD figlet "My image works!"
 
     ```
 
-**Exercise:** Now push this image (with a version tag) to docker hub. We will use it later for the [`singularity` exercises](singularity.md).
+!!! note "Two flavours of `CMD`"
+    You have seen in the output of `docker inspect` that docker translates the command (i.e. `figlet "my image works!"`) into this: `["/bin/sh", "-c", "figlet 'My image works!'"]`. The notation we used in the `Dockerfile` is the *shell notation* while the notation with the square brackets (`[]`) is the *exec-notation*. You can use both notations in your `Dockerfile`. Altough the *shell notation* is more readable, the *exec notation* is directly used by the image, and therefore less ambiguous.
+
+    A `Dockerfile` with shell notation:
+    ```dockerfile
+    FROM ubuntu
+    RUN apt-get update
+    RUN apt-get install figlet
+    CMD figlet 'My image works!'
+    ```
+
+    A `Dockerfile` with exec notation:
+    ```dockerfile
+    FROM ubuntu
+    RUN apt-get update
+    RUN apt-get install figlet
+    CMD ["/bin/sh", "-c", "figlet 'My image works!'"]
+    ```
+
+**Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`singularity` exercises](singularity.md).
 
 ??? done "Answer"
     ```sh

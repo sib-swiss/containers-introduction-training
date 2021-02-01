@@ -59,7 +59,7 @@ And you're back in the container shell.
     yes:
 
     ```sh
-    figlet "try some more text!"
+    figlet 'try some more text!'
     ```
 
     Should give you output.
@@ -109,7 +109,7 @@ docker run -it ubuntu-figlet
 The second positional argument of `docker run` can be a command followed by its arguments. So, we could run a container non-interactively (without `-it`), and just let it run a single command:
 
 ```sh
-docker run ubuntu-figlet figlet "non-interactive run"
+docker run ubuntu-figlet figlet 'non-interactive run'
 ```
 
 Resulting in just the output of the `figlet` command.
@@ -146,7 +146,7 @@ docker container prune
 Unless you're developing further on a container, or you're using it for an analysis, you probably want to get rid of it once you have exited the container. You can do this with adding `--rm` to your `docker run` command, e.g.:
 
 ```sh
-docker run --rm ubuntu-figlet figlet "non-interactive run"
+docker run --rm ubuntu-figlet figlet 'non-interactive run'
 ```
 
 ### Pushing to dockerhub
@@ -159,6 +159,9 @@ Before pushing an image to dockerhub, `docker` has to know to which user and whi
 docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
 docker push [USER NAME]/ubuntu-figlet
 ```
+
+!!! note "How docker makes money"
+    All images pushed to dockerhub are open to the world. With a free account you can have one image on dockerhub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to dockerhub, you can store images locally with [`docker save`](https://docs.docker.com/engine/reference/commandline/save/).
 
 We didn't specify the tag for our new image. That's why `docker tag` gave it the default tag called `latest`. Pushing an image without a tag will overwrite the current image with the tag `latest` (more on (not) using `latest` [here](https://vsupalov.com/docker-latest-tag/)). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to dockerhub:
 
@@ -174,7 +177,7 @@ For many analyses you do calculations with files or scripts that are on your hos
 ```sh
 docker run \
 --mount type=bind,source=/host/source/path,target=/path/in/container \
-image_name
+[IMAGE]
 ```
 
 The target directory will be created if it does not yet exist. The source directory should exist.
@@ -209,7 +212,7 @@ This mounted directory is both available for the host (locally) and for the cont
 !!! hint
     You can write the output of `figlet` to a file like this:
     ```sh
-    figlet "some string" > file.txt
+    figlet 'some string' > file.txt
     ```
 
 ??? done "Answer"

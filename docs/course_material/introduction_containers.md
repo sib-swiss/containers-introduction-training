@@ -35,7 +35,12 @@ This will give you an interactive shell into the created container (this interac
 !!! note "Where does the image come from?"
     If the image `ubuntu` was not on your computer yet, `docker` will search and try to get them from [dockerhub](https://hub.docker.com/), and download it.
 
-Check out the container panel at the Docker dashboard or open another host terminal and type:
+**Exercise:** Run the command `whoami` in the docker container. Who are you?
+
+??? done "Answer"
+    The command `whoami` returns the current user. In the container `whoami` will return `root`. This means you are the [`root` user](https://en.wikipedia.org/wiki/Superuser) i.e. within the container you are admin and can basically change anything.  
+
+Check out the container panel at the Docker dashboard (the Docker gui) or open another host terminal and type:
 
 ```
 docker container ls -a
@@ -59,7 +64,7 @@ docker container ls -a
 
     Also showing you that the `STATUS` is `Up`.
 
-Now let's install some software in our `ubuntu` environment. We'll install some simple software called [`figlet`](http://www.figlet.org/):
+Now let's install some software in our `ubuntu` environment. We'll install some simple software called [`figlet`](http://www.figlet.org/). Type into the container shell:
 
 ```sh
 apt-get update
@@ -69,10 +74,10 @@ apt-get install figlet
 !!! note "This will give some warnings"
     This installation will give some warnings. It's safe to ignore them.
 
-Now let's try it out:
+Now let's try it out. Type into the container shell:
 
 ```sh
-figlet "SIB courses are great!"
+figlet 'SIB courses are great!'
 ```
 
 Now you have installed and used software `figlet` in an `ubuntu` environment completely separated from your host computer. This already gives you an idea of the power of containerization.

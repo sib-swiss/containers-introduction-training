@@ -1,5 +1,7 @@
 # Course website
 
+This course is partly inspired by the course material available from the [Docker course](https://carpentries-incubator.github.io/docker-introduction/index.html) of the [Carpentries community developed lessons](https://carpentries.org/community-lessons/). 
+
 ## Material
 
 * This website

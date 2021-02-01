@@ -7,7 +7,7 @@ As is stated in the course prerequisites at the [announcement web page](https://
 
 Install `docker` on your local computer and create an account on [dockerhub](hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use `docker`, and if you are installing `docker` on Windows, you need a recent Windows version.
 
-We will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/]))  Elastic Cloud (EC2) server. Our Ubuntu server behaves like a 'normal' remote server, and can be approached through `ssh` with a username, key and IP address. All participants will be granted access to a personal home directory.
+In addition to your local computer, we will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/]))  Elastic Cloud (EC2) server. Our Ubuntu server behaves like a 'normal' remote server, and can be approached through `ssh` with a username, key and IP address. All participants will be granted access to a personal home directory.
 
 Before the course, make sure you can comfortably work on a remote server. This means that you can approach it through the shell, modify scripts and transfer files. We can recommend `atom` for Linux and Mac, and MobaXterm for Windows. Therefore, install on your computer:
 
