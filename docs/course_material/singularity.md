@@ -128,11 +128,11 @@ singularity shell ubuntu-figlet-df_v2.sif
 !!! note
     To exit the shell type `exit`.
 
-**Exercise:** Can you run figlet inside this shell?
+**Exercise:** Can you run `figlet` inside this shell?
 
 ??? done "Answer"
     Yes:
-    ```sh
+    ```
     Singularity> figlet test
      _            _
     | |_ ___  ___| |_
@@ -144,14 +144,11 @@ singularity shell ubuntu-figlet-df_v2.sif
 
 ### A bioinformatics example (extra)
 
-Pull an image that contains some bioinformatics tools (this will take a few minutes):
+Pull the image `geertvangeest/fastqc:v1` that contains an installation of [`conda`](https://docs.conda.io/en/latest/) and [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) (this will take a few minutes):
 
 ```sh
 singularity pull docker://geertvangeest/fastqc:v1
 ```
-
-!!! note
-    The above image contains an installation of [`conda`](https://docs.conda.io/en/latest/) and [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 
 Download some sample reads to test the image:
 
