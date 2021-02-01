@@ -15,8 +15,8 @@ theme:
   favicon: assets/images/SIB_logo.svg
 
 # Repository
-repo_name: GeertvanGeest/course_website_template
-repo_url: https://github.com/GeertvanGeest/course_website_template
+repo_name: sib-swiss/containers-introduction-training
+repo_url: https://github.com/sib-swiss/containers-introduction-training
 edit_uri: ""
 
 markdown_extensions:
