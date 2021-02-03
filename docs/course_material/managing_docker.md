@@ -1,5 +1,8 @@
 ## Material
 
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/managing_docker.pdf){: .md-button }
+
+* [Overview of how docker works](https://docs.docker.com/get-started/overview/)
 * [More on bind mounts](https://docs.docker.com/storage/bind-mounts/)
 * [Docker volumes in general](https://docs.docker.com/storage/volumes/)
 
