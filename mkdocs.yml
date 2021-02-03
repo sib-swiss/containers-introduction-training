@@ -13,11 +13,13 @@ theme:
   name: material
   logo: assets/images/SIB_logo.svg
   favicon: assets/images/SIB_logo.svg
+  icon:
+    repo: fontawesome/brands/github
 
 # Repository
 repo_name: sib-swiss/containers-introduction-training
 repo_url: https://github.com/sib-swiss/containers-introduction-training
-edit_uri: ""
+# edit_uri: ""
 
 markdown_extensions:
   - abbr
