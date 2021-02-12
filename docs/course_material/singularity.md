@@ -1,3 +1,15 @@
+## Learning outcomes
+
+**After having completed this chapter you will be able to:**
+
+* Login to a remote machine with `ssh`
+* Use `singularity pull` to convert an image from dockerhub to the 'singularity image format' (`.sif`)
+* Execute a `.sif` file with the default command or a specified command
+* Explain the difference between default mounting behaviour between `docker` and `singularity`
+* Use `singularity shell` to generate an interacte shell inside a `.sif` image
+* Search and use images with both `docker` and `singularity` from [biocontainers.pro](https://biocontainers.pro)
+
+
 ## Material
 
 * [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/)
@@ -119,7 +131,7 @@ Running the command `pwd` (full name of current working directory) will therefor
 
 ### Interactive shell
 
-If you want to debug or inspect an image, it can be helpfull to have a shell inside the container. You can do that with `singularity shell`:
+If you want to debug or inspect an image, it can be helpful to have a shell inside the container. You can do that with `singularity shell`:
 
 ```sh
 singularity shell ubuntu-figlet-df_v2.sif
@@ -144,13 +156,20 @@ singularity shell ubuntu-figlet-df_v2.sif
 
 ### A bioinformatics example (extra)
 
-Pull the image `geertvangeest/fastqc:v1` that contains an installation of [`conda`](https://docs.conda.io/en/latest/) and [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) (this will take a few minutes):
+Check out [biocontainers.pro](https://biocontainers.pro). This registry contains a large collection of containerized bioinformatic tools. These are very powerful for pipeline development. You can pull one of their images from dockerhub using `singularity` like this:
 
 ```sh
-singularity pull docker://geertvangeest/fastqc:v1
+singularity pull docker://biocontainers/fastqc:v0.11.9_cv7
 ```
 
-Download some sample reads to test the image:
+!!! note "BioContainers and `singularity`"
+     You can directly pull a `singularity` image like so (as shown on the `fastqc` [page](https://biocontainers.pro/tools/fastqc)):
+
+    ```sh
+    singularity run https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
+    ```
+
+Let's test the image. Download some sample reads first:
 
 ```sh
 mkdir reads
@@ -163,8 +182,8 @@ Now you can simply run the image as an executable preceding the commands you wou
 
 ```sh
 cd
-./fastqc_v1.sif fastqc ./reads/ecoli_1.fastq.gz
-./fastqc_v1.sif fastqc ./reads/ecoli_2.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_1.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_2.fastq.gz
 ```
 
 This will result in `html` files in the directory `./reads`. These are quality reports for the sequence reads. If you'd like to view them, you can download them with `scp` or e.g. [FileZilla](https://filezilla-project.org/), and view them with your local browser.

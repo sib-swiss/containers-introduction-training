@@ -1,3 +1,13 @@
+## Learning outcomes
+
+**After having completed this chapter you will be able to:**
+
+* Build an image based on a dockerfile
+* Depict the image from which a new image should be built with `FROM`
+* Use `RUN` to specify the command that need to be run while building a new image
+* Change the default command of an image and validate the change
+* Map ports to a container to display interactive content through a browser
+
 ## Material
 
 * [Official `Dockerfile` reference](https://docs.docker.com/engine/reference/builder/)

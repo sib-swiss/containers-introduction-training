@@ -1,3 +1,12 @@
+## Learning outcomes
+
+**After having completed this chapter you will be able to:**
+
+* Discriminate between an image and a container
+* Run a docker container from dockerhub interactively
+* Validate that the current shell is inside a Linux container with `cat /etc/os-release` and `whoami`
+* Check the available containers and their status with `docker container ls -a`
+
 ## Material
 
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/introduction_containers.pdf){: .md-button }
