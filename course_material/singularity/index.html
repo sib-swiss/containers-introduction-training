@@ -58,7 +58,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#material" class="md-skip">
+        <a href="#learning-outcomes" class="md-skip">
           Skip to content
         </a>
       
@@ -304,6 +304,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#material" class="md-nav__link">
     Material
   </a>
@@ -399,6 +406,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#material" class="md-nav__link">
     Material
   </a>
@@ -479,7 +493,17 @@
                 
                   <h1>Running containers with singularity</h1>
                 
-                <h2 id="material">Material</h2>
+                <h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Login to a remote machine with <code>ssh</code></li>
+<li>Use <code>singularity pull</code> to convert an image from dockerhub to the &lsquo;singularity image format&rsquo; (<code>.sif</code>)</li>
+<li>Execute a <code>.sif</code> file with the default command or a specified command</li>
+<li>Explain the difference between default mounting behaviour between <code>docker</code> and <code>singularity</code></li>
+<li>Use <code>singularity shell</code> to generate an interacte shell inside a <code>.sif</code> image</li>
+<li>Search and use images with both <code>docker</code> and <code>singularity</code> from <a href="https://biocontainers.pro">biocontainers.pro</a></li>
+</ul>
+<h2 id="material">Material</h2>
 <ul>
 <li><a href="https://sylabs.io/guides/3.7/user-guide/">Singularity documentation</a></li>
 <li><a href="https://pythonspeed.com/articles/containers-filesystem-data-processing/">An article on Docker vs Singularity</a></li>
@@ -558,7 +582,7 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <details class="done"><summary>Answer</summary><p>The output of <code>./ubuntu-figlet-df_v2.sif pwd</code> is the current directory on the host: i.e. <code>/home/username</code> if you have it in your home directory. The output of <code>docker run --rm ubuntu-figlet-df:v2 pwd</code> (on the local host) would be <code>/</code>, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).</p>
 </details>
 <h3 id="interactive-shell">Interactive shell</h3>
-<p>If you want to debug or inspect an image, it can be helpfull to have a shell inside the container. You can do that with <code>singularity shell</code>:</p>
+<p>If you want to debug or inspect an image, it can be helpful to have a shell inside the container. You can do that with <code>singularity shell</code>:</p>
 <div class="highlight"><pre><span></span><code>singularity shell ubuntu-figlet-df_v2.sif
 </code></pre></div>
 <div class="admonition note">
@@ -576,10 +600,16 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 </code></pre></div></p>
 </details>
 <h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
-<p>Pull the image <code>geertvangeest/fastqc:v1</code> that contains an installation of <a href="https://docs.conda.io/en/latest/"><code>conda</code></a> and <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"><code>fastqc</code></a> (this will take a few minutes):</p>
-<div class="highlight"><pre><span></span><code>singularity pull docker://geertvangeest/fastqc:v1
+<p>Check out <a href="https://biocontainers.pro">biocontainers.pro</a>. This registry contains a large collection of containerized bioinformatic tools. These are very powerful for pipeline development. You can pull one of their images from dockerhub using <code>singularity</code> like this:</p>
+<div class="highlight"><pre><span></span><code>singularity pull docker://biocontainers/fastqc:v0.11.9_cv7
 </code></pre></div>
-<p>Download some sample reads to test the image:</p>
+<div class="admonition note">
+<p class="admonition-title">BioContainers and <code>singularity</code></p>
+<p>You can directly pull a <code>singularity</code> image like so (as shown on the <code>fastqc</code> <a href="https://biocontainers.pro/tools/fastqc">page</a>):</p>
+<div class="highlight"><pre><span></span><code>singularity run https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
+</code></pre></div>
+</div>
+<p>Let&rsquo;s test the image. Download some sample reads first:</p>
 <div class="highlight"><pre><span></span><code>mkdir reads
 <span class="nb">cd</span> reads
 wget https://introduction-containers.s3.eu-central-1.amazonaws.com/ecoli_reads.tar.gz
@@ -587,8 +617,8 @@ tar -xzvf ecoli_reads.tar.gz
 </code></pre></div>
 <p>Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running <code>fastqc</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span>
-./fastqc_v1.sif fastqc ./reads/ecoli_1.fastq.gz
-./fastqc_v1.sif fastqc ./reads/ecoli_2.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_1.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_2.fastq.gz
 </code></pre></div>
 <p>This will result in <code>html</code> files in the directory <code>./reads</code>. These are quality reports for the sequence reads. If you&rsquo;d like to view them, you can download them with <code>scp</code> or e.g. <a href="https://filezilla-project.org/">FileZilla</a>, and view them with your local browser.</p>
                 
