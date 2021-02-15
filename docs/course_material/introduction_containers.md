@@ -91,7 +91,7 @@ Now let's try it out. Type into the container shell:
 figlet 'SIB courses are great!'
 ```
 
-Now you have installed and used software `figlet` in an `ubuntu` environment completely separated from your host computer. This already gives you an idea of the power of containerization.
+Now you have installed and used software `figlet` in an `ubuntu` environment (almost) completely separated from your host computer. This already gives you an idea of the power of containerization.
 
 Exit the shell by typing `exit`. Check out the container panel of Docker dashboard or type:
 

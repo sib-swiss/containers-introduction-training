@@ -236,7 +236,7 @@ This mounted directory is both available for the host (locally) and for the cont
 
 ??? done "Answer"
     ```
-    root@8d80a8698865:/# figlet "testing mounted dir" > /working_dir/figlet_output.txt
+    root@8d80a8698865:/# figlet 'testing mounted dir' > /working_dir/figlet_output.txt
     ```
 
     This should create a file in both your host (local) source directory and the target directory in the container called `figlet_output.txt`.

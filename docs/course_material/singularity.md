@@ -92,7 +92,7 @@ And you can overwrite the default command like this:
     Running with a another `figlet` command:
 
     ```sh
-    ./ubuntu-figlet-df_v2.sif figlet "Something else"
+    ./ubuntu-figlet-df_v2.sif figlet 'Something else'
     ```
 
     Should give:
