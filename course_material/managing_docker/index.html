@@ -653,7 +653,7 @@ boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
 <div class="highlight"><pre><span></span><code>figlet <span class="s1">&#39;some string&#39;</span> &gt; file.txt
 </code></pre></div></p>
 </div>
-<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>root@8d80a8698865:/# figlet &quot;testing mounted dir&quot; &gt; /working_dir/figlet_output.txt
+<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>root@8d80a8698865:/# figlet &#39;testing mounted dir&#39; &gt; /working_dir/figlet_output.txt
 </code></pre></div>
 <p>This should create a file in both your host (local) source directory and the target directory in the container called <code>figlet_output.txt</code>.</p>
 </details>
