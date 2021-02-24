@@ -4,8 +4,7 @@
 
 * Discriminate between an image and a container
 * Run a docker container from dockerhub interactively
-* Validate that the current shell is inside a Linux container with `cat /etc/os-release` and `whoami`
-* Check the available containers and their status with `docker container ls -a`
+* Validate the available containers and their status
 
 ## Material
 

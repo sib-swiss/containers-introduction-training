@@ -4,7 +4,7 @@
 
 * Login to a remote machine with `ssh`
 * Use `singularity pull` to convert an image from dockerhub to the 'singularity image format' (`.sif`)
-* Execute a `.sif` file with the default command or a specified command
+* Execute a singularity container
 * Explain the difference in default mounting behaviour between `docker` and `singularity`
 * Use `singularity shell` to generate an interactive shell inside a `.sif` image
 * Search and use images with both `docker` and `singularity` from [biocontainers.pro](https://biocontainers.pro)

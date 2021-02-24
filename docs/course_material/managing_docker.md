@@ -3,12 +3,11 @@
 **After having completed this chapter you will be able to:**
 
 * Explain the concept of layers in the context of docker containers and images
-* Explain the behaviour of `docker run` while creating a container from an image
 * Use the command line to restart and re-attach to an exited container
 * Create a new image with `docker commit`
 * List locally available images with `docker image ls`
 * Run a command inside a container non-interactively
-* Find the default command of the image with `docker image inspect`
+* Use `docker image inspect` to get more information on an image
 * Use the command line to prune dangling images and stopped containers
 * Rename and tag a docker image
 * Push a newly created image to dockerhub
