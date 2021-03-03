@@ -5,16 +5,11 @@ As is stated in the course prerequisites at the [announcement web page](https://
 
 ## Software
 
-Install `docker` on your local computer and create an account on [dockerhub](hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use `docker`, and if you are installing `docker` on Windows, you need a recent Windows version.
+Install Docker on your local computer and create an account on [dockerhub](hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version.
+
+!!! note "If installing Docker is a problem"
+    During the course, we can give only limited support for installation issues. If you do not manage to install Docker before the course, you can still do almost all exercises on [Play with Docker](https://labs.play-with-docker.com/). A Docker login is required.
 
 In addition to your local computer, we will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/]))  Elastic Cloud (EC2) server. Our Ubuntu server behaves like a 'normal' remote server, and can be approached through `ssh` with a username, key and IP address. All participants will be granted access to a personal home directory.
 
-Before the course, make sure you can comfortably work on a remote server. This means that you can approach it through the shell, modify scripts and transfer files. We can recommend `atom` for Linux and Mac, and MobaXterm for Windows. Therefore, install on your computer:
-
-=== "mac OS/Linux"
-    * SSH and scripting: [Atom](https://atom.io/) with packages like: [`terminus`](https://atom.io/packages/terminus) and [`ftp-remote-edit`](https://atom.io/packages/ftp-remote-edit)
-    * Transferring files: [FileZilla](https://filezilla-project.org/)
-
-=== "Windows"
-    * SSH and scripting: [MobaXterm](https://mobaxterm.mobatek.net/ "get MobaXterm") and/or [Notepad++](https://notepad-plus-plus.org/downloads/) with the plugin `NppFTP`
-    * Transferring files: [FileZilla](https://filezilla-project.org/)
+Before the course, make sure you can work on a remote server. In MacOS and Linux you can use your terminal for this. On windows, you can use the terminal of the WSL (Windows Subsystem for Linux) or use [MobaXterm](https://mobaxterm.mobatek.net/ "get MobaXterm").
