@@ -242,3 +242,177 @@ This mounted directory is both available for the host (locally) and for the cont
 
 !!! note "Using files on the host"
     This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.
+
+Depending on your system, the user ID and group ID will be taken over from the user inside the container. If the user inside the container is root, this will be root. That's a bit inconvenient if you just want to run the container as a regular user (for example in certain circumstances your container could write in `/`). To do that, use the `-u` option, and specify the group ID and user ID like this:
+
+```sh
+docker run -u [uid]:[gid]
+```
+
+So, e.g.:
+
+```sh
+docker run \
+-it \
+-u 1000:1000 \
+--mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
+ubuntu-figlet
+```
+
+If you want docker to take over your current uid and gid, you can use:
+
+```
+docker run -u "$(id -u):$(id -g)"
+```
+
+!!! note "This behaviour is different on MacOS"
+    On MacOS the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [stackoverflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
+
+**Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to stdout. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
+
+??? done "Answer"
+    === "Linux"
+
+        **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting my current directory:**
+
+        ```sh
+        docker run -it -v $PWD:/data -u "$(id -u):$(id -g)" ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        I have no name!@e808d7c36e7c:/$ id
+        uid=1000 gid=1000 groups=1000
+        ```
+
+        So, I have taken over uid 1000 and gid 1000.
+
+        ```
+        I have no name!@e808d7c36e7c:/$ cd /data
+        I have no name!@e808d7c36e7c:/data$ figlet 'uid set' > uid_set.txt
+        I have no name!@e808d7c36e7c:/data$ ls -lh
+        -rw-r--r-- 1 1000 1000 0 Mar  400 13:37 uid_set.txt
+        ```
+
+        So the file belongs to user 1000, and group 1000.
+
+        Outside container:
+
+        ```
+        ubuntu@ip-172-31-33-21:~$ ls -lh
+        -rw-r--r-- 1 ubuntu ubuntu 400 Mar  5 13:37 uid_set.txt
+        ```
+
+        Which makes sense:
+
+        ```
+        ubuntu@ip-172-31-33-21:~$ id
+        uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu)
+        ```
+
+        **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
+
+        ```sh
+        docker run -it -v $PWD:/data ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        root@fface8afb220:/# id
+        uid=0(root) gid=0(root) groups=0(root)
+        ```
+
+        So, uid and gid are `root`.
+
+        ```
+        root@fface8afb220:/# cd /data
+        root@fface8afb220:/data# figlet 'uid unset' > uid_unset.txt
+        root@fface8afb220:/data# ls -lh
+        -rw-r--r-- 1 1000 1000 400 Mar  5 13:37 uid_set.txt
+        -rw-r--r-- 1 root root 400 Mar  5 13:40 uid_unset.txt
+        ```
+
+        Outside container:
+
+        ```
+        ubuntu@ip-172-31-33-21:~$ ls -lh
+        -rw-r--r-- 1 ubuntu ubuntu 0 Mar  5 13:37 uid_set.txt
+        -rw-r--r-- 1 root   root   0 Mar  5 13:40 uid_unset.txt
+        ```
+
+        So, the uid and gid 0 (root:root) are taken over.
+
+    === "MacOS"
+
+        **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting my current directory:**
+
+        ```sh
+        docker run -it -v $PWD:/data -u "$(id -u):$(id -g)" ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        I have no name!@e808d7c36e7c:/$ id
+        uid=503 gid=20(dialout) groups=20(dialout)
+        ```
+        So, the container has taken over uid 503 and group 20
+
+        ```
+        I have no name!@e808d7c36e7c:/$ cd /data
+        I have no name!@e808d7c36e7c:/data$ figlet 'uid set' > uid_set.txt
+        I have no name!@e808d7c36e7c:/data$ ls -lh
+        -rw-r--r--  1 503 dialout    400 Mar  5 13:11 uid_set.txt
+        ```
+
+        So the file belongs to user 503, and the group `dialout`.
+
+        Outside container:
+
+        ```
+        mac-34392:~ geertvangeest$ ls -lh
+        -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
+        ```
+
+        Which are the same as inside the container:
+
+        ```
+        mac-34392:~ geertvangeest$ echo "$(id -u):$(id -g)"
+        503:20
+        ```
+
+        The `uid` 503 was nameless in the docker container. However the group 20 already existed in the ubuntu container, and was named `dialout`.
+
+        **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
+
+        ```sh
+        docker run -it -v $PWD:/data ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        root@fface8afb220:/# id
+        uid=0(root) gid=0(root) groups=0(root)
+        ```
+
+        So, inside the container I am `root`.
+        Creating new files will lead to ownership of `root` inside the container:
+
+        ```
+        root@fface8afb220:/# cd /data
+        root@fface8afb220:/data# figlet 'uid unset' > uid_unset.txt
+        root@fface8afb220:/data# ls -lh
+        -rw-r--r--  1 root root    400 Mar  5 13:11 uid_set.txt
+        -rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
+        ```
+
+        **Note:** the uid and gid of `uid_set.txt` is now `root`, and not 503 and `dialout`.
+
+        Outside container:
+
+        ```
+        mac-34392:~ geertvangeest$ ls -lh
+        -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
+        -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:15 uid_unset.txt
+        ```
+
+        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.

@@ -12,6 +12,8 @@
 
 ## Material
 
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/singularity.pdf){: .md-button }
+
 * [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/)
 * [An article on Docker vs Singularity](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
 
@@ -152,6 +154,22 @@ singularity shell ubuntu-figlet-df_v2.sif
     | ||  __/\__ \ |_
      \__\___||___/\__|
 
+    ```
+
+During the lecture you have learned that singularity takes over the user privileges of the user on the host. You can get user information with command like `whoami`, `id`, `groups` etc.
+
+**Exercise:** Run the `figlet` container interactively. Do you have the same user privileges as if you were on the host? How is that with `docker`?
+
+??? done "Answer"
+    A command like `whoami` will result in your username printed at stdout. You have exactly the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you'll get output like this:
+
+    ```
+    root@a3d6e59dc19d:/# whoami
+    root
+    root@a3d6e59dc19d:/# groups
+    root
+    root@a3d6e59dc19d:/# id
+    uid=0(root) gid=0(root) groups=0(root)
     ```
 
 ### A bioinformatics example (extra)
