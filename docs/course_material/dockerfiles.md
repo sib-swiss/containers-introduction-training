@@ -10,6 +10,7 @@
 ## Material
 
 * [Official `Dockerfile` reference](https://docs.docker.com/engine/reference/builder/)
+* [Ten simple rules for writing dockerfiles](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316)
 
 ## Exercises
 
@@ -20,10 +21,22 @@ To make your images shareable and adjustable, it's good practice to work with a 
 You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with `FROM` that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with `RUN`.  In our `figlet` example that would be:
 
 ```dockerfile
-FROM ubuntu
+FROM ubuntu:focal-20210401
 RUN apt-get update
 RUN apt-get install figlet
 ```
+
+!!! note "On writing reproducible `Dockerfiles`"
+    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `focal-20210401`). We could also have written:
+
+    ```dockerfile
+    FROM ubuntu
+    RUN apt-get update
+    RUN apt-get install figlet
+    ```
+
+    This will automatically pull the image with the tag `latest`. However, if the maintainer of the `ubuntu` images decides to tag another `ubuntu` version as `latest`, rebuilding with the above `Dockerfile` will not give you the same result. Therefore it's always good practice to add the (stable) tag to the image in a `Dockerfile`. More rules on making your `Dockerfiles` more reproducible [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316).
+
 
 **Exercise:** Create a file on your computer called `Dockerfile`, and paste the above instruction lines in that file. Make the directory containing the `Dockerfile` your current directory. Build a new image based on that `Dockerfile` with:
 
@@ -67,7 +80,7 @@ What has happened? What is the name of the build image?
 As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
-FROM ubuntu
+FROM ubuntu:focal-20210401
 RUN apt-get update
 RUN apt-get install figlet
 CMD figlet 'My image works!'
@@ -132,16 +145,18 @@ CMD figlet 'My image works!'
     You have seen in the output of `docker inspect` that docker translates the command (i.e. `figlet "my image works!"`) into this: `["/bin/sh", "-c", "figlet 'My image works!'"]`. The notation we used in the `Dockerfile` is the *shell notation* while the notation with the square brackets (`[]`) is the *exec-notation*. You can use both notations in your `Dockerfile`. Altough the *shell notation* is more readable, the *exec notation* is directly used by the image, and therefore less ambiguous.
 
     A `Dockerfile` with shell notation:
+
     ```dockerfile
-    FROM ubuntu
+    FROM ubuntu:focal-20210401
     RUN apt-get update
     RUN apt-get install figlet
     CMD figlet 'My image works!'
     ```
 
     A `Dockerfile` with exec notation:
+
     ```dockerfile
-    FROM ubuntu
+    FROM ubuntu:focal-20210401
     RUN apt-get update
     RUN apt-get install figlet
     CMD ["/bin/sh", "-c", "figlet 'My image works!'"]
@@ -160,7 +175,7 @@ CMD figlet 'My image works!'
 You might have gotten enough of `figlet`. Let's do something more fancy. Check out this `Dockerfile`:
 
 ```dockerfile
-FROM python
+FROM python:3.9.4-buster
 
 RUN pip install jupyterlab
 
@@ -171,10 +186,15 @@ This will create an image from the existing `python` image. It will also install
 
 **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
+??? done "Answer"
+    ```sh
+    docker build -t jupyter-lab .
+    ```
+
 You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [CONTAINERPORT:HOSTPORT]`. We choose to publish it to the same port number:
 
 ```sh
-docker run -it -p 8888:8888 jupyter-lab
+docker run --rm -it -p 8888:8888 jupyter-lab
 ```
 
 By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
@@ -182,7 +202,9 @@ By running the above command, a container will be started exposing jupyterhub at
 We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
 
 ```sh
-docker run -it \
+docker run \
+-it \
+--rm \
 -p 8888:8888 \
 --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/
 jupyter-lab
@@ -191,4 +213,14 @@ jupyter-lab
 By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it.
 
 !!! note
-    Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)
+    Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
+
+    ```sh
+    docker run \
+    --rm \
+    -e JUPYTER_ENABLE_LAB=yes \
+    -p 8888:8888 \
+    jupyter/base-notebook
+    ```
+
+    Using the above will also give you easier control over security, users and permissions.
