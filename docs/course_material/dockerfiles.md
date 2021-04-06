@@ -206,7 +206,7 @@ docker run \
 -it \
 --rm \
 -p 8888:8888 \
---mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/
+--mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
 jupyter-lab
 ```
 
