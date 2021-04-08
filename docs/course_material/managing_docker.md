@@ -132,7 +132,7 @@ docker run ubuntu-figlet figlet 'non-interactive run'
 
 Resulting in just the output of the `figlet` command.
 
-In the previous exercises we have run containers without a command as positional argument. This doesn't mean that no command has been run, because the container would do nothing without a command. The default command stored in the image, and you can find it by `docker image inspect [IMAGE NAME]`.  
+In the previous exercises we have run containers without a command as positional argument. This doesn't mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by `docker image inspect [IMAGE NAME]`.  
 
 **Exercise:** What is the default command (`CMD`) of the ubuntu image?
 
@@ -200,6 +200,17 @@ docker run \
 
 The target directory will be created if it does not yet exist. The source directory should exist.
 
+!!! note "MobaXterm users"
+    You can specify your local path with the Windows syntax (e.g. `C:\Users\myusername`). However, you will have to use forward slashes (`/`) instead of backward slashes (`\`). Therefore, mounting a directory would look like:
+
+    ```sh
+    docker run \
+    --mount type=bind,source=C:/Users/myusername,target=/path/in/container \
+    [IMAGE]
+    ```
+
+    Do not use autocompletion or variable substitution (e.g. `$PWD`) in MobaXterm, since these point to 'emulated' paths, and are not passed properly to the docker command.
+
 !!! note "Using docker from Windows PowerShell"
     Most of the syntax for `docker` is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by `\` instead of `/`. Also, line breaks are not escaped by `\` but by `.
 
@@ -265,8 +276,8 @@ If you want docker to take over your current uid and gid, you can use:
 docker run -u "$(id -u):$(id -g)"
 ```
 
-!!! note "This behaviour is different on MacOS"
-    On MacOS the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [stackoverflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
+!!! note "This behaviour is different on MacOS and MobaXterm"
+    On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [stackoverflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
 
 **Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to stdout. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
 
@@ -276,7 +287,7 @@ docker run -u "$(id -u):$(id -g)"
         **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting my current directory:**
 
         ```sh
-        docker run -it -v $PWD:/data -u "$(id -u):$(id -g)" ubuntu-figlet
+        docker run -it --mount type=bind,source=$PWD,target=/data -u "$(id -u):$(id -g)" ubuntu-figlet
         ```
         Inside container:
 
@@ -313,7 +324,7 @@ docker run -u "$(id -u):$(id -g)"
         **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
 
         ```sh
-        docker run -it -v $PWD:/data ubuntu-figlet
+        docker run -it --mount type=bind,source=$PWD,target=/data ubuntu-figlet
         ```
         Inside container:
 
@@ -347,7 +358,7 @@ docker run -u "$(id -u):$(id -g)"
         **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting my current directory:**
 
         ```sh
-        docker run -it -v $PWD:/data -u "$(id -u):$(id -g)" ubuntu-figlet
+        docker run -it --mount type=bind,source=$PWD,target=/data -u "$(id -u):$(id -g)" ubuntu-figlet
         ```
         Inside container:
 
@@ -385,7 +396,7 @@ docker run -u "$(id -u):$(id -g)"
         **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
 
         ```sh
-        docker run -it -v $PWD:/data ubuntu-figlet
+        docker run -it --mount type=bind,source=$PWD,target=/data ubuntu-figlet
         ```
         Inside container:
 
@@ -401,11 +412,9 @@ docker run -u "$(id -u):$(id -g)"
         root@fface8afb220:/# cd /data
         root@fface8afb220:/data# figlet 'uid unset' > uid_unset.txt
         root@fface8afb220:/data# ls -lh
-        -rw-r--r--  1 root root    400 Mar  5 13:11 uid_set.txt
+        -rw-r--r--  1 503 dialout    400 Mar  5 13:11 uid_set.txt
         -rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
         ```
-
-        **Note:** the uid and gid of `uid_set.txt` is now `root`, and not 503 and `dialout`.
 
         Outside container:
 
@@ -413,6 +422,77 @@ docker run -u "$(id -u):$(id -g)"
         mac-34392:~ geertvangeest$ ls -lh
         -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
         -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:15 uid_unset.txt
+        ```
+
+        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.
+
+    === "MobaXterm"
+
+        **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting to a  specfied directory:**
+
+        ```sh
+        docker run -it --mount type=bind,source=C:/Users/geert/data,target=/data -u "$(id -u):$(id -g)" ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        I have no name!@e808d7c36e7c:/$ id
+        uid=1003 gid=513 groups=513
+        ```
+        So, the container has taken over uid 1003 and group 513
+
+        ```
+        I have no name!@e808d7c36e7c:/$ cd /data
+        I have no name!@e808d7c36e7c:/data$ figlet 'uid set' > uid_set.txt
+        I have no name!@e808d7c36e7c:/data$ ls -lh
+        -rw-r--r--  1 1003 513    400 Mar  5 13:11 uid_set.txt
+        ```
+
+        So the file belongs to user 1003, and the group 513.
+
+        Outside container:
+
+        ```
+        /home/mobaxterm/data$ ls -lh
+        -rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+        ```
+
+        Which are the same as inside the container:
+
+        ```
+        /home/mobaxterm/data$ echo "$(id -u):$(id -g)"
+        1003:513
+        ```
+
+        **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
+
+        ```sh
+        docker run -it --mount type=bind,source=C:/Users/geert/data,target=/data ubuntu-figlet
+        ```
+        Inside container:
+
+        ```
+        root@fface8afb220:/# id
+        uid=0(root) gid=0(root) groups=0(root)
+        ```
+
+        So, inside the container I am `root`.
+        Creating new files will lead to ownership of `root` inside the container:
+
+        ```
+        root@fface8afb220:/# cd /data
+        root@fface8afb220:/data# figlet 'uid unset' > uid_unset.txt
+        root@fface8afb220:/data# ls -lh
+        -rw-r--r--  1 1003 503    400 Mar  5 13:11 uid_set.txt
+        -rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
+        ```
+
+        Outside container:
+
+        ```
+        /home/mobaxterm/data$ ls -lh
+        -rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+        -rwx------   1 geert  UserGrp     400 Mar  5 14:15 uid_unset.txt
         ```
 
         So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.
