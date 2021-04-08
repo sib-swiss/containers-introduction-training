@@ -620,7 +620,7 @@ ubuntu                            latest    f63181f19b2f   29 hours ago    72.9M
 </code></pre></div>
 
 <p>Resulting in just the output of the <code>figlet</code> command.</p>
-<p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
+<p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
 <p><strong>Exercise:</strong> What is the default command (<code>CMD</code>) of the ubuntu image?</p>
 <details class="done"><summary>Answer</summary><p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):
 <div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
@@ -670,6 +670,16 @@ docker push [USER NAME]/ubuntu-figlet:v1
 </code></pre></div>
 
 <p>The target directory will be created if it does not yet exist. The source directory should exist.</p>
+<div class="admonition note">
+<p class="admonition-title">MobaXterm users</p>
+<p>You can specify your local path with the Windows syntax (e.g. <code>C:\Users\myusername</code>). However, you will have to use forward slashes (<code>/</code>) instead of backward slashes (<code>\</code>). Therefore, mounting a directory would look like:</p>
+<div class="highlight"><pre><span></span><code>docker run <span class="se">\</span>
+--mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/myusername,target<span class="o">=</span>/path/in/container <span class="se">\</span>
+<span class="o">[</span>IMAGE<span class="o">]</span>
+</code></pre></div>
+
+<p>Do not use autocompletion or variable substitution (e.g. <code>$PWD</code>) in MobaXterm, since these point to &lsquo;emulated&rsquo; paths, and are not passed properly to the docker command.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Using docker from Windows PowerShell</p>
 <p>Most of the syntax for <code>docker</code> is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by <code>\</code> instead of <code>/</code>. Also, line breaks are not escaped by <code>\</code> but by `.</p>
@@ -723,13 +733,13 @@ ubuntu-figlet
 </code></pre></div>
 
 <div class="admonition note">
-<p class="admonition-title">This behaviour is different on MacOS</p>
-<p>On MacOS the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
+<p class="admonition-title">This behaviour is different on MacOS and MobaXterm</p>
+<p>On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
 </div>
 <p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to stdout. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
-<details class="done"><summary>Answer</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Linux</label><div class="tabbed-content">
+<details class="done"><summary>Answer</summary><div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Linux</label><div class="tabbed-content">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
-<p><div class="highlight"><pre><span></span><code>docker run -it -v <span class="nv">$PWD</span>:/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
 </code></pre></div>
 Inside container:</p>
 <div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
@@ -755,7 +765,7 @@ uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu)
 </code></pre></div>
 
 <p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
-<p><div class="highlight"><pre><span></span><code>docker run -it -v <span class="nv">$PWD</span>:/data ubuntu-figlet
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data ubuntu-figlet
 </code></pre></div>
 Inside container:</p>
 <div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
@@ -780,7 +790,7 @@ root@fface8afb220:/data# ls -lh
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">MacOS</label><div class="tabbed-content">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
-<p><div class="highlight"><pre><span></span><code>docker run -it -v <span class="nv">$PWD</span>:/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
 </code></pre></div>
 Inside container:</p>
 <p><div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
@@ -806,7 +816,7 @@ I have no name!@e808d7c36e7c:/data$ ls -lh
 
 <p>The <code>uid</code> 503 was nameless in the docker container. However the group 20 already existed in the ubuntu container, and was named <code>dialout</code>.</p>
 <p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
-<p><div class="highlight"><pre><span></span><code>docker run -it -v <span class="nv">$PWD</span>:/data ubuntu-figlet
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data ubuntu-figlet
 </code></pre></div>
 Inside container:</p>
 <div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
@@ -818,15 +828,65 @@ Creating new files will lead to ownership of <code>root</code> inside the contai
 <div class="highlight"><pre><span></span><code>root@fface8afb220:/# cd /data
 root@fface8afb220:/data# figlet &#39;uid unset&#39; &gt; uid_unset.txt
 root@fface8afb220:/data# ls -lh
--rw-r--r--  1 root root    400 Mar  5 13:11 uid_set.txt
+-rw-r--r--  1 503 dialout    400 Mar  5 13:11 uid_set.txt
 -rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
 </code></pre></div>
 
-<p><strong>Note:</strong> the uid and gid of <code>uid_set.txt</code> is now <code>root</code>, and not 503 and <code>dialout</code>.</p>
 <p>Outside container:</p>
 <div class="highlight"><pre><span></span><code>mac-34392:~ geertvangeest$ ls -lh
 -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
 -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:15 uid_unset.txt
+</code></pre></div>
+
+<p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
+</div>
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">MobaXterm</label><div class="tabbed-content">
+<p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting to a  specfied directory:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/geert/data,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<p><div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
+uid=1003 gid=513 groups=513
+</code></pre></div>
+So, the container has taken over uid 1003 and group 513</p>
+<div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ cd /data
+I have no name!@e808d7c36e7c:/data$ figlet &#39;uid set&#39; &gt; uid_set.txt
+I have no name!@e808d7c36e7c:/data$ ls -lh
+-rw-r--r--  1 1003 513    400 Mar  5 13:11 uid_set.txt
+</code></pre></div>
+
+<p>So the file belongs to user 1003, and the group 513.</p>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ ls -lh
+-rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+</code></pre></div>
+
+<p>Which are the same as inside the container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ echo &quot;$(id -u):$(id -g)&quot;
+1003:513
+</code></pre></div>
+
+<p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/geert/data,target<span class="o">=</span>/data ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre></div>
+
+<p>So, inside the container I am <code>root</code>.
+Creating new files will lead to ownership of <code>root</code> inside the container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# cd /data
+root@fface8afb220:/data# figlet &#39;uid unset&#39; &gt; uid_unset.txt
+root@fface8afb220:/data# ls -lh
+-rw-r--r--  1 1003 503    400 Mar  5 13:11 uid_set.txt
+-rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
+</code></pre></div>
+
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ ls -lh
+-rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+-rwx------   1 geert  UserGrp     400 Mar  5 14:15 uid_unset.txt
 </code></pre></div>
 
 <p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
