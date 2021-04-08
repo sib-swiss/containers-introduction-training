@@ -8,9 +8,18 @@
 
 ## Material
 
+**General introduction:**
+
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/general_introduction.pdf){: .md-button }
+
+**Introduction to containers:**
+
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/introduction_containers.pdf){: .md-button }
 
 ## Exercises
+
+!!! note "If working on Windows"
+    If you are working on Windows, you can either use [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or the local terminal in [MobaXterm](https://mobaxterm.mobatek.net/). In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
 
 Let's create our first container from an existing image. We do this with the image `ubuntu`, generating an environment with a minimal installation of ubuntu.  
 
