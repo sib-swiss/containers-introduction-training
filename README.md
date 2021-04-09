@@ -1,5 +1,7 @@
 # Course website containers
 
+Website is hosted at: [https://sib-swiss.github.io/containers-introduction-training/](https://sib-swiss.github.io/containers-introduction-training/)
+
 This website is generated with [MkDocs](https://www.mkdocs.org/), with the theme [Material](https://squidfunk.github.io/mkdocs-material/).
 
 To host it locally, install MkDocs:
