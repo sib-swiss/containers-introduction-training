@@ -161,7 +161,18 @@ During the lecture you have learned that singularity takes over the user privile
 **Exercise:** Run the `figlet` container interactively. Do you have the same user privileges as if you were on the host? How is that with `docker`?
 
 ??? done "Answer"
-    A command like `whoami` will result in your username printed at stdout. You have exactly the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you'll get output like this:
+    A command like `whoami` will result in your username printed at stdout:
+
+    ```
+    Singularity> whoami
+    myusername
+    Singularity> id
+    uid=1030(myusername) gid=1031(myusername) groups=1031(myusername),1001(condausers)
+    Singularity> groups
+    myusername condausers
+    ```
+
+    With singularity, you have the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you'll get output like this:
 
     ```
     root@a3d6e59dc19d:/# whoami
@@ -184,7 +195,7 @@ singularity pull docker://biocontainers/fastqc:v0.11.9_cv7
      You can directly pull a `singularity` image like so (as shown on the `fastqc` [page](https://biocontainers.pro/tools/fastqc)):
 
     ```sh
-    singularity run https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
+    singularity pull fastqc_0.11.9.sif https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
     ```
 
 Let's test the image. Download some sample reads first:
@@ -194,14 +205,14 @@ mkdir reads
 cd reads
 wget https://introduction-containers.s3.eu-central-1.amazonaws.com/ecoli_reads.tar.gz
 tar -xzvf ecoli_reads.tar.gz
+rm ecoli_reads.tar.gz
 ```
 
 Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running `fastqc` would look like:
 
 ```sh
 cd
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_1.fastq.gz
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_2.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_*.fastq.gz
 ```
 
 This will result in `html` files in the directory `./reads`. These are quality reports for the sequence reads. If you'd like to view them, you can download them with `scp` or e.g. [FileZilla](https://filezilla-project.org/), and view them with your local browser.
