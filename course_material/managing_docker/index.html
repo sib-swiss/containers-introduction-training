@@ -367,6 +367,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#managing-permissions-extra" class="md-nav__link">
+    Managing permissions (extra)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -492,6 +499,13 @@
           <li class="md-nav__item">
   <a href="#mounting-a-directory" class="md-nav__link">
     Mounting a directory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managing-permissions-extra" class="md-nav__link">
+    Managing permissions (extra)
   </a>
   
 </li>
@@ -716,6 +730,7 @@ boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
 <p class="admonition-title">Using files on the host</p>
 <p>This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.</p>
 </div>
+<h3 id="managing-permissions-extra">Managing permissions (extra)</h3>
 <p>Depending on your system, the user ID and group ID will be taken over from the user inside the container. If the user inside the container is root, this will be root. That&rsquo;s a bit inconvenient if you just want to run the container as a regular user (for example in certain circumstances your container could write in <code>/</code>). To do that, use the <code>-u</code> option, and specify the group ID and user ID like this:</p>
 <div class="highlight"><pre><span></span><code>docker run -u <span class="o">[</span>uid<span class="o">]</span>:<span class="o">[</span>gid<span class="o">]</span>
 </code></pre></div>
@@ -736,7 +751,7 @@ ubuntu-figlet
 <p class="admonition-title">This behaviour is different on MacOS and MobaXterm</p>
 <p>On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
 </div>
-<p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to stdout. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
+<p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
 <details class="done"><summary>Answer</summary><div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Linux</label><div class="tabbed-content">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
 <p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
