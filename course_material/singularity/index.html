@@ -639,7 +639,16 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 </details>
 <p>During the lecture you have learned that singularity takes over the user privileges of the user on the host. You can get user information with command like <code>whoami</code>, <code>id</code>, <code>groups</code> etc.</p>
 <p><strong>Exercise:</strong> Run the <code>figlet</code> container interactively. Do you have the same user privileges as if you were on the host? How is that with <code>docker</code>?</p>
-<details class="done"><summary>Answer</summary><p>A command like <code>whoami</code> will result in your username printed at stdout. You have exactly the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you&rsquo;ll get output like this:</p>
+<details class="done"><summary>Answer</summary><p>A command like <code>whoami</code> will result in your username printed at stdout:</p>
+<div class="highlight"><pre><span></span><code>Singularity&gt; whoami
+myusername
+Singularity&gt; id
+uid=1030(myusername) gid=1031(myusername) groups=1031(myusername),1001(condausers)
+Singularity&gt; groups
+myusername condausers
+</code></pre></div>
+
+<p>With singularity, you have the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you&rsquo;ll get output like this:</p>
 <div class="highlight"><pre><span></span><code>root@a3d6e59dc19d:/# whoami
 root
 root@a3d6e59dc19d:/# groups
@@ -657,7 +666,7 @@ uid=0(root) gid=0(root) groups=0(root)
 <div class="admonition note">
 <p class="admonition-title">BioContainers and <code>singularity</code></p>
 <p>You can directly pull a <code>singularity</code> image like so (as shown on the <code>fastqc</code> <a href="https://biocontainers.pro/tools/fastqc">page</a>):</p>
-<div class="highlight"><pre><span></span><code>singularity run https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
+<div class="highlight"><pre><span></span><code>singularity pull fastqc_0.11.9.sif https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
 </code></pre></div>
 
 </div>
@@ -666,12 +675,12 @@ uid=0(root) gid=0(root) groups=0(root)
 <span class="nb">cd</span> reads
 wget https://introduction-containers.s3.eu-central-1.amazonaws.com/ecoli_reads.tar.gz
 tar -xzvf ecoli_reads.tar.gz
+rm ecoli_reads.tar.gz
 </code></pre></div>
 
 <p>Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running <code>fastqc</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span>
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_1.fastq.gz
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_2.fastq.gz
+./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_*.fastq.gz
 </code></pre></div>
 
 <p>This will result in <code>html</code> files in the directory <code>./reads</code>. These are quality reports for the sequence reads. If you&rsquo;d like to view them, you can download them with <code>scp</code> or e.g. <a href="https://filezilla-project.org/">FileZilla</a>, and view them with your local browser.</p>
