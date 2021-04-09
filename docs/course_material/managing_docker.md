@@ -254,6 +254,8 @@ This mounted directory is both available for the host (locally) and for the cont
 !!! note "Using files on the host"
     This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.
 
+### Managing permissions (extra)
+
 Depending on your system, the user ID and group ID will be taken over from the user inside the container. If the user inside the container is root, this will be root. That's a bit inconvenient if you just want to run the container as a regular user (for example in certain circumstances your container could write in `/`). To do that, use the `-u` option, and specify the group ID and user ID like this:
 
 ```sh
@@ -279,7 +281,7 @@ docker run -u "$(id -u):$(id -g)"
 !!! note "This behaviour is different on MacOS and MobaXterm"
     On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [stackoverflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
 
-**Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to stdout. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
+**Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
 
 ??? done "Answer"
     === "Linux"
