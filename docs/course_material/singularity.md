@@ -15,6 +15,7 @@
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/singularity.pdf){: .md-button }
 
 * [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/)
+* [Singularity hub](https://singularity-hub.org/)
 * [An article on Docker vs Singularity](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
 
 ## Exercises
