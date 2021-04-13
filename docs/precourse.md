@@ -5,7 +5,7 @@ As is stated in the course prerequisites at the [announcement web page](https://
 
 ## Software
 
-Install Docker on your local computer and create an account on [dockerhub](hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version.
+Install Docker on your local computer and create an account on [dockerhub](https://hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version.
 
 !!! note "If installing Docker is a problem"
     During the course, we can give only limited support for installation issues. If you do not manage to install Docker before the course, you can still do almost all exercises on [Play with Docker](https://labs.play-with-docker.com/). A Docker login is required.
