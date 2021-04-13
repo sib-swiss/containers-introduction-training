@@ -178,6 +178,13 @@ docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
 docker push [USER NAME]/ubuntu-figlet
 ```
 
+!!! note "If on Linux"
+    If you are on Linux and haven't connected to docker hub before, you will have login first. To do that, run:
+
+    ```sh
+    docker login
+    ```
+
 !!! note "How docker makes money"
     All images pushed to dockerhub are open to the world. With a free account you can have one image on dockerhub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to dockerhub, you can store images locally with [`docker save`](https://docs.docker.com/engine/reference/commandline/save/).
 
