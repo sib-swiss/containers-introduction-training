@@ -191,11 +191,14 @@ This will create an image from the existing `python` image. It will also install
     docker build -t jupyter-lab .
     ```
 
-You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [CONTAINERPORT:HOSTPORT]`. We choose to publish it to the same port number:
+You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
 ```sh
 docker run --rm -it -p 8888:8888 jupyter-lab
 ```
+
+!!! note "Networking"
+    More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
 By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
 
