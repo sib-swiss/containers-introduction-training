@@ -1,0 +1,724 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.5">
+    
+    
+      
+        <title>Working with dockerfiles - Introduction to containers</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.be71726b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Introduction to containers" class="md-header__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to containers
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Working with dockerfiles
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/sib-swiss/containers-introduction-training/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introduction to containers" class="md-nav__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to containers
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/sib-swiss/containers-introduction-training/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../precourse/" class="md-nav__link">
+        Precourse preparations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_schedule/" class="md-nav__link">
+        Course schedule
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Course material
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Course material" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Course material
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction_containers/" class="md-nav__link">
+        Introduction to containers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../managing_docker/" class="md-nav__link">
+        Managing containers and images
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Working with dockerfiles
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Working with dockerfiles
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-dockerfile" class="md-nav__link">
+    Basic Dockerfile
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-cmd" class="md-nav__link">
+    Using CMD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-more-real-world-example-extra" class="md-nav__link">
+    A more real-world example (extra)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../singularity/" class="md-nav__link">
+        Running containers with singularity
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-dockerfile" class="md-nav__link">
+    Basic Dockerfile
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-cmd" class="md-nav__link">
+    Using CMD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-more-real-world-example-extra" class="md-nav__link">
+    A more real-world example (extra)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/sib-swiss/containers-introduction-training/edit/main/docs/course_material/dockerfiles.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Working with dockerfiles</h1>
+                
+                <h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Build an image based on a dockerfile</li>
+<li>Use the basic dockerfile syntax</li>
+<li>Change the default command of an image and validate the change</li>
+<li>Map ports to a container to display interactive content through a browser</li>
+</ul>
+<h2 id="material">Material</h2>
+<ul>
+<li><a href="https://docs.docker.com/engine/reference/builder/">Official <code>Dockerfile</code> reference</a></li>
+<li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316">Ten simple rules for writing dockerfiles</a></li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<p>To make your images shareable and adjustable, it&rsquo;s good practice to work with a <code>Dockerfile</code>. This is a script with a set of instructions to build your image from an existing image.</p>
+<h3 id="basic-dockerfile">Basic <code>Dockerfile</code></h3>
+<p>You can generate an image from a <code>Dockerfile</code> using the command <code>docker build</code>. A <code>Dockerfile</code> has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with <code>FROM</code> that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with <code>RUN</code>.  In our <code>figlet</code> example that would be:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
+<span class="k">RUN</span> apt-get update
+<span class="k">RUN</span> apt-get install figlet
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">On writing reproducible <code>Dockerfiles</code></p>
+<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>focal-20210401</code>). We could also have written:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu</span>
+<span class="k">RUN</span> apt-get update
+<span class="k">RUN</span> apt-get install figlet
+</code></pre></div>
+<p>This will automatically pull the image with the tag <code>latest</code>. However, if the maintainer of the <code>ubuntu</code> images decides to tag another <code>ubuntu</code> version as <code>latest</code>, rebuilding with the above <code>Dockerfile</code> will not give you the same result. Therefore it&rsquo;s always good practice to add the (stable) tag to the image in a <code>Dockerfile</code>. More rules on making your <code>Dockerfiles</code> more reproducible <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316">here</a>.</p>
+</div>
+<p><strong>Exercise:</strong> Create a file on your computer called <code>Dockerfile</code>, and paste the above instruction lines in that file. Make the directory containing the <code>Dockerfile</code> your current directory. Build a new image based on that <code>Dockerfile</code> with:</p>
+<div class="highlight"><pre><span></span><code>docker build .
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">The argument of <code>docker build</code></p>
+<p>The command <code>docker build</code> takes a directory as input (providing <code>.</code> means the current directory). This directory should contain the <code>Dockerfile</code>, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.</p>
+</div>
+<p>What has happened? What is the name of the build image?</p>
+<details class="done"><summary>Answer</summary><p>A new image was created based on the <code>Dockerfile</code>. You can check it with: <code>docker image ls</code>, which gives something like:</p>
+<div class="highlight"><pre><span></span><code>REPOSITORY                        TAG       IMAGE ID       CREATED             SIZE
+&lt;none&gt;                            &lt;none&gt;    92c980b09aad   7 seconds ago       101MB
+ubuntu-figlet                     latest    e08b999c7978   About an hour ago   101MB
+ubuntu                            latest    f63181f19b2f   30 hours ago        72.9MB
+</code></pre></div>
+<p>It has created an image without a name or tag. That&rsquo;s a bit inconvenient.</p>
+</details>
+<p><strong>Exercise:</strong> Build a new image with a specific name. You can do that with adding the option <code>-t</code> to <code>docker build</code>. Before that, remove the nameless image.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>An image without a name is usually a &ldquo;dangling image&rdquo;. You can remove those with <code>docker image prune</code>.</p>
+</div>
+<details class="done"><summary>Answer</summary><p>Remove the nameless image with <code>docker image prune</code>.</p>
+<p>After that, rebuild an image with a name:</p>
+<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet-df .
+</code></pre></div>
+</details>
+<h3 id="using-cmd">Using <code>CMD</code></h3>
+<p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
+<span class="k">RUN</span> apt-get update
+<span class="k">RUN</span> apt-get install figlet
+<span class="k">CMD</span> figlet <span class="s1">&#39;My image works!&#39;</span>
+</code></pre></div>
+<p><strong>Exercise:</strong> Build a new image based on the above <code>Dockerfile</code>. Can you validate the change using <code>docker image inspect</code>? Can you overwrite this default with <code>docker run</code>?</p>
+<details class="done"><summary>Answer</summary><p>Copy the new line to your <code>Dockerfile</code>, and build the new image like this:</p>
+<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet-df:v2 .
+</code></pre></div>
+<p>The command <code>docker inspect ubuntu-figlet-df:v2</code> will give:</p>
+<div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
+    &quot;/bin/sh&quot;,
+    &quot;-c&quot;,
+    &quot;figlet &#39;My image works!&#39;&quot;
+]
+</code></pre></div>
+<p>So the default command (<code>/bin/bash</code>) has changed to <code>figlet 'My image works!'</code></p>
+<p>Running the image (with clean-up (<code>--rm</code>)):</p>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet-df:v2
+</code></pre></div>
+<p>Will result in:</p>
+<div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
+|  \/  |_   _  (_)_ __ ___   __ _  __ _  ___  __      _____  _ __| | _____| |
+| |\/| | | | | | | &#39;_ ` _ \ / _` |/ _` |/ _ \ \ \ /\ / / _ \| &#39;__| |/ / __| |
+| |  | | |_| | | | | | | | | (_| | (_| |  __/  \ V  V / (_) | |  |   &lt;\__ \_|
+|_|  |_|\__, | |_|_| |_| |_|\__,_|\__, |\___|   \_/\_/ \___/|_|  |_|\_\___(_)
+       |___/                     |___/
+</code></pre></div>
+<p>And of course you can overwrite the default command:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet-df:v2 figlet <span class="s1">&#39;another text&#39;</span>
+</code></pre></div>
+<p>Resulting in:</p>
+<div class="highlight"><pre><span></span><code>_   _                 _            _
+__ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
+/ _` | &#39;_ \ / _ \| __| &#39;_ \ / _ \ &#39;__| | __/ _ \ \/ / __|
+| (_| | | | | (_) | |_| | | |  __/ |    | ||  __/&gt;  &lt;| |_
+\__,_|_| |_|\___/ \__|_| |_|\___|_|     \__\___/_/\_\\__|
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Two flavours of <code>CMD</code></p>
+<p>You have seen in the output of <code>docker inspect</code> that docker translates the command (i.e. <code>figlet "my image works!"</code>) into this: <code>["/bin/sh", "-c", "figlet 'My image works!'"]</code>. The notation we used in the <code>Dockerfile</code> is the <em>shell notation</em> while the notation with the square brackets (<code>[]</code>) is the <em>exec-notation</em>. You can use both notations in your <code>Dockerfile</code>. Altough the <em>shell notation</em> is more readable, the <em>exec notation</em> is directly used by the image, and therefore less ambiguous.</p>
+<p>A <code>Dockerfile</code> with shell notation:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
+<span class="k">RUN</span> apt-get update
+<span class="k">RUN</span> apt-get install figlet
+<span class="k">CMD</span> figlet <span class="s1">&#39;My image works!&#39;</span>
+</code></pre></div>
+<p>A <code>Dockerfile</code> with exec notation:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
+<span class="k">RUN</span> apt-get update
+<span class="k">RUN</span> apt-get install figlet
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;figlet &#39;My image works!&#39;&quot;</span><span class="p">]</span>
+</code></pre></div>
+</div>
+<p><strong>Exercise:</strong> Now push our created image (with a version tag) to docker hub. We will use it later for the <a href="../singularity/"><code>singularity</code> exercises</a>.</p>
+<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet-df:v2 <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet-df:v2
+docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet-df:v2
+</code></pre></div>
+</details>
+<h3 id="a-more-real-world-example-extra">A more real-world example (extra)</h3>
+<p>You might have gotten enough of <code>figlet</code>. Let&rsquo;s do something more fancy. Check out this <code>Dockerfile</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">RUN</span> pip install jupyterlab
+
+<span class="k">CMD</span> jupyter lab --ip<span class="o">=</span><span class="m">0</span>.0.0.0 --port<span class="o">=</span><span class="m">8888</span> --allow-root
+</code></pre></div>
+<p>This will create an image from the existing <code>python</code> image. It will also install <code>jupyterlab</code> with <code>pip</code>. As a default command it starts a jupyter notebook at port 8888.</p>
+<p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
+<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker build -t jupyter-lab .
+</code></pre></div>
+</details>
+<p>You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with <code>-p [HOSTPORT:CONTAINERPORT]</code>. We choose to publish it to the same port number:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm -it -p <span class="m">8888</span>:8888 jupyter-lab
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Networking</p>
+<p>More info on docker container networking <a href="https://docs.docker.com/config/containers/container-networking/">here</a></p>
+</div>
+<p>By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing <code>localhost:8888</code> in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.</p>
+<p>We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:</p>
+<div class="highlight"><pre><span></span><code>docker run <span class="se">\</span>
+-it <span class="se">\</span>
+--rm <span class="se">\</span>
+-p <span class="m">8888</span>:8888 <span class="se">\</span>
+--mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/Users/myusername/working_dir,target<span class="o">=</span>/working_dir/ <span class="se">\</span>
+jupyter-lab
+</code></pre></div>
+<p>By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Jupyter has a wide range of pre-built images available <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html">here</a>. Example syntax with a pre-built jupyter image would look like:</p>
+<div class="highlight"><pre><span></span><code>docker run <span class="se">\</span>
+--rm <span class="se">\</span>
+-e <span class="nv">JUPYTER_ENABLE_LAB</span><span class="o">=</span>yes <span class="se">\</span>
+-p <span class="m">8888</span>:8888 <span class="se">\</span>
+jupyter/base-notebook
+</code></pre></div>
+<p>Using the above will also give you easier control over security, users and permissions.</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../managing_docker/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Managing containers and images" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Managing containers and images
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../singularity/" class="md-footer__link md-footer__link--next" aria-label="Next: Running containers with singularity" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Running containers with singularity
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.409db549.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56a63758.min.js"></script>
+      
+    
+  </body>
+</html>
