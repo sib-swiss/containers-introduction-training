@@ -19,7 +19,7 @@ theme:
 # Repository
 repo_name: sib-swiss/containers-introduction-training
 repo_url: https://github.com/sib-swiss/containers-introduction-training
-# edit_uri: ""
+edit_uri: edit/main/docs/
 
 markdown_extensions:
   - abbr
