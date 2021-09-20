@@ -15,6 +15,9 @@ theme:
   favicon: assets/images/SIB_logo.svg
   icon:
     repo: fontawesome/brands/github
+extra:
+  version:
+    provider: mike
 
 # Repository
 repo_name: sib-swiss/containers-introduction-training
