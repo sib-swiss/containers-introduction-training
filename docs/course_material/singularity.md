@@ -17,6 +17,7 @@
 * [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/)
 * [Singularity hub](https://singularity-hub.org/)
 * [An article on Docker vs Singularity](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
+* [Using conda and containers with snakemake](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#containerization-of-conda-based-workflows)
 
 ## Exercises
 
