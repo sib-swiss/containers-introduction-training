@@ -1,5 +1,17 @@
 # Course website
 
+## Authors
+
+- Geert van Geest
+
+This course is partly inspired by the [Carpentries container course](https://epcced.github.io/2020-12-08-Containers-Online/index.html)
+
+## License & copyright
+
+**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/single-cell-training/master/LICENCE)
+
+**Copyright:** [SIB Swiss Institute of Bioinformatics](https://www.sib.swiss/)
+
 ## Material
 
 * This website
