@@ -2,7 +2,7 @@
 
 ## Authors
 
-- Geert van Geest
+- Geert van Geest | [ORCiD](https://orcid.org/0000-0002-1561-078X)
 
 This course is partly inspired by the [Carpentries container course](https://epcced.github.io/2020-12-08-Containers-Online/index.html)
 

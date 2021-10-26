@@ -7,6 +7,9 @@ As is stated in the course prerequisites at the [announcement web page](https://
 
 Install Docker on your local computer and create an account on [dockerhub](https://hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-docker/). Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version.
 
+!!! note "If working with Windows"
+    During the course exercises you will be mainly interacting with docker through the command line. Although windows powershell is suitable for that, it is easier to follow the exercises if you have UNIX or 'UNIX-like' terminal. You can get this by using [MobaXterm](https://mobaxterm.mobatek.net/ "get MobaXterm") or [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install). Make sure you install the latest versions before installing docker. 
+
 !!! note "If installing Docker is a problem"
     During the course, we can give only limited support for installation issues. If you do not manage to install Docker before the course, you can still do almost all exercises on [Play with Docker](https://labs.play-with-docker.com/). A Docker login is required.
 

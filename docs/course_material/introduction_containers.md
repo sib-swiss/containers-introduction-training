@@ -19,7 +19,7 @@
 ## Exercises
 
 !!! note "If working on Windows"
-    If you are working on Windows, you can either use [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or the local terminal in [MobaXterm](https://mobaxterm.mobatek.net/). In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
+    If you are working on Windows, you can either use [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or the local terminal in [MobaXterm](https://mobaxterm.mobatek.net/). Make sure you install the latest versions before you install docker. In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
 
 Let's create our first container from an existing image. We do this with the image `ubuntu`, generating an environment with a minimal installation of ubuntu.  
 
