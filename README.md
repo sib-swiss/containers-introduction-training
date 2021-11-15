@@ -1,6 +1,6 @@
-# Course website containers
-
+![GitHub Release Date](https://img.shields.io/github/release-date/sib-swiss/containers-introduction-training)
 [![DOI](https://zenodo.org/badge/331890430.svg)](https://zenodo.org/badge/latestdoi/331890430)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
 Website is hosted at: [https://sib-swiss.github.io/containers-introduction-training/](https://sib-swiss.github.io/containers-introduction-training/)
 
