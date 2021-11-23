@@ -22,6 +22,6 @@ The easiest way to get started is to file an issue to tell us about a spelling m
 
 ## What to Contribute
 
-There are many ways to contribute, from writing new exercises and improving existing ones  to providing feedback after teaching or learning from this course, and submitting [bug reports](https://github.com/sib-swiss/single-cell-training/issues) about things that don't work, aren't clear, or are missing. If you are looking for ideas, please see the 'Issues' tab for  a list of issues associated with this repository.
+There are many ways to contribute, from writing new exercises and improving existing ones  to providing feedback after teaching or learning from this course, and submitting [bug reports](https://github.com/sib-swiss/containers-introduction-training/issues) about things that don't work, aren't clear, or are missing. If you are looking for ideas, please see the 'Issues' tab for  a list of issues associated with this repository.
 
 Comments on issues and reviews of pull requests are just as welcome: we are smarter together than we are on our own. Reviews from novices and newcomers are particularly valuable: it's easy for people who have been using these courses for a while to forget how impenetrable some of this material can be, so fresh eyes are always welcome.
