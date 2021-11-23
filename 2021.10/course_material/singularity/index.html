@@ -567,9 +567,9 @@
 <p><strong>Exercise:</strong> On the remote server, pull the docker image that has the adjusted default <code>CMD</code> that we have pushed to dockerhub <a href="../dockerfiles/#using-cmd">in this exercise</a> (<code>ubuntu-figlet-df:v2</code>) with <code>singularity pull</code>. The syntax is:</p>
 <div class="highlight"><pre><span></span><code>singularity pull docker://<span class="o">[</span>USER NAME<span class="o">]</span>/<span class="o">[</span>IMAGE NAME<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
 </code></pre></div>
-<details class="done"><summary>Answer</summary><p><div class="highlight"><pre><span></span><code>singularity pull docker://<span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet-df:v2
+<details class="done"><summary>Answer</summary><p><div class="highlight"><pre><span></span><code>singularity pull docker://<span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet:v3
 </code></pre></div>
-This will result in a file called <code>ubuntu-figlet-df_v2.sif</code></p>
+This will result in a file called <code>ubuntu-figlet_v3.sif</code></p>
 </details>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -577,13 +577,13 @@ This will result in a file called <code>ubuntu-figlet-df_v2.sif</code></p>
 </div>
 <h3 id="executing-an-image">Executing an image</h3>
 <p>These <code>.sif</code> files can be run as standalone executables:</p>
-<div class="highlight"><pre><span></span><code>./ubuntu-figlet-df_v2.sif
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif
 </code></pre></div>
 <p>And you can overwrite the default command like this:</p>
 <div class="highlight"><pre><span></span><code>./<span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
 </code></pre></div>
 <p><strong>Exercise:</strong> Run the <code>.sif</code> file without a command, and with a command that runs <code>figlet</code>. Do you get expected output?</p>
-<details class="done"><summary>Answer</summary><p>Running it without a command (<code>./ubuntu-figlet-df_v2.sif</code>) should give:</p>
+<details class="done"><summary>Answer</summary><p>Running it without a command (<code>./ubuntu-figlet_v3.sif</code>) should give:</p>
 <p><div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
 |  \/  |_   _  (_)_ __ ___   __ _  __ _  ___  __      _____  _ __| | _____| |
 | |\/| | | | | | | &#39;_ ` _ \ / _` |/ _` |/ _ \ \ \ /\ / / _ \| &#39;__| |/ / __| |
@@ -593,7 +593,7 @@ This will result in a file called <code>ubuntu-figlet-df_v2.sif</code></p>
 </code></pre></div>
 Which is the default command that we changed in the <code>Dockerfile</code>.</p>
 <p>Running with a another <code>figlet</code> command:</p>
-<div class="highlight"><pre><span></span><code>./ubuntu-figlet-df_v2.sif figlet <span class="s1">&#39;Something else&#39;</span>
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif figlet <span class="s1">&#39;Something else&#39;</span>
 </code></pre></div>
 <p>Should give:</p>
 <div class="highlight"><pre><span></span><code>____                       _   _     _                    _
@@ -607,20 +607,20 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <h3 id="mounting-with-singularity">Mounting with Singularity</h3>
 <p>Singularity is also different from Docker in the way it handles mounting. By default, Singularity binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.  </p>
 <p>Running the command <code>pwd</code> (full name of current working directory) will therefore result in a path on the host machine:</p>
-<div class="highlight"><pre><span></span><code>./ubuntu-figlet-df_v2.sif <span class="nb">pwd</span>
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif <span class="nb">pwd</span>
 </code></pre></div>
 <p><strong>Exercise:</strong> Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>A similar Docker command would look like (run this on your local computer):</p>
-<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet-df:v2 <span class="nb">pwd</span>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet:v3 <span class="nb">pwd</span>
 </code></pre></div>
 </div>
-<details class="done"><summary>Answer</summary><p>The output of <code>./ubuntu-figlet-df_v2.sif pwd</code> is the current directory on the host: i.e. <code>/home/username</code> if you have it in your home directory. The output of <code>docker run --rm ubuntu-figlet-df:v2 pwd</code> (on the local host) would be <code>/</code>, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).</p>
+<details class="done"><summary>Answer</summary><p>The output of <code>./ubuntu-figlet_v3.sif pwd</code> is the current directory on the host: i.e. <code>/home/username</code> if you have it in your home directory. The output of <code>docker run --rm ubuntu-figlet:v3 pwd</code> (on the local host) would be <code>/</code>, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).</p>
 </details>
 <h3 id="interactive-shell">Interactive shell</h3>
 <p>If you want to debug or inspect an image, it can be helpful to have a shell inside the container. You can do that with <code>singularity shell</code>:</p>
-<div class="highlight"><pre><span></span><code>singularity shell ubuntu-figlet-df_v2.sif
+<div class="highlight"><pre><span></span><code>singularity shell ubuntu-figlet_v3.sif
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

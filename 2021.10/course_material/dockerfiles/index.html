@@ -538,7 +538,7 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 </div>
 <details class="done"><summary>Answer</summary><p>Remove the nameless image with <code>docker image prune</code>.</p>
 <p>After that, rebuild an image with a name:</p>
-<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet-df .
+<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet:v2 .
 </code></pre></div>
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
@@ -546,22 +546,22 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
 <span class="k">RUN</span> apt-get update
 <span class="k">RUN</span> apt-get install figlet
-<span class="k">CMD</span> figlet <span class="s1">&#39;My image works!&#39;</span>
+<span class="k">CMD</span> figlet My image works!
 </code></pre></div>
 <p><strong>Exercise:</strong> Build a new image based on the above <code>Dockerfile</code>. Can you validate the change using <code>docker image inspect</code>? Can you overwrite this default with <code>docker run</code>?</p>
 <details class="done"><summary>Answer</summary><p>Copy the new line to your <code>Dockerfile</code>, and build the new image like this:</p>
-<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet-df:v2 .
+<div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet:v3 .
 </code></pre></div>
-<p>The command <code>docker inspect ubuntu-figlet-df:v2</code> will give:</p>
+<p>The command <code>docker inspect ubuntu-figlet:v3</code> will give:</p>
 <div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
     &quot;/bin/sh&quot;,
     &quot;-c&quot;,
-    &quot;figlet &#39;My image works!&#39;&quot;
+    &quot;figlet My image works!&quot;
 ]
 </code></pre></div>
-<p>So the default command (<code>/bin/bash</code>) has changed to <code>figlet 'My image works!'</code></p>
+<p>So the default command (<code>/bin/bash</code>) has changed to <code>figlet My image works!</code></p>
 <p>Running the image (with clean-up (<code>--rm</code>)):</p>
-<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet-df:v2
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet:v3
 </code></pre></div>
 <p>Will result in:</p>
 <div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
@@ -572,7 +572,7 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
        |___/                     |___/
 </code></pre></div>
 <p>And of course you can overwrite the default command:</p>
-<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet-df:v2 figlet <span class="s1">&#39;another text&#39;</span>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet:v3 figlet another text
 </code></pre></div>
 <p>Resulting in:</p>
 <div class="highlight"><pre><span></span><code>_   _                 _            _
@@ -589,18 +589,18 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
 <span class="k">RUN</span> apt-get update
 <span class="k">RUN</span> apt-get install figlet
-<span class="k">CMD</span> figlet <span class="s1">&#39;My image works!&#39;</span>
+<span class="k">CMD</span> figlet My image works!
 </code></pre></div>
 <p>A <code>Dockerfile</code> with exec notation:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">ubuntu:focal-20210401</span>
 <span class="k">RUN</span> apt-get update
 <span class="k">RUN</span> apt-get install figlet
-<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;figlet &#39;My image works!&#39;&quot;</span><span class="p">]</span>
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;figlet My image works!&quot;</span><span class="p">]</span>
 </code></pre></div>
 </div>
 <p><strong>Exercise:</strong> Now push our created image (with a version tag) to docker hub. We will use it later for the <a href="../singularity/"><code>singularity</code> exercises</a>.</p>
-<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet-df:v2 <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet-df:v2
-docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet-df:v2
+<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet:v3 <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet:v3
+docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet:v3
 </code></pre></div>
 </details>
 <h3 id="a-more-real-world-example-extra">A more real-world example (extra)</h3>
