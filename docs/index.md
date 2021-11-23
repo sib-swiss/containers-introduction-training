@@ -1,10 +1,18 @@
 # Course website
 
+## Teachers 
+
+- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+- Marco Kreuzer
+
 ## Authors
 
-- Geert van Geest | [ORCiD](https://orcid.org/0000-0002-1561-078X)
+- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+- Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 
-This course is partly inspired by the [Carpentries container course](https://epcced.github.io/2020-12-08-Containers-Online/index.html)
+## Attribution
+
+This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/)
 
 ## License & copyright
 
