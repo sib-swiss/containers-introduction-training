@@ -57,9 +57,9 @@ singularity pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
 
 ??? done "Answer"
     ```sh
-    singularity pull docker://[USER NAME]/ubuntu-figlet-df:v2
+    singularity pull docker://[USER NAME]/ubuntu-figlet:v3
     ```
-    This will result in a file called `ubuntu-figlet-df_v2.sif`
+    This will result in a file called `ubuntu-figlet_v3.sif`
 
 !!! note
     If you weren't able to push the image in the previous exercises to your docker hub, you can use `geertvangeest` as username to pull the image.
@@ -69,7 +69,7 @@ singularity pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
 These `.sif` files can be run as standalone executables:
 
 ```sh
-./ubuntu-figlet-df_v2.sif
+./ubuntu-figlet_v3.sif
 ```
 
 And you can overwrite the default command like this:
@@ -81,7 +81,7 @@ And you can overwrite the default command like this:
 **Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output?
 
 ??? done "Answer"
-    Running it without a command (`./ubuntu-figlet-df_v2.sif`) should give:
+    Running it without a command (`./ubuntu-figlet_v3.sif`) should give:
 
     ```
     __  __         _                                                 _        _
@@ -96,7 +96,7 @@ And you can overwrite the default command like this:
     Running with a another `figlet` command:
 
     ```sh
-    ./ubuntu-figlet-df_v2.sif figlet 'Something else'
+    ./ubuntu-figlet_v3.sif figlet 'Something else'
     ```
 
     Should give:
@@ -118,7 +118,7 @@ Singularity is also different from Docker in the way it handles mounting. By def
 Running the command `pwd` (full name of current working directory) will therefore result in a path on the host machine:
 
 ```sh
-./ubuntu-figlet-df_v2.sif pwd
+./ubuntu-figlet_v3.sif pwd
 ```
 
 **Exercise:** Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?
@@ -127,18 +127,18 @@ Running the command `pwd` (full name of current working directory) will therefor
     A similar Docker command would look like (run this on your local computer):
 
     ```sh
-    docker run --rm ubuntu-figlet-df:v2 pwd
+    docker run --rm ubuntu-figlet:v3 pwd
     ```
 
 ??? done "Answer"
-    The output of `./ubuntu-figlet-df_v2.sif pwd` is the current directory on the host: i.e. `/home/username` if you have it in your home directory. The output of `docker run --rm ubuntu-figlet-df:v2 pwd` (on the local host) would be `/`, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).
+    The output of `./ubuntu-figlet_v3.sif pwd` is the current directory on the host: i.e. `/home/username` if you have it in your home directory. The output of `docker run --rm ubuntu-figlet:v3 pwd` (on the local host) would be `/`, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).
 
 ### Interactive shell
 
 If you want to debug or inspect an image, it can be helpful to have a shell inside the container. You can do that with `singularity shell`:
 
 ```sh
-singularity shell ubuntu-figlet-df_v2.sif
+singularity shell ubuntu-figlet_v3.sif
 ```
 
 !!! note

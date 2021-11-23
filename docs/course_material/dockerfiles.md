@@ -72,7 +72,7 @@ What has happened? What is the name of the build image?
     After that, rebuild an image with a name:
 
     ```
-    docker build -t ubuntu-figlet-df .
+    docker build -t ubuntu-figlet:v2 .
     ```
 
 ### Using `CMD`
@@ -83,7 +83,7 @@ As you might remember the second positional argument of `docker run` is a comman
 FROM ubuntu:focal-20210401
 RUN apt-get update
 RUN apt-get install figlet
-CMD figlet 'My image works!'
+CMD figlet My image works!
 ```
 
 **Exercise:** Build a new image based on the above `Dockerfile`. Can you validate the change using `docker image inspect`? Can you overwrite this default with `docker run`?
@@ -92,25 +92,25 @@ CMD figlet 'My image works!'
     Copy the new line to your `Dockerfile`, and build the new image like this:
 
     ```sh
-    docker build -t ubuntu-figlet-df:v2 .
+    docker build -t ubuntu-figlet:v3 .
     ```
 
-    The command `docker inspect ubuntu-figlet-df:v2` will give:
+    The command `docker inspect ubuntu-figlet:v3` will give:
 
     ```
     "Cmd": [
         "/bin/sh",
         "-c",
-        "figlet 'My image works!'"
+        "figlet My image works!"
     ]
     ```
 
-    So the default command (`/bin/bash`) has changed to `figlet 'My image works!'`
+    So the default command (`/bin/bash`) has changed to `figlet My image works!`
 
     Running the image (with clean-up (`--rm`)):
 
     ```sh
-    docker run --rm ubuntu-figlet-df:v2
+    docker run --rm ubuntu-figlet:v3
     ```
 
     Will result in:
@@ -127,7 +127,7 @@ CMD figlet 'My image works!'
     And of course you can overwrite the default command:
 
     ```sh
-    docker run --rm ubuntu-figlet-df:v2 figlet 'another text'
+    docker run --rm ubuntu-figlet:v3 figlet another text
     ```
 
     Resulting in:
@@ -150,7 +150,7 @@ CMD figlet 'My image works!'
     FROM ubuntu:focal-20210401
     RUN apt-get update
     RUN apt-get install figlet
-    CMD figlet 'My image works!'
+    CMD figlet My image works!
     ```
 
     A `Dockerfile` with exec notation:
@@ -159,15 +159,15 @@ CMD figlet 'My image works!'
     FROM ubuntu:focal-20210401
     RUN apt-get update
     RUN apt-get install figlet
-    CMD ["/bin/sh", "-c", "figlet 'My image works!'"]
+    CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
 **Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`singularity` exercises](singularity.md).
 
 ??? done "Answer"
     ```sh
-    docker tag ubuntu-figlet-df:v2 [USER NAME]/ubuntu-figlet-df:v2
-    docker push [USER NAME]/ubuntu-figlet-df:v2
+    docker tag ubuntu-figlet:v3 [USER NAME]/ubuntu-figlet:v3
+    docker push [USER NAME]/ubuntu-figlet:v3
     ```
 
 ### A more real-world example (extra)
