@@ -668,7 +668,8 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 </code></pre></div>
 </details>
 <h3 id="build-image-for-your-own-script">Build image for your own script</h3>
-<p>You can copy your own script into a container with <code>COPY</code>. Here we copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
+<p>You can copy your own script into a container with <code>COPY</code>. You can find a simple python script called <code>daterange.py</code> <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py">here</a>. </p>
+<p>Here we have downloaded the script and added it to the same directory as we have the <code>Dockerfile</code>. In the <code>Dockerfile</code> we give the instruction to copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
 
 <span class="k">RUN</span> pip install pandas 
@@ -680,9 +681,17 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 <p>Have a look at <code>daterange.py</code>. It is a simple script that uses <code>pandas</code>. It takes a date (in the format <code>YYYYMMDD</code>) as provided by the option <code>--date</code>, and returns a list of all dates in the week starting from that date. An example for execution would be:</p>
 <div class="highlight"><pre><span></span><code>./daterange.py --date <span class="m">20220226</span>
 </code></pre></div>
-<p>Giving a list of dates starting from 26-FEB-2022. </p>
+<p>Giving a list of dates starting from 26-FEB-2022:</p>
+<div class="highlight"><pre><span></span><code>2022-02-26 00:00:00
+2022-02-27 00:00:00
+2022-02-28 00:00:00
+2022-03-01 00:00:00
+2022-03-02 00:00:00
+2022-03-03 00:00:00
+2022-03-04 00:00:00
+</code></pre></div>
 </div>
-<p>Build this image with <code>docker build</code> and execute the script inside the container. </p>
+<p><strong>Exercise:</strong> Build this image with <code>docker build</code> and execute the script inside the container. </p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
