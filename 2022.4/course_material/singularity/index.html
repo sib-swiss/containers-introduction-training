@@ -570,7 +570,9 @@
 <h2 id="exercises">Exercises</h2>
 <h3 id="login-to-remote">Login to remote</h3>
 <p>If you are enrolled in the course, you have received an e-mail with an IP, username, private key and password. To do the Singularity exercises we will login to a remote server. Below you can find instructions on how to login.</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">mac OS/Linux</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">mac OS/Linux</label><label for="__tabbed_1_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p>Open a terminal, and <code>cd</code> to the directory where you have stored your private key. After that, change the file permissions of the key:</p>
 <div class="highlight"><pre><span></span><code>chmod <span class="m">400</span> key_&lt;username&gt;.pem
 </code></pre></div>
@@ -578,10 +580,11 @@
 <div class="highlight"><pre><span></span><code>ssh -i key_&lt;username&gt;.pem &lt;username&gt;@&lt;IP&gt;
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Windows</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p>Below you can find video tutorials and information to log in with MobaXterm.</p>
 <p>MobaXterm is an SSH client for Windows. You can use it to connect to the remote host and edit remote scripts. With MobaXterm, you will automatically login to the remote server once you&rsquo;ve started the SSH session. Set it up on your own computer using your own credentials and the video below.</p>
 <p><iframe src="https://player.vimeo.com/video/473838657" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></p>
+</div>
 </div>
 </div>
 <h3 id="pulling-an-image">Pulling an image</h3>

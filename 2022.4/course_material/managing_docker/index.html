@@ -764,7 +764,9 @@ ubuntu-figlet
 <p>On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
 </div>
 <p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
-<details class="done"><summary>Answer</summary><div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Linux</label><div class="tabbed-content">
+<details class="done"><summary>Answer</summary><div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux</label><label for="__tabbed_1_2">MacOS</label><label for="__tabbed_1_3">MobaXterm</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
 <p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
 </code></pre></div>
@@ -808,7 +810,7 @@ root@fface8afb220:/data# ls -lh
 </code></pre></div>
 <p>So, the uid and gid 0 (root:root) are taken over.</p>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">MacOS</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
 <p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
 </code></pre></div>
@@ -854,7 +856,7 @@ root@fface8afb220:/data# ls -lh
 </code></pre></div>
 <p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
 </div>
-<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">MobaXterm</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting to a  specfied directory:</strong></p>
 <p><div class="highlight"><pre><span></span><code>docker run -it --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/geert/data,target<span class="o">=</span>/data -u <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&quot;</span> ubuntu-figlet
 </code></pre></div>
@@ -898,6 +900,7 @@ root@fface8afb220:/data# ls -lh
 -rwx------   1 geert  UserGrp     400 Mar  5 14:15 uid_unset.txt
 </code></pre></div>
 <p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
+</div>
 </div>
 </div>
 </details>

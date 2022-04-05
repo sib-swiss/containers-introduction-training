@@ -375,8 +375,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#a-more-real-world-example-extra" class="md-nav__link">
-    A more real-world example (extra)
+  <a href="#build-image-for-your-own-script" class="md-nav__link">
+    Build image for your own script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-information-on-your-image-with-docker-inspect" class="md-nav__link">
+    Get information on your image with docker inspect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-metadata-to-your-image" class="md-nav__link">
+    Adding metadata to your image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-an-image-with-a-browser-interface" class="md-nav__link">
+    Building an image with a browser interface
   </a>
   
 </li>
@@ -476,8 +497,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#a-more-real-world-example-extra" class="md-nav__link">
-    A more real-world example (extra)
+  <a href="#build-image-for-your-own-script" class="md-nav__link">
+    Build image for your own script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-information-on-your-image-with-docker-inspect" class="md-nav__link">
+    Get information on your image with docker inspect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-metadata-to-your-image" class="md-nav__link">
+    Adding metadata to your image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-an-image-with-a-browser-interface" class="md-nav__link">
+    Building an image with a browser interface
   </a>
   
 </li>
@@ -625,8 +667,200 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet:v3
 </code></pre></div>
 </details>
-<h3 id="a-more-real-world-example-extra">A more real-world example (extra)</h3>
-<p>You might have gotten enough of <code>figlet</code>. Let&rsquo;s do something more fancy. Check out this <code>Dockerfile</code>:</p>
+<h3 id="build-image-for-your-own-script">Build image for your own script</h3>
+<p>You can copy your own script into a container with <code>COPY</code>. Here we copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">RUN</span> pip install pandas 
+
+<span class="k">COPY</span> daterange.py /opt 
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Have a look at <code>daterange.py</code>. It is a simple script that uses <code>pandas</code>. It takes a date (in the format <code>YYYYMMDD</code>) as provided by the option <code>--date</code>, and returns a list of all dates in the week starting from that date. An example for execution would be:</p>
+<div class="highlight"><pre><span></span><code>./daterange.py --date <span class="m">20220226</span>
+</code></pre></div>
+<p>Giving a list of dates starting from 26-FEB-2022. </p>
+</div>
+<p>Build this image with <code>docker build</code> and execute the script inside the container. </p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
+</div>
+<details class="done"><summary>Answer</summary><p>Build the container:</p>
+<div class="highlight"><pre><span></span><code>docker build -t own_script .
+</code></pre></div>
+<p>Run the container:</p>
+<div class="highlight"><pre><span></span><code>docker run -it --rm own_script /bin/bash
+</code></pre></div>
+<p>Inside the container we look up the script:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span> /opt
+ls
+</code></pre></div>
+<p>This should return <code>daterange.py</code>. </p>
+<p>Now you can execute it from inside the container:</p>
+<div class="highlight"><pre><span></span><code>./daterange.py --date <span class="m">20220226</span>
+</code></pre></div>
+</details>
+<p>That&rsquo;s kind of nice. We can ship our python script inside our container. However, we don&rsquo;t want to run it interactively every time. So let&rsquo;s make some changes to make it easy to run it as an executable. For example, we can add <code>/opt</code> to the global <code>$PATH</code> variable with <code>ENV</code>. </p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">RUN</span> pip install pandas 
+
+<span class="k">COPY</span> daterange.py /opt 
+
+<span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>ENV</code> instruction can be used to set any variable. </p>
+</div>
+<p><strong>Exercise</strong>: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute <code>daterange.py</code> from anywhere?)</p>
+<details class="done"><summary>Answer</summary><p>After re-building we start an interactive session:</p>
+<div class="highlight"><pre><span></span><code>docker run -it --rm own_script /bin/bash
+</code></pre></div>
+<p>Now you can try to execute it from the base directory:</p>
+<div class="highlight"><pre><span></span><code>daterange.py --date <span class="m">20220226</span>
+</code></pre></div>
+</details>
+<p>What we can also do now more easily, is instead of starting an interactive session with <code>/bin/bash</code> is running the script non-interactively:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm own_script daterange.py --date <span class="m">20220226</span>
+</code></pre></div>
+<p>Now it will directly print the output of <code>daterange.py</code> to stdout. </p>
+<p>In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use <code>ENTRYPOINT</code>. <code>ENTRYPOINT</code> is similar to <code>CMD</code>, but has two important differences:</p>
+<ul>
+<li><code>ENTRYPOINT</code> can not be overwritten by the positional arguments (i.e. <code>docker run my_image command --option</code>), but has to be overwritten by <code>--entrypoint</code>. </li>
+<li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> code. Meaning you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
+</ul>
+<p>Let&rsquo;s try it out:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">RUN</span> pip install pandas 
+
+<span class="k">COPY</span> daterange.py /opt 
+
+<span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
+
+<span class="c"># note that if you want to be able to combine the two</span>
+<span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
+<span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;daterange.py&quot;</span><span class="p">]</span>
+
+<span class="c"># default option (if positional arguments are not specified)</span>
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span> <span class="s2">&quot;20220226&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Exercise</strong>: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to <code>--date</code>. How do the commands look?</p>
+<details class="done"><summary>Answer</summary><p>Just running the container non-interactively would be:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm own_script
+</code></pre></div>
+<p>Passing a different argument (i.e. overwriting <code>CMD</code>) would be:</p>
+<div class="highlight"><pre><span></span><code>docker run --rm own_script --date <span class="m">20210330</span>
+</code></pre></div>
+<p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
+</details>
+<p>Most containerized applications do not need one file but multiple and sometimes you want to specify a default working directory. You can do that with <code>WORKDIR</code>. This instruction will set the default directory for all other instructions (like <code>RUN</code>, <code>COPY</code> etc.). It will also change the directory in which you will land if you run the container interactively.</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">RUN</span> pip install pandas 
+
+<span class="k">WORKDIR</span><span class="s"> /opt</span>
+
+<span class="c"># we don&#39;t have to specify /opt as target dir but the current dir</span>
+<span class="k">COPY</span> daterange.py .
+
+<span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
+
+<span class="c"># note that if you want to be able to combine the two</span>
+<span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
+<span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;daterange.py&quot;</span><span class="p">]</span>
+
+<span class="c"># default option (if positional arguments are not specified)</span>
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span> <span class="s2">&quot;20220226&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Exercise</strong>: build the image, and start the container interactively. Has the default directory changed? </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
+</div>
+<details class="done"><summary>Answer</summary><p>Running the container interactively would be:</p>
+<div class="highlight"><pre><span></span><code>docker run -it --rm --entrypoint /bin/bash own_script
+</code></pre></div>
+<p>Which should result in a termina looking something like this:</p>
+<div class="highlight"><pre><span></span><code>root@9a27da455fb1:/opt#
+</code></pre></div>
+<p>Meaning that indeed the default directory has changed to <code>/opt</code></p>
+</details>
+<h3 id="get-information-on-your-image-with-docker-inspect">Get information on your image with <code>docker inspect</code></h3>
+<p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
+<div class="highlight"><pre><span></span><code>&quot;Config&quot;: {
+        &quot;Hostname&quot;: &quot;&quot;,
+        &quot;Domainname&quot;: &quot;&quot;,
+        &quot;User&quot;: &quot;&quot;,
+        &quot;AttachStdin&quot;: false,
+        &quot;AttachStdout&quot;: false,
+        &quot;AttachStderr&quot;: false,
+        &quot;Tty&quot;: false,
+        &quot;OpenStdin&quot;: false,
+        &quot;StdinOnce&quot;: false,
+        &quot;Env&quot;: [
+            &quot;PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;,
+            &quot;LANG=C.UTF-8&quot;,
+            &quot;GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568&quot;,
+            &quot;PYTHON_VERSION=3.9.4&quot;,
+            &quot;PYTHON_PIP_VERSION=21.1.1&quot;,
+            &quot;PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py&quot;,
+            &quot;PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993&quot;
+        ],
+        &quot;Cmd&quot;: [
+            &quot;--date&quot;,
+            &quot;20220226&quot;
+        ],
+        &quot;ArgsEscaped&quot;: true,
+        &quot;Image&quot;: &quot;&quot;,
+        &quot;Volumes&quot;: null,
+        &quot;WorkingDir&quot;: &quot;/opt&quot;,
+        &quot;Entrypoint&quot;: [
+            &quot;daterange.py&quot;
+        ],
+        &quot;OnBuild&quot;: null,
+        &quot;Labels&quot;: null
+    },
+</code></pre></div>
+<h3 id="adding-metadata-to-your-image">Adding metadata to your image</h3>
+<p>You can annotate your <code>Dockerfile</code> and with that the image with the instruction <code>LABEL</code>. You can give any key with <code>&lt;key&gt;=&lt;value&gt;</code>. However, it is recommended to use the <a href="https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md">Open Container Initiative (OCI) keys</a>.</p>
+<p><strong>Exercise</strong>: Annotate our <code>Dockerfile</code> with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with <code>docker inspect</code>. </p>
+<details class="done"><summary>Answer</summary><p>The <code>Dockerfile</code> would look like:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
+
+<span class="k">LABEL</span> org.opencontainers.image.created<span class="o">=</span><span class="s2">&quot;2022-04-12&quot;</span> <span class="se">\</span>
+    org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span> <span class="se">\</span>
+    org.opencontainers.image.description<span class="o">=</span><span class="s2">&quot;Great container for getting all dates in a week! \</span>
+<span class="s2">    You will never use a calender again&quot;</span>
+
+<span class="k">RUN</span> pip install pandas 
+
+<span class="k">WORKDIR</span><span class="s"> /opt</span>
+
+<span class="k">COPY</span> daterange.py .
+
+<span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
+
+<span class="c"># note that if you want to be able to combine the two</span>
+<span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
+<span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;daterange.py&quot;</span><span class="p">]</span>
+
+<span class="c"># default option (if positional arguments are not specified)</span>
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span> <span class="s2">&quot;20220226&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>The <code>Config</code> record in the output of <code>docker inspect</code> was updated with:</p>
+<div class="highlight"><pre><span></span><code>&quot;Labels&quot;: {
+            &quot;org.opencontainers.image.authors&quot;: &quot;Geert van Geest&quot;,
+            &quot;org.opencontainers.image.created&quot;: &quot;2022-04-12&quot;,
+            &quot;org.opencontainers.image.description&quot;: &quot;Great container for getting all dates in a week!     You will never use a calender again&quot;
+        }
+</code></pre></div>
+</details>
+<h3 id="building-an-image-with-a-browser-interface">Building an image with a browser interface</h3>
+<p>In this exercise, we will use the same base image (<code>python:3.9.4-buster</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code> in order to be able to run jupyter lab inside a container. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
 
 <span class="k">RUN</span> pip install jupyterlab
@@ -634,6 +868,10 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 <span class="k">CMD</span> jupyter lab --ip<span class="o">=</span><span class="m">0</span>.0.0.0 --port<span class="o">=</span><span class="m">8888</span> --allow-root
 </code></pre></div>
 <p>This will create an image from the existing <code>python</code> image. It will also install <code>jupyterlab</code> with <code>pip</code>. As a default command it starts a jupyter notebook at port 8888.</p>
+<div class="admonition note">
+<p class="admonition-title">Ports</p>
+<p>We have specified here that jupyter lab should use port 8888. However, this <strong>inside</strong> the container. We can not connect to it yet with our browser.</p>
+</div>
 <p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
 <details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker build -t jupyter-lab .
 </code></pre></div>
