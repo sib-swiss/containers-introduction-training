@@ -315,7 +315,7 @@ CMD ["--date", "20220226"]
 
     Here, the container behaves as the executable itself to which you can pass arguments. 
 
-Most containerized applications do not need one file but multiple and sometimes you want to specify a default working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
+Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore it can come in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
 
 ```dockerfile
 FROM python:3.9.4-buster
