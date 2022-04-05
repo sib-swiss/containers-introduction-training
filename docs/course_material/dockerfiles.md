@@ -172,7 +172,9 @@ CMD figlet My image works!
 
 ### Build image for your own script
 
-You can copy your own script into a container with `COPY`. Here we copy `daterange.py` to `/opt` inside the container:
+You can copy your own script into a container with `COPY`. You can find a simple python script called `daterange.py` [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). 
+
+Here we have downloaded the script and added it to the same directory as we have the `Dockerfile`. In the `Dockerfile` we give the instruction to copy `daterange.py` to `/opt` inside the container:
 
 ```dockerfile
 FROM python:3.9.4-buster
@@ -189,9 +191,19 @@ COPY daterange.py /opt
     ./daterange.py --date 20220226
     ```
 
-    Giving a list of dates starting from 26-FEB-2022. 
+    Giving a list of dates starting from 26-FEB-2022:
 
-Build this image with `docker build` and execute the script inside the container. 
+    ```
+    2022-02-26 00:00:00
+    2022-02-27 00:00:00
+    2022-02-28 00:00:00
+    2022-03-01 00:00:00
+    2022-03-02 00:00:00
+    2022-03-03 00:00:00
+    2022-03-04 00:00:00
+    ```
+
+**Exercise:** Build this image with `docker build` and execute the script inside the container. 
 
 !!! hint
     Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
