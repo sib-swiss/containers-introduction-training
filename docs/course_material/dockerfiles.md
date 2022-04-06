@@ -172,6 +172,8 @@ CMD figlet My image works!
 
 ### Build image for your own script
 
+Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. However, in order to make your container more easy to use, there are several other steps that can come in useful. 
+
 You can copy your own script into a container with `COPY`. You can find a simple python script called `daterange.py` [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). 
 
 Here we have downloaded the script and added it to the same directory as we have the `Dockerfile`. In the `Dockerfile` we give the instruction to copy `daterange.py` to `/opt` inside the container:
@@ -266,7 +268,7 @@ ENV PATH=/opt:$PATH
     daterange.py --date 20220226
     ```
 
-What we can also do now more easily, is instead of starting an interactive session with `/bin/bash` is running the script non-interactively:
+Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
 ```sh
 docker run --rm own_script daterange.py --date 20220226
@@ -276,8 +278,8 @@ Now it will directly print the output of `daterange.py` to stdout.
 
 In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
-* `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run my_image command --option`), but has to be overwritten by `--entrypoint`. 
-* The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` code. Meaning you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
+* `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+* The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
 
 Let's try it out:
 
@@ -444,7 +446,7 @@ You can annotate your `Dockerfile` and with that the image with the instruction 
 
 ### Building an image with a browser interface
 
-In this exercise, we will use the same base image (`python:3.9.4-buster`), but instead of installing `pandas`, we will install `jupyterlab` in order to be able to run jupyter lab inside a container. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. Check out the `Dockerfile`:
+In this exercise, we will use the same base image (`python:3.9.4-buster`), but instead of installing `pandas`, we will install `jupyterlab`. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 
 ```dockerfile
 FROM python:3.9.4-buster
