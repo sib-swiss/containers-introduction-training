@@ -668,6 +668,7 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 </code></pre></div>
 </details>
 <h3 id="build-image-for-your-own-script">Build image for your own script</h3>
+<p>Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. However, in order to make your container more easy to use, there are several other steps that can come in useful. </p>
 <p>You can copy your own script into a container with <code>COPY</code>. You can find a simple python script called <code>daterange.py</code> <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py">here</a>. </p>
 <p>Here we have downloaded the script and added it to the same directory as we have the <code>Dockerfile</code>. In the <code>Dockerfile</code> we give the instruction to copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
@@ -732,14 +733,14 @@ ls
 <div class="highlight"><pre><span></span><code>daterange.py --date <span class="m">20220226</span>
 </code></pre></div>
 </details>
-<p>What we can also do now more easily, is instead of starting an interactive session with <code>/bin/bash</code> is running the script non-interactively:</p>
+<p>Instead of starting an interactive session with <code>/bin/bash</code> we can now more easily run the script non-interactively:</p>
 <div class="highlight"><pre><span></span><code>docker run --rm own_script daterange.py --date <span class="m">20220226</span>
 </code></pre></div>
 <p>Now it will directly print the output of <code>daterange.py</code> to stdout. </p>
 <p>In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use <code>ENTRYPOINT</code>. <code>ENTRYPOINT</code> is similar to <code>CMD</code>, but has two important differences:</p>
 <ul>
-<li><code>ENTRYPOINT</code> can not be overwritten by the positional arguments (i.e. <code>docker run my_image command --option</code>), but has to be overwritten by <code>--entrypoint</code>. </li>
-<li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> code. Meaning you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
+<li><code>ENTRYPOINT</code> can not be overwritten by the positional arguments (i.e. <code>docker run image [CMD]</code>), but has to be overwritten by <code>--entrypoint</code>. </li>
+<li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> command. This means that you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
 </ul>
 <p>Let&rsquo;s try it out:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
@@ -869,7 +870,7 @@ ls
 </code></pre></div>
 </details>
 <h3 id="building-an-image-with-a-browser-interface">Building an image with a browser interface</h3>
-<p>In this exercise, we will use the same base image (<code>python:3.9.4-buster</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code> in order to be able to run jupyter lab inside a container. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. Check out the <code>Dockerfile</code>:</p>
+<p>In this exercise, we will use the same base image (<code>python:3.9.4-buster</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code>. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.9.4-buster</span>
 
 <span class="k">RUN</span> pip install jupyterlab
