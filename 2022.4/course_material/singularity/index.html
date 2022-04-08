@@ -681,15 +681,9 @@ uid=0(root) gid=0(root) groups=0(root)
 </code></pre></div>
 </details>
 <h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
-<p>Check out <a href="https://biocontainers.pro">biocontainers.pro</a>. This registry contains a large collection of containerized bioinformatic tools. These are very powerful for pipeline development. You can pull one of their images from dockerhub using <code>singularity</code> like this:</p>
-<div class="highlight"><pre><span></span><code>singularity pull docker://biocontainers/fastqc:v0.11.9_cv7
+<p>All bioconda packages also have a pre-built container. Have a look at the <a href="https://bioconda.github.io/index.html">bioconda website</a>, and search for <code>fastqc</code>. In the search results, click on the appropriate record (i.e. package &lsquo;fastqc&rsquo;). Now, scroll down and find the namespace and tag for the latest fastqc image. Now we can pull it with singularity like this:</p>
+<div class="highlight"><pre><span></span><code>singularity pull docker://quay.io/biocontainers/fastqc:0.11.9--hdfd78af_1
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">BioContainers and <code>singularity</code></p>
-<p>You can directly pull a <code>singularity</code> image like so (as shown on the <code>fastqc</code> <a href="https://biocontainers.pro/tools/fastqc">page</a>):</p>
-<div class="highlight"><pre><span></span><code>singularity pull fastqc_0.11.9.sif https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
-</code></pre></div>
-</div>
 <p>Let&rsquo;s test the image. Download some sample reads first:</p>
 <div class="highlight"><pre><span></span><code>mkdir reads
 <span class="nb">cd</span> reads
@@ -699,7 +693,7 @@ rm ecoli_reads.tar.gz
 </code></pre></div>
 <p>Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running <code>fastqc</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span>
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_*.fastq.gz
+./fastqc_0.11.9--hdfd78af_1.sif fastqc ./reads/ecoli_*.fastq.gz
 </code></pre></div>
 <p>This will result in <code>html</code> files in the directory <code>./reads</code>. These are quality reports for the sequence reads. If you&rsquo;d like to view them, you can download them with <code>scp</code> or e.g. <a href="https://filezilla-project.org/">FileZilla</a>, and view them with your local browser.</p>
 
