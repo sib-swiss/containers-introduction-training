@@ -1,0 +1,312 @@
+[
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946726",
+        "alias": "",
+        "text": "How comfortable are you with the command line?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525126",
+                "alias": null,
+                "text": "I had some introduction in unix and ready to get started!",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525127",
+                "alias": null,
+                "text": "I analyzed some datasets for which I used the command line",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525128",
+                "alias": null,
+                "text": "I regularly analyze datasets with the command line",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525129",
+                "alias": null,
+                "text": "I’m a bioinformatician",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946728",
+        "alias": "",
+        "text": "How experienced are you with containers?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525135",
+                "alias": null,
+                "text": "I have zero experience",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525136",
+                "alias": null,
+                "text": "I tried to run a container once or twice because I had to",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525137",
+                "alias": null,
+                "text": "I’m using images built by others on a regular basis",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525138",
+                "alias": null,
+                "text": "I have already built images myself",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946727",
+        "alias": "",
+        "text": "Why are you joining this course?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525130",
+                "alias": null,
+                "text": "Containers are a hot topic, so I want to learn how it can help me",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525131",
+                "alias": null,
+                "text": "I want to make my workflows/pipelines more reproducible",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525132",
+                "alias": null,
+                "text": "I am done with installing (and failing to install) dependencies",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525133",
+                "alias": null,
+                "text": "I want to use a container from a fellow scientist but don’t know how",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525134",
+                "alias": null,
+                "text": "Other",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "OpenTextQuestion",
+        "wordCloudQuestion": true,
+        "lowerCaseAlias": "",
+        "id": "1946729",
+        "alias": "",
+        "text": "Write three topics you would like to learn about in this course",
+        "image": null,
+        "maxLength": 2000,
+        "maxWords": 150,
+        "resultFormat": "WORD_CLOUD",
+        "maxWordCount": null,
+        "maxWordLength": null,
+        "correctAnswers": [],
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946775",
+        "alias": "",
+        "text": "Which statement is true?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525339",
+                "alias": null,
+                "text": "The concept of containers is property of Docker, so Docker is the only software that can be used to develop containers",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525340",
+                "alias": null,
+                "text": "If you have many different tasks, it’s best to use a single container",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525341",
+                "alias": null,
+                "text": "A container contains the information for generating an image",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525342",
+                "alias": null,
+                "text": "An image contains the information for generating a container",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946776",
+        "alias": "",
+        "text": "Why is creating an image using docker commit not very reproducible?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525343",
+                "alias": null,
+                "text": "In order to recreate the container you will need the entire image (big file)",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525344",
+                "alias": null,
+                "text": "The exact build steps are not described by default",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525345",
+                "alias": null,
+                "text": "It is difficult to trace back software versions",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525346",
+                "alias": null,
+                "text": "All of the above",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "lowerCaseAlias": "",
+        "id": "1946779",
+        "alias": "",
+        "text": "What is the best way to share an image in the context of reproducibility?",
+        "image": null,
+        "choices": [
+            {
+                "id": "7525350",
+                "alias": null,
+                "text": "As an image on dockerhub",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525351",
+                "alias": null,
+                "text": "As a tar file generated by docker save",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            },
+            {
+                "id": "7525352",
+                "alias": null,
+                "text": "As a dockerfile on a git repo",
+                "isCorrectAnswer": false,
+                "excludeFromResults": false,
+                "image": null
+            }
+        ],
+        "minNumberSelections": 1,
+        "maxNumberSelections": 1,
+        "resultFormat": "%",
+        "distributableWeight": null,
+        "weightingSetting": null,
+        "weightingFactor": null,
+        "correctAnswerExplanation": null
+    }
+]
