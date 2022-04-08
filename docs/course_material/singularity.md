@@ -187,18 +187,11 @@ During the lecture you have learned that singularity takes over the user privile
 
 ### A bioinformatics example (extra)
 
-Check out [biocontainers.pro](https://biocontainers.pro). This registry contains a large collection of containerized bioinformatic tools. These are very powerful for pipeline development. You can pull one of their images from dockerhub using `singularity` like this:
+All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the namespace and tag for the latest fastqc image. Now we can pull it with singularity like this:
 
 ```sh
-singularity pull docker://biocontainers/fastqc:v0.11.9_cv7
+singularity pull docker://quay.io/biocontainers/fastqc:0.11.9--hdfd78af_1
 ```
-
-!!! note "BioContainers and `singularity`"
-     You can directly pull a `singularity` image like so (as shown on the `fastqc` [page](https://biocontainers.pro/tools/fastqc)):
-
-    ```sh
-    singularity pull fastqc_0.11.9.sif https://depot.galaxyproject.org/singularity/fastqc:0.11.9--0
-    ```
 
 Let's test the image. Download some sample reads first:
 
@@ -214,7 +207,7 @@ Now you can simply run the image as an executable preceding the commands you wou
 
 ```sh
 cd
-./fastqc_v0.11.9_cv7.sif fastqc ./reads/ecoli_*.fastq.gz
+./fastqc_0.11.9--hdfd78af_1.sif fastqc ./reads/ecoli_*.fastq.gz
 ```
 
 This will result in `html` files in the directory `./reads`. These are quality reports for the sequence reads. If you'd like to view them, you can download them with `scp` or e.g. [FileZilla](https://filezilla-project.org/), and view them with your local browser.

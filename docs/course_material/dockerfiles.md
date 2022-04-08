@@ -172,19 +172,9 @@ CMD figlet My image works!
 
 ### Build image for your own script
 
-Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. However, in order to make your container more easy to use, there are several other steps that can come in useful. 
+Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. 
 
-You can copy your own script into a container with `COPY`. You can find a simple python script called `daterange.py` [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). 
-
-Here we have downloaded the script and added it to the same directory as we have the `Dockerfile`. In the `Dockerfile` we give the instruction to copy `daterange.py` to `/opt` inside the container:
-
-```dockerfile
-FROM python:3.9.4-buster
-
-RUN pip install pandas 
-
-COPY daterange.py /opt 
-```
+In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). 
 
 !!! note
     Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
@@ -205,7 +195,20 @@ COPY daterange.py /opt
     2022-03-04 00:00:00
     ```
 
-**Exercise:** Build this image with `docker build` and execute the script inside the container. 
+In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
+
+```dockerfile
+FROM python:3.9.4-buster
+
+RUN pip install pandas 
+
+COPY daterange.py /opt 
+```
+
+!!! note
+    In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+
+**Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
 
 !!! hint
     Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
@@ -240,6 +243,9 @@ COPY daterange.py /opt
 
 That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
 
+!!! note "The `$PATH` variable"
+    The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
+
 ```dockerfile
 FROM python:3.9.4-buster
 
@@ -262,7 +268,19 @@ ENV PATH=/opt:$PATH
     docker run -it --rm own_script /bin/bash
     ```
 
-    Now you can try to execute it from the base directory:
+    The path is upated, `/opt` is appended to the beginning of the variable:
+
+    ```sh
+    echo $PATH
+    ```
+
+    returns:
+
+    ```
+    /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    ```
+
+    Now you can try to execute it from the root directory (or any other):
 
     ```sh
     daterange.py --date 20220226
@@ -317,7 +335,7 @@ CMD ["--date", "20220226"]
 
     Here, the container behaves as the executable itself to which you can pass arguments. 
 
-Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore it can come in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
+Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
 
 ```dockerfile
 FROM python:3.9.4-buster
@@ -401,9 +419,16 @@ We have used `docker inspect` already in the previous chapter to find the defaul
 
 ### Adding metadata to your image
 
-You can annotate your `Dockerfile` and with that the image with the instruction `LABEL`. You can give any key with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
+You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
 **Exercise**: Annotate our `Dockerfile` with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with `docker inspect`. 
+
+!!! note
+    You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
+
+    ```dockerfile
+    LABEL keyx="valuex" keyy="valuey"
+    ```
 
 ??? done "Answer"
 
@@ -446,7 +471,7 @@ You can annotate your `Dockerfile` and with that the image with the instruction 
 
 ### Building an image with a browser interface
 
-In this exercise, we will use the same base image (`python:3.9.4-buster`), but instead of installing `pandas`, we will install `jupyterlab`. Jupyter lab is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+In this exercise, we will use the same base image (`python:3.9.4-buster`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 
 ```dockerfile
 FROM python:3.9.4-buster
@@ -490,7 +515,7 @@ docker run \
 jupyter-lab
 ```
 
-By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it.
+By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
 
 !!! note
     Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
