@@ -7,8 +7,7 @@
 * Execute a singularity container
 * Explain the difference in default mounting behaviour between `docker` and `singularity`
 * Use `singularity shell` to generate an interactive shell inside a `.sif` image
-* Search and use images with both `docker` and `singularity` from [biocontainers.pro](https://biocontainers.pro)
-
+* Search and use images with both `docker` and `singularity` from [bioconda](https://bioconda.github.io/index.html)
 
 ## Material
 
