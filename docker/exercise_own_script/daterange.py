@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from xml.dom.minidom import Attr
 import pandas as pd
 import argparse
 
