@@ -580,8 +580,22 @@
 <p>This will automatically pull the image with the tag <code>latest</code>. However, if the maintainer of the <code>ubuntu</code> images decides to tag another <code>ubuntu</code> version as <code>latest</code>, rebuilding with the above <code>Dockerfile</code> will not give you the same result. Therefore it&rsquo;s always good practice to add the (stable) tag to the image in a <code>Dockerfile</code>. More rules on making your <code>Dockerfiles</code> more reproducible <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316">here</a>.</p>
 </div>
 <p><strong>Exercise:</strong> Create a file on your computer called <code>Dockerfile</code>, and paste the above instruction lines in that file. Make the directory containing the <code>Dockerfile</code> your current directory. Build a new image based on that <code>Dockerfile</code> with:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">x86_64 / AMD64</label><label for="__tabbed_1_2">ARM64 (MacOS M1 chip)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker build .
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build --platform amd64 .
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">If using an Apple M1 chip (newer Macs)</p>
+<p>If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) <code>x86_64/AMD64</code> machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it&rsquo;s best to specify the <code>--platform amd64</code> flag. </p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">The argument of <code>docker build</code></p>
 <p>The command <code>docker build</code> takes a directory as input (providing <code>.</code> means the current directory). This directory should contain the <code>Dockerfile</code>, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.</p>
@@ -602,8 +616,18 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 </div>
 <details class="done"><summary>Answer</summary><p>Remove the nameless image with <code>docker image prune</code>.</p>
 <p>After that, rebuild an image with a name:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">x86_64 / AMD64</label><label for="__tabbed_2_2">ARM (MacOS M1 chip)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet:v2 .
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build --platform amd64 -t ubuntu-figlet:v2 .
+</code></pre></div>
+</div>
+</div>
+</div>
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
 <p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
@@ -614,8 +638,18 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 </code></pre></div>
 <p><strong>Exercise:</strong> Build a new image based on the above <code>Dockerfile</code>. Can you validate the change using <code>docker image inspect</code>? Can you overwrite this default with <code>docker run</code>?</p>
 <details class="done"><summary>Answer</summary><p>Copy the new line to your <code>Dockerfile</code>, and build the new image like this:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">x86_64 / AMD64</label><label for="__tabbed_3_2">ARM64 (MacOS M1 chip)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker build -t ubuntu-figlet:v3 .
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build --platform amd64 -t ubuntu-figlet:v3 .
+</code></pre></div>
+</div>
+</div>
+</div>
 <p>The command <code>docker inspect ubuntu-figlet:v3</code> will give:</p>
 <div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
     &quot;/bin/sh&quot;,
@@ -669,7 +703,9 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 </details>
 <h3 id="build-image-for-your-own-script">Build image for your own script</h3>
 <p>Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction <code>COPY</code>. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. </p>
-<p>In the exercises will use a simple script called <code>daterange.py</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py">here</a>. </p>
+<p>In the exercises will use a simple script called <code>daterange.py</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py">here</a>. After you have downloaded it, make sure to set the permissions to executable:</p>
+<div class="highlight"><pre><span></span><code>chmod +x daterange.py
+</code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Have a look at <code>daterange.py</code>. It is a simple script that uses <code>pandas</code>. It takes a date (in the format <code>YYYYMMDD</code>) as provided by the option <code>--date</code>, and returns a list of all dates in the week starting from that date. An example for execution would be:</p>
@@ -702,8 +738,18 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
 </div>
 <details class="done"><summary>Answer</summary><p>Build the container:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">x86_64 / AMD64</label><label for="__tabbed_4_2">ARM64 (MacOS M1 chip)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker build -t own_script .
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build --platform amd64 -t own_script .
+</code></pre></div>
+</div>
+</div>
+</div>
 <p>Run the container:</p>
 <div class="highlight"><pre><span></span><code>docker run -it --rm own_script /bin/bash
 </code></pre></div>
@@ -903,8 +949,18 @@ ls
 <p>We have specified here that jupyter lab should use port 8888. However, this <strong>inside</strong> the container. We can not connect to it yet with our browser.</p>
 </div>
 <p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
-<details class="done"><summary>Answer</summary><div class="highlight"><pre><span></span><code>docker build -t jupyter-lab .
+<details class="done"><summary>Answer</summary><div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">x86_64 / AMD64</label><label for="__tabbed_5_2">ARM64 (MacOS M1 chip)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build -t jupyter-lab .
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker build --platform amd64 -t jupyter-lab .
+</code></pre></div>
+</div>
+</div>
+</div>
 </details>
 <p>You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with <code>-p [HOSTPORT:CONTAINERPORT]</code>. We choose to publish it to the same port number:</p>
 <div class="highlight"><pre><span></span><code>docker run --rm -it -p <span class="m">8888</span>:8888 jupyter-lab
