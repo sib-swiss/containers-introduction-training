@@ -604,9 +604,22 @@ This will result in a file called <code>ubuntu-figlet_v3.sif</code></p>
 <p>These <code>.sif</code> files can be run as standalone executables:</p>
 <div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is shorthand for:</p>
+<div class="highlight"><pre><span></span><code>singularity run ubuntu-figlet_v3.sif
+</code></pre></div>
+</div>
 <p>And you can overwrite the default command like this:</p>
 <div class="highlight"><pre><span></span><code>./<span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is shorthand for:</p>
+<div class="highlight"><pre><span></span><code>singularity <span class="nb">exec</span> <span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
+</code></pre></div>
+<p>Most applications require <code>singularity exec</code>. Especially if you want to provide options like <code>--bind</code> (for mounting directories). </p>
+</div>
 <p><strong>Exercise:</strong> Run the <code>.sif</code> file without a command, and with a command that runs <code>figlet</code>. Do you get expected output?</p>
 <details class="done"><summary>Answer</summary><p>Running it without a command (<code>./ubuntu-figlet_v3.sif</code>) should give:</p>
 <p><div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
@@ -631,6 +644,12 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 </details>
 <h3 id="mounting-with-singularity">Mounting with Singularity</h3>
 <p>Singularity is also different from Docker in the way it handles mounting. By default, Singularity binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.  </p>
+<div class="admonition note">
+<p class="admonition-title">If your directory is not mounted by default</p>
+<p>It depends on the singularity settings whether most directories are mounted by default to the container. If your directory is not mounted, you can do that with the <code>--bind</code> option of <code>singularity exec</code>:</p>
+<div class="highlight"><pre><span></span><code>singularity <span class="nb">exec</span> --bind /my/dir/to/mount/ <span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
+</code></pre></div>
+</div>
 <p>Running the command <code>pwd</code> (full name of current working directory) will therefore result in a path on the host machine:</p>
 <div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif <span class="nb">pwd</span>
 </code></pre></div>
