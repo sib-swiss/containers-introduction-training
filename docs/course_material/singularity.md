@@ -71,11 +71,28 @@ These `.sif` files can be run as standalone executables:
 ./ubuntu-figlet_v3.sif
 ```
 
+!!! note
+    This is shorthand for:
+
+    ```sh
+    singularity run ubuntu-figlet_v3.sif
+    ```
+
 And you can overwrite the default command like this:
 
 ```sh
 ./[IMAGE NAME].sif [COMMAND]
 ```
+
+!!! note
+    This is shorthand for:
+
+    ```sh
+    singularity exec [IMAGE NAME].sif [COMMAND]
+    ```
+
+    Most applications require `singularity exec`. Especially if you want to provide options like `--bind` (for mounting directories). 
+
 
 **Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output?
 
@@ -113,6 +130,14 @@ And you can overwrite the default command like this:
 ### Mounting with Singularity
 
 Singularity is also different from Docker in the way it handles mounting. By default, Singularity binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.  
+
+!!! note "If your directory is not mounted by default"
+    It depends on the singularity settings whether most directories are mounted by default to the container. If your directory is not mounted, you can do that with the `--bind` option of `singularity exec`:
+
+    ```sh
+    singularity exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]
+    ```
+
 
 Running the command `pwd` (full name of current working directory) will therefore result in a path on the host machine:
 
