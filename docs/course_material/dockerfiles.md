@@ -40,9 +40,17 @@ RUN apt-get install figlet
 
 **Exercise:** Create a file on your computer called `Dockerfile`, and paste the above instruction lines in that file. Make the directory containing the `Dockerfile` your current directory. Build a new image based on that `Dockerfile` with:
 
-```sh
-docker build .
-```
+=== "x86_64 / AMD64"
+    ```sh
+    docker build .
+    ```
+=== "ARM64 (MacOS M1 chip)"
+    ```sh
+    docker build --platform amd64 .
+    ```
+
+!!! warning "If using an Apple M1 chip (newer Macs)"
+    If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it's best to specify the `--platform amd64` flag. 
 
 !!! note "The argument of `docker build`"
     The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.
@@ -71,9 +79,14 @@ What has happened? What is the name of the build image?
 
     After that, rebuild an image with a name:
 
-    ```
-    docker build -t ubuntu-figlet:v2 .
-    ```
+    === "x86_64 / AMD64"
+        ```sh
+        docker build -t ubuntu-figlet:v2 .
+        ```
+    === "ARM (MacOS M1 chip)"
+        ```sh
+        docker build --platform amd64 -t ubuntu-figlet:v2 .
+        ```
 
 ### Using `CMD`
 
@@ -91,9 +104,14 @@ CMD figlet My image works!
 ??? done "Answer"
     Copy the new line to your `Dockerfile`, and build the new image like this:
 
-    ```sh
-    docker build -t ubuntu-figlet:v3 .
-    ```
+    === "x86_64 / AMD64"
+        ```sh
+        docker build -t ubuntu-figlet:v3 .
+        ```
+    === "ARM64 (MacOS M1 chip)"
+        ```sh
+        docker build --platform amd64 -t ubuntu-figlet:v3 .
+        ```
 
     The command `docker inspect ubuntu-figlet:v3` will give:
 
@@ -174,7 +192,11 @@ CMD figlet My image works!
 
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. 
 
-In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). 
+In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
+
+```sh
+chmod +x daterange.py
+```
 
 !!! note
     Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
@@ -216,9 +238,14 @@ COPY daterange.py /opt
 ??? done "Answer"
     Build the container:
 
-    ```sh
-    docker build -t own_script .
-    ```
+    === "x86_64 / AMD64"
+        ```sh
+        docker build -t own_script .
+        ```
+    === "ARM64 (MacOS M1 chip)"
+        ```sh
+        docker build --platform amd64 -t own_script .
+        ```
 
     Run the container:
 
@@ -489,9 +516,14 @@ This will create an image from the existing `python` image. It will also install
 **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
 ??? done "Answer"
-    ```sh
-    docker build -t jupyter-lab .
-    ```
+    === "x86_64 / AMD64"
+        ```sh
+        docker build -t jupyter-lab .
+        ```
+    === "ARM64 (MacOS M1 chip)"
+        ```sh
+        docker build --platform amd64 -t jupyter-lab .
+        ```
 
 You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
