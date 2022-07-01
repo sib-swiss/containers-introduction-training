@@ -13,6 +13,8 @@
 
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/singularity.pdf){: .md-button }
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 * [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/)
 * [Singularity hub](https://singularity-hub.org/)
 * [An article on Docker vs Singularity](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
