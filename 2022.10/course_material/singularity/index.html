@@ -1,0 +1,967 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "LearningResource",
+    "@id": "https://sib-swiss.github.io/containers-introduction-training",
+    "http://purl.org/dc/terms/conformsTo": {
+        "@type": "CreativeWork",
+        "@id": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE"
+    },
+    "description": "Course on containers for reproducible research",
+    "keywords": "container, docker, singularity, reproducible",
+    "name": " Docker and Singularity for reproducible research: getting started with containers ",
+
+    "abstract": "Reproducible analysis in bioinformatics goes beyond good documentation and sharing code. Often, analyses depend on an entire environment with many different programs, libraries and settings. For the sake of reproducibility, but also for productivity, you might want to store, reuse, and share your environments using container software such as Docker and Singularity. Containerization is a lightweight and scalable way of working with such isolated environments. For example, with Docker you can develop, store and manage environments based on Linux operating systems which can run in mostly any computer. Often, bioinformatic calculations also require large memory and CPU resources, therefore you might want to use a shared computer environment (e.g. a HPC cluster). However, to run Docker you need to have privileged rights (i.e. as root), which is not the case for Singularity, a program that enables you to run environments from a wide range of resources (including Docker) in a safe manner without the need for privileged access. Combining Singularity and Docker thus makes you extremely flexible in how, when and where you use your computer environments and those of others. To introduce you to working with containers in the context of bioinformatics research, we will take a practical approach with several hands-on exercises to go through the basics of using, developing and sharing containers.",
+    "audience": "Biologists, bioinformaticians and computational biologists",
+    "author": [
+        {
+            "@type": "Person",
+            "name": "Geert van Geest",
+            "email": "geert.vangeest@sib.swiss"
+        },
+        {
+            "@type": "Person",
+            "name": "Patricia Palagi"
+        },
+        {
+            "@type": "Organization",
+            "name": "SIB Swiss Institute of Bioinformatics"
+        }
+    ],
+    "identifier": "https://doi.org/10.5281/zenodo.6787081",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "teaches": [
+        "Understand the basic concepts and terminology associated with virtualization with containers",
+        "Be able to customize, store and share a containerized environment with Docker",
+        "Understand the essential differences between Docker and Singularity",
+        "Be able to use Singularity to run containers on a shared computer environment (e.g. a HPC cluster)"
+    ]
+}
+</script>
+
+    
+      
+        <title>Running containers with singularity - Introduction to containers</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-1HJVS56CBX"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-1HJVS56CBX",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-1HJVS56CBX",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>var consent;"undefined"==typeof __md_analytics||(consent=__md_get("__consent"))&&consent.analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+              </button>
+            
+            
+  <b>Issues, questions or feedback? &#128591; &#128640; </b> Use the "Questions and Answers" section at the bottom &#128071; of every page
+
+          </div>
+          
+            <script>var content,el=document.querySelector("[data-md-component=announce]");el&&(content=el.querySelector(".md-typeset"),__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0))</script>
+          
+        </aside>
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../.."> 
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Introduction to containers" class="md-header__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to containers
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Running containers with singularity
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introduction to containers" class="md-nav__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to containers
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../precourse/" class="md-nav__link">
+        Precourse preparations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_schedule/" class="md-nav__link">
+        Course schedule
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Course material
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Course material" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Course material
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction_containers/" class="md-nav__link">
+        Introduction to containers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../managing_docker/" class="md-nav__link">
+        Managing containers and images
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dockerfiles/" class="md-nav__link">
+        Working with dockerfiles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Running containers with singularity
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Running containers with singularity
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login-to-remote" class="md-nav__link">
+    Login to remote
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pulling-an-image" class="md-nav__link">
+    Pulling an image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-an-image" class="md-nav__link">
+    Executing an image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-with-singularity" class="md-nav__link">
+    Mounting with Singularity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-shell" class="md-nav__link">
+    Interactive shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-bioinformatics-example-extra" class="md-nav__link">
+    A bioinformatics example (extra)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    Material
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login-to-remote" class="md-nav__link">
+    Login to remote
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pulling-an-image" class="md-nav__link">
+    Pulling an image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-an-image" class="md-nav__link">
+    Executing an image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-with-singularity" class="md-nav__link">
+    Mounting with Singularity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-shell" class="md-nav__link">
+    Interactive shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-bioinformatics-example-extra" class="md-nav__link">
+    A bioinformatics example (extra)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+  
+                
+  <a href="https://github.com/sib-swiss/containers-introduction-training/edit/main/docs/course_material/singularity.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Running containers with singularity</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Login to a remote machine with <code>ssh</code></li>
+<li>Use <code>singularity pull</code> to convert an image from dockerhub to the &lsquo;singularity image format&rsquo; (<code>.sif</code>)</li>
+<li>Execute a singularity container</li>
+<li>Explain the difference in default mounting behaviour between <code>docker</code> and <code>singularity</code></li>
+<li>Use <code>singularity shell</code> to generate an interactive shell inside a <code>.sif</code> image</li>
+<li>Search and use images with both <code>docker</code> and <code>singularity</code> from <a href="https://bioconda.github.io/index.html">bioconda</a></li>
+</ul>
+<h2 id="material">Material</h2>
+<p><a class="md-button" href="../../assets/pdf/singularity.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M88 304h-8v-48h8c13.3 0 24 10.7 24 24s-10.7 24-24 24zm104-48h8c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16h-8v-96zM224 0v128c0 17.7 14.3 32 32 32h128v288c0 35.3-28.7 64-64 64H64c-35.35 0-64-28.7-64-64V64C0 28.65 28.65 0 64 0h160zM64 224c-8.84 0-16 7.2-16 16v128c0 8.8 7.16 16 16 16s16-7.2 16-16v-32h8c30.9 0 56-25.1 56-56s-25.1-56-56-56H64zm96 144c0 8.8 7.2 16 16 16h24c26.5 0 48-21.5 48-48v-64c0-26.5-21.5-48-48-48h-24c-8.8 0-16 7.2-16 16v128zm128-144c-8.8 0-16 7.2-16 16v128c0 8.8 7.2 16 16 16s16-7.2 16-16v-48h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32v-32h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-48zM256 0l128 128H256V0z"/></svg></span> Download the presentation</a></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<ul>
+<li><a href="https://sylabs.io/guides/3.7/user-guide/">Singularity documentation</a></li>
+<li><a href="https://singularity-hub.org/">Singularity hub</a></li>
+<li><a href="https://pythonspeed.com/articles/containers-filesystem-data-processing/">An article on Docker vs Singularity</a></li>
+<li><a href="https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#containerization-of-conda-based-workflows">Using conda and containers with snakemake</a></li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<h3 id="login-to-remote">Login to remote</h3>
+<p>If you are enrolled in the course, you have received an e-mail with an IP, username, private key and password. To do the Singularity exercises we will login to a remote server. Below you can find instructions on how to login.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">mac OS/Linux</label><label for="__tabbed_1_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Open a terminal, and <code>cd</code> to the directory where you have stored your private key. After that, change the file permissions of the key:</p>
+<div class="highlight"><pre><span></span><code>chmod <span class="m">400</span> key_&lt;username&gt;.pem
+</code></pre></div>
+<p>Then, login like this:</p>
+<div class="highlight"><pre><span></span><code>ssh -i key_&lt;username&gt;.pem &lt;username&gt;@&lt;IP&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Below you can find video tutorials and information to log in with MobaXterm.</p>
+<p>MobaXterm is an SSH client for Windows. You can use it to connect to the remote host and edit remote scripts. With MobaXterm, you will automatically login to the remote server once you&rsquo;ve started the SSH session. Set it up on your own computer using your own credentials and the video below.</p>
+<p><iframe src="https://player.vimeo.com/video/473838657" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></p>
+</div>
+</div>
+</div>
+<h3 id="pulling-an-image">Pulling an image</h3>
+<p>Singularity can take several image formats (e.g. a <code>docker</code> image), and convert them into it&rsquo;s own <code>.sif</code> format. Unlike <code>docker</code> this image doesn&rsquo;t live in a local image cache, but it&rsquo;s stored as an actual file.</p>
+<p><strong>Exercise:</strong> On the remote server, pull the docker image that has the adjusted default <code>CMD</code> that we have pushed to dockerhub <a href="../dockerfiles/#using-cmd">in this exercise</a> (<code>ubuntu-figlet-df:v2</code>) with <code>singularity pull</code>. The syntax is:</p>
+<div class="highlight"><pre><span></span><code>singularity pull docker://<span class="o">[</span>USER NAME<span class="o">]</span>/<span class="o">[</span>IMAGE NAME<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
+</code></pre></div>
+<details class="done"><summary>Answer</summary><p><div class="highlight"><pre><span></span><code>singularity pull docker://<span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-figlet:v3
+</code></pre></div>
+This will result in a file called <code>ubuntu-figlet_v3.sif</code></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you weren&rsquo;t able to push the image in the previous exercises to your docker hub, you can use <code>geertvangeest</code> as username to pull the image.</p>
+</div>
+<h3 id="executing-an-image">Executing an image</h3>
+<p>These <code>.sif</code> files can be run as standalone executables:</p>
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is shorthand for:</p>
+<div class="highlight"><pre><span></span><code>singularity run ubuntu-figlet_v3.sif
+</code></pre></div>
+</div>
+<p>And you can overwrite the default command like this:</p>
+<div class="highlight"><pre><span></span><code>./<span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is shorthand for:</p>
+<div class="highlight"><pre><span></span><code>singularity <span class="nb">exec</span> <span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
+</code></pre></div>
+<p>Most applications require <code>singularity exec</code>. Especially if you want to provide options like <code>--bind</code> (for mounting directories). </p>
+</div>
+<p><strong>Exercise:</strong> Run the <code>.sif</code> file without a command, and with a command that runs <code>figlet</code>. Do you get expected output?</p>
+<details class="done"><summary>Answer</summary><p>Running it without a command (<code>./ubuntu-figlet_v3.sif</code>) should give:</p>
+<p><div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
+|  \/  |_   _  (_)_ __ ___   __ _  __ _  ___  __      _____  _ __| | _____| |
+| |\/| | | | | | | &#39;_ ` _ \ / _` |/ _` |/ _ \ \ \ /\ / / _ \| &#39;__| |/ / __| |
+| |  | | |_| | | | | | | | | (_| | (_| |  __/  \ V  V / (_) | |  |   &lt;\__ \_|
+|_|  |_|\__, | |_|_| |_| |_|\__,_|\__, |\___|   \_/\_/ \___/|_|  |_|\_\___(_)
+       |___/                     |___/
+</code></pre></div>
+Which is the default command that we changed in the <code>Dockerfile</code>.</p>
+<p>Running with a another <code>figlet</code> command:</p>
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif figlet <span class="s1">&#39;Something else&#39;</span>
+</code></pre></div>
+<p>Should give:</p>
+<div class="highlight"><pre><span></span><code>____                       _   _     _                    _
+/ ___|  ___  _ __ ___   ___| |_| |__ (_)_ __   __ _    ___| |___  ___
+\___ \ / _ \| &#39;_ ` _ \ / _ \ __| &#39;_ \| | &#39;_ \ / _` |  / _ \ / __|/ _ \
+___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
+|____/ \___/|_| |_| |_|\___|\__|_| |_|_|_| |_|\__, |  \___|_|___/\___|
+                                             |___/
+</code></pre></div>
+</details>
+<h3 id="mounting-with-singularity">Mounting with Singularity</h3>
+<p>Singularity is also different from Docker in the way it handles mounting. By default, Singularity binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.  </p>
+<div class="admonition note">
+<p class="admonition-title">If your directory is not mounted by default</p>
+<p>It depends on the singularity settings whether most directories are mounted by default to the container. If your directory is not mounted, you can do that with the <code>--bind</code> option of <code>singularity exec</code>:</p>
+<div class="highlight"><pre><span></span><code>singularity <span class="nb">exec</span> --bind /my/dir/to/mount/ <span class="o">[</span>IMAGE NAME<span class="o">]</span>.sif <span class="o">[</span>COMMAND<span class="o">]</span>
+</code></pre></div>
+</div>
+<p>Running the command <code>pwd</code> (full name of current working directory) will therefore result in a path on the host machine:</p>
+<div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif <span class="nb">pwd</span>
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>A similar Docker command would look like (run this on your local computer):</p>
+<div class="highlight"><pre><span></span><code>docker run --rm ubuntu-figlet:v3 <span class="nb">pwd</span>
+</code></pre></div>
+</div>
+<details class="done"><summary>Answer</summary><p>The output of <code>./ubuntu-figlet_v3.sif pwd</code> is the current directory on the host: i.e. <code>/home/username</code> if you have it in your home directory. The output of <code>docker run --rm ubuntu-figlet:v3 pwd</code> (on the local host) would be <code>/</code>, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).</p>
+</details>
+<h3 id="interactive-shell">Interactive shell</h3>
+<p>If you want to debug or inspect an image, it can be helpful to have a shell inside the container. You can do that with <code>singularity shell</code>:</p>
+<div class="highlight"><pre><span></span><code>singularity shell ubuntu-figlet_v3.sif
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To exit the shell type <code>exit</code>.</p>
+</div>
+<p><strong>Exercise:</strong> Can you run <code>figlet</code> inside this shell?</p>
+<details class="done"><summary>Answer</summary><p>Yes:
+<div class="highlight"><pre><span></span><code>Singularity&gt; figlet test
+ _            _
+| |_ ___  ___| |_
+| __/ _ \/ __| __|
+| ||  __/\__ \ |_
+ \__\___||___/\__|
+</code></pre></div></p>
+</details>
+<p>During the lecture you have learned that singularity takes over the user privileges of the user on the host. You can get user information with command like <code>whoami</code>, <code>id</code>, <code>groups</code> etc.</p>
+<p><strong>Exercise:</strong> Run the <code>figlet</code> container interactively. Do you have the same user privileges as if you were on the host? How is that with <code>docker</code>?</p>
+<details class="done"><summary>Answer</summary><p>A command like <code>whoami</code> will result in your username printed at stdout:</p>
+<div class="highlight"><pre><span></span><code>Singularity&gt; whoami
+myusername
+Singularity&gt; id
+uid=1030(myusername) gid=1031(myusername) groups=1031(myusername),1001(condausers)
+Singularity&gt; groups
+myusername condausers
+</code></pre></div>
+<p>With singularity, you have the same privileges inside the singularity container as on the host. If you do this in the docker container (based on the same image), you&rsquo;ll get output like this:</p>
+<div class="highlight"><pre><span></span><code>root@a3d6e59dc19d:/# whoami
+root
+root@a3d6e59dc19d:/# groups
+root
+root@a3d6e59dc19d:/# id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre></div>
+</details>
+<h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
+<p>All bioconda packages also have a pre-built container. Have a look at the <a href="https://bioconda.github.io/index.html">bioconda website</a>, and search for <code>fastqc</code>. In the search results, click on the appropriate record (i.e. package &lsquo;fastqc&rsquo;). Now, scroll down and find the namespace and tag for the latest fastqc image. Now we can pull it with singularity like this:</p>
+<div class="highlight"><pre><span></span><code>singularity pull docker://quay.io/biocontainers/fastqc:0.11.9--hdfd78af_1
+</code></pre></div>
+<p>Let&rsquo;s test the image. Download some sample reads first:</p>
+<div class="highlight"><pre><span></span><code>mkdir reads
+<span class="nb">cd</span> reads
+wget https://introduction-containers.s3.eu-central-1.amazonaws.com/ecoli_reads.tar.gz
+tar -xzvf ecoli_reads.tar.gz
+rm ecoli_reads.tar.gz
+</code></pre></div>
+<p>Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running <code>fastqc</code> would look like:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span>
+./fastqc_0.11.9--hdfd78af_1.sif fastqc ./reads/ecoli_*.fastq.gz
+</code></pre></div>
+<p>This will result in <code>html</code> files in the directory <code>./reads</code>. These are quality reports for the sequence reads. If you&rsquo;d like to view them, you can download them with <code>scp</code> or e.g. <a href="https://filezilla-project.org/">FileZilla</a>, and view them with your local browser.</p>
+
+
+  
+
+
+
+              
+
+  <!-- Giscus -->
+  <h2>Questions & Answers</h2>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="sib-swiss/containers-introduction-training"
+            data-repo-id="MDEwOlJlcG9zaXRvcnkzMzE4OTA0MzA="
+            data-category="Q&A"
+            data-category-id="DIC_kwDOE8g-_s4CSEuU"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+    </script>
+  <!-- Synchronize Giscus theme with palette -->
+  <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    /* Set palette on initial load */
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "dark" : "light"
+      giscus.setAttribute("data-theme", theme) 
+
+
+    }
+
+    /* Register event handlers after documented loaded */
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+          /* Instruct Giscus to change theme */
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
+
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../dockerfiles/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Working with dockerfiles" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Working with dockerfiles
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 SIB Swiss institute of Bioinformatics – <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+
+  
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input type="checkbox" class="md-toggle" id="__settings">
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="analytics" checked>
+          <span class="task-list-indicator"></span>
+          Google Analytics
+        <label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);console.log(new FormData(form)),__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["announce.dismiss"], "search": "../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+    
+  </body>
+</html>
