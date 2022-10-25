@@ -50,7 +50,7 @@ If you are enrolled in the course, you have received an e-mail with an IP, usern
 
 Singularity can take several image formats (e.g. a `docker` image), and convert them into it's own `.sif` format. Unlike `docker` this image doesn't live in a local image cache, but it's stored as an actual file.
 
-**Exercise:** On the remote server, pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](../dockerfiles/#using-cmd) (`ubuntu-figlet-df:v2`) with `singularity pull`. The syntax is:
+**Exercise:** On the remote server, pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](../dockerfiles/#using-cmd) (`ubuntu-figlet-df:v3`) with `singularity pull`. The syntax is:
 
 ```sh
 singularity pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
@@ -83,20 +83,23 @@ These `.sif` files can be run as standalone executables:
 And you can overwrite the default command like this:
 
 ```sh
-./[IMAGE NAME].sif [COMMAND]
+singularity run [IMAGE NAME].sif [COMMAND]
 ```
 
 !!! note
-    This is shorthand for:
+    In this case, you can also use
 
     ```sh
-    singularity exec [IMAGE NAME].sif [COMMAND]
+    ./[IMAGE NAME].sif [COMMAND]
     ```
 
-    Most applications require `singularity exec`. Especially if you want to provide options like `--bind` (for mounting directories). 
+    However, most applications require `singularity run`. Especially if you want to provide options like `--bind` (for mounting directories). 
 
 
-**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output?
+**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the `daterange` image (pull from dockerhub first).
+
+!!! note "Entrypoint and singularity"
+    The `daterange` image has an entrypoint set, and `singularity run` does not overwrite it. In order to ignore both the entrypoint and cmd use `singularity exec`.  
 
 ??? done "Answer"
     Running it without a command (`./ubuntu-figlet_v3.sif`) should give:
@@ -127,6 +130,30 @@ And you can overwrite the default command like this:
     |____/ \___/|_| |_| |_|\___|\__|_| |_|_|_| |_|\__, |  \___|_|___/\___|
                                                  |___/
 
+    ```
+
+    Pulling the `daterange.py` image:
+
+    ```sh
+    singularity pull docker://[USER NAME]/daterange:v1
+    ```
+
+    Running it without command:
+
+    ```sh
+    ./daterange_v1.sif
+    ```
+
+    Running with a command:
+
+    ```sh
+    ./daterange_v1.sif --date 20221005
+    ```
+
+    To overwrite both entrypoint and the command:
+
+    ```sh
+    singularity exec daterange_v1.sif daterange.py --date 20221005
     ```
 
 ### Mounting with Singularity

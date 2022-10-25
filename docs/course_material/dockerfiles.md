@@ -240,17 +240,17 @@ COPY daterange.py /opt
 
     === "x86_64 / AMD64"
         ```sh
-        docker build -t own_script .
+        docker build -t daterange .
         ```
     === "ARM64 (MacOS M1 chip)"
         ```sh
-        docker build --platform amd64 -t own_script .
+        docker build --platform amd64 -t daterange .
         ```
 
     Run the container:
 
     ```sh
-    docker run -it --rm own_script /bin/bash
+    docker run -it --rm daterange /bin/bash
     ```
 
     Inside the container we look up the script:
@@ -292,7 +292,7 @@ ENV PATH=/opt:$PATH
     After re-building we start an interactive session:
 
     ```sh
-    docker run -it --rm own_script /bin/bash
+    docker run -it --rm daterange /bin/bash
     ```
 
     The path is upated, `/opt` is appended to the beginning of the variable:
@@ -316,7 +316,7 @@ ENV PATH=/opt:$PATH
 Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
 ```sh
-docker run --rm own_script daterange.py --date 20220226
+docker run --rm daterange daterange.py --date 20220226
 ```
 
 Now it will directly print the output of `daterange.py` to stdout. 
@@ -351,13 +351,13 @@ CMD ["--date", "20220226"]
     Just running the container non-interactively would be:
 
     ```sh
-    docker run --rm own_script
+    docker run --rm daterange
     ```
 
     Passing a different argument (i.e. overwriting `CMD`) would be:
 
     ```sh
-    docker run --rm own_script --date 20210330
+    docker run --rm daterange --date 20210330
     ```
 
     Here, the container behaves as the executable itself to which you can pass arguments. 
@@ -384,7 +384,7 @@ ENTRYPOINT ["daterange.py"]
 CMD ["--date", "20220226"]
 ```
 
-**Exercise**: build the image, and start the container interactively. Has the default directory changed? 
+**Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
 
 !!! note 
     You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
@@ -393,16 +393,23 @@ CMD ["--date", "20220226"]
     Running the container interactively would be:
 
     ```sh
-    docker run -it --rm --entrypoint /bin/bash own_script
+    docker run -it --rm --entrypoint /bin/bash daterange
     ```
     
-    Which should result in a termina looking something like this:
+    Which should result in a terminal looking something like this:
 
     ```
     root@9a27da455fb1:/opt#
     ```
 
     Meaning that indeed the default directory has changed to `/opt`
+
+    Pushing it to dockerhub: 
+
+    ```sh
+    docker tag daterage [USER NAME]/daterange:v1
+    docker push [USER NAME]/daterange:v1
+    ```
 
 ### Get information on your image with `docker inspect`
 

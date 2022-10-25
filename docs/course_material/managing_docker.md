@@ -142,13 +142,10 @@ In the previous exercises we have run containers without a command as positional
     Running `docker image inspect ubuntu` gives (amongst other information):
     ```
     "Cmd": [
-               "/bin/sh",
-               "-c",
-               "#(nop) ",
-               "CMD [\"/bin/bash\"]"
-           ],
+        "bash"
+    ],
     ```
-    The first part in the list following `"Cmd":` is the shell in which the command is executed (`/bin/sh -c`; i.e. *Bourne shell*), the second part, following `CMD`, is the default command. In the case of the ubuntu image this is `/bin/bash`, returning a shell in `bash` (i.e. *Bourne again shell* in stead of `sh`). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](dockerfiles.md).
+    In the case of the ubuntu the default command is `bash`, returning a shell in `bash` (i.e. *Bourne again shell*). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](dockerfiles.md).
 
 ### Removing containers
 
