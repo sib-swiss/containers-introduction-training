@@ -807,7 +807,7 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/ubuntu-fig
 </code></pre></div>
 </div>
 <p>In the <code>Dockerfile</code> below we give the instruction to copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip install pandas 
 
@@ -854,7 +854,7 @@ ls
 <p class="admonition-title">The <code>$PATH</code> variable</p>
 <p>The path variable is a special variable that consists of a list of path seperated by colons (<code>:</code>). These paths are searched if you are trying to run an executable. More info this topic at e.g. <a href="https://en.wikipedia.org/wiki/PATH_(variable)">wikipedia</a>. </p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip install pandas 
 
@@ -892,7 +892,7 @@ ls
 <li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> command. This means that you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
 </ul>
 <p>Let&rsquo;s try it out:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip install pandas 
 
@@ -919,7 +919,7 @@ ls
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
 <p>Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with <code>WORKDIR</code>. This instruction will set the default directory for all other instructions (like <code>RUN</code>, <code>COPY</code> etc.). It will also change the directory in which you will land if you run the container interactively.</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip install pandas 
 
@@ -1004,7 +1004,7 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/daterange:
 <details class="done">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">LABEL</span><span class="w"> </span>org.opencontainers.image.created<span class="o">=</span><span class="s2">&quot;2022-04-12&quot;</span> <span class="se">\</span>
     org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span> <span class="se">\</span>
@@ -1035,8 +1035,8 @@ docker push <span class="o">[</span>USER NAME<span class="o">]</span>/daterange:
 </code></pre></div>
 </details>
 <h3 id="building-an-image-with-a-browser-interface">Building an image with a browser interface</h3>
-<p>In this exercise, we will use the same base image (<code>python:3.9.4-buster</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.4-buster</span>
+<p>In this exercise, we will use the same base image (<code>python:3.9.15</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip install jupyterlab
 
