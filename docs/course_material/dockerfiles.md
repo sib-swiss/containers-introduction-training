@@ -220,7 +220,7 @@ chmod +x daterange.py
 In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
 
 ```dockerfile
-FROM python:3.9.4-buster
+FROM python:3.9.15
 
 RUN pip install pandas 
 
@@ -274,7 +274,7 @@ That's kind of nice. We can ship our python script inside our container. However
     The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
 ```dockerfile
-FROM python:3.9.4-buster
+FROM python:3.9.15
 
 RUN pip install pandas 
 
@@ -329,7 +329,7 @@ In the case you want to pack your script inside a container, you are building a 
 Let's try it out:
 
 ```dockerfile
-FROM python:3.9.4-buster
+FROM python:3.9.15
 
 RUN pip install pandas 
 
@@ -365,7 +365,7 @@ CMD ["--date", "20220226"]
 Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
 
 ```dockerfile
-FROM python:3.9.4-buster
+FROM python:3.9.15
 
 RUN pip install pandas 
 
@@ -469,7 +469,7 @@ You can annotate your `Dockerfile` and the image by using the instruction `LABEL
     The `Dockerfile` would look like:
 
     ```dockerfile
-    FROM python:3.9.4-buster
+    FROM python:3.9.15
 
     LABEL org.opencontainers.image.created="2022-04-12" \
         org.opencontainers.image.authors="Geert van Geest" \
@@ -505,10 +505,10 @@ You can annotate your `Dockerfile` and the image by using the instruction `LABEL
 
 ### Building an image with a browser interface
 
-In this exercise, we will use the same base image (`python:3.9.4-buster`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 
 ```dockerfile
-FROM python:3.9.4-buster
+FROM python:3.9.15
 
 RUN pip install jupyterlab
 
