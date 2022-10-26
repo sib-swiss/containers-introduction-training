@@ -21,13 +21,13 @@ To make your images shareable and adjustable, it's good practice to work with a 
 You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with `FROM` that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with `RUN`.  In our `figlet` example that would be:
 
 ```dockerfile
-FROM ubuntu:focal-20210401
+FROM ubuntu:focal-20221019
 RUN apt-get update
 RUN apt-get install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
-    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `focal-20210401`). We could also have written:
+    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `focal-20221019`). We could also have written:
 
     ```dockerfile
     FROM ubuntu
@@ -93,7 +93,7 @@ What has happened? What is the name of the build image?
 As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
-FROM ubuntu:focal-20210401
+FROM ubuntu:focal-20221019
 RUN apt-get update
 RUN apt-get install figlet
 CMD figlet My image works!
@@ -165,7 +165,7 @@ CMD figlet My image works!
     A `Dockerfile` with shell notation:
 
     ```dockerfile
-    FROM ubuntu:focal-20210401
+    FROM ubuntu:focal-20221019
     RUN apt-get update
     RUN apt-get install figlet
     CMD figlet My image works!
@@ -174,7 +174,7 @@ CMD figlet My image works!
     A `Dockerfile` with exec notation:
 
     ```dockerfile
-    FROM ubuntu:focal-20210401
+    FROM ubuntu:focal-20221019
     RUN apt-get update
     RUN apt-get install figlet
     CMD ["/bin/sh", "-c", "figlet My image works!"]

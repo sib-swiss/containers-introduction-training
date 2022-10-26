@@ -1,3 +1,3 @@
-FROM ubuntu:focal-20210401
+FROM ubuntu:focal-20221019
 RUN apt-get update
 RUN apt-get install figlet
