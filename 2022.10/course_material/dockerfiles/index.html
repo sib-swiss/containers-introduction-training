@@ -643,13 +643,13 @@
 <p>To make your images shareable and adjustable, it&rsquo;s good practice to work with a <code>Dockerfile</code>. This is a script with a set of instructions to build your image from an existing image.</p>
 <h3 id="basic-dockerfile">Basic <code>Dockerfile</code></h3>
 <p>You can generate an image from a <code>Dockerfile</code> using the command <code>docker build</code>. A <code>Dockerfile</code> has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with <code>FROM</code> that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with <code>RUN</code>.  In our <code>figlet</code> example that would be:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20210401</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get update
 <span class="k">RUN</span><span class="w"> </span>apt-get install figlet
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">On writing reproducible <code>Dockerfiles</code></p>
-<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>focal-20210401</code>). We could also have written:</p>
+<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>focal-20221019</code>). We could also have written:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get update
 <span class="k">RUN</span><span class="w"> </span>apt-get install figlet
@@ -712,7 +712,7 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
 <p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20210401</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get update
 <span class="k">RUN</span><span class="w"> </span>apt-get install figlet
 <span class="k">CMD</span><span class="w"> </span>figlet My image works!
@@ -767,13 +767,13 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 <p class="admonition-title">Two flavours of <code>CMD</code></p>
 <p>You have seen in the output of <code>docker inspect</code> that docker translates the command (i.e. <code>figlet "my image works!"</code>) into this: <code>["/bin/sh", "-c", "figlet 'My image works!'"]</code>. The notation we used in the <code>Dockerfile</code> is the <em>shell notation</em> while the notation with the square brackets (<code>[]</code>) is the <em>exec-notation</em>. You can use both notations in your <code>Dockerfile</code>. Altough the <em>shell notation</em> is more readable, the <em>exec notation</em> is directly used by the image, and therefore less ambiguous.</p>
 <p>A <code>Dockerfile</code> with shell notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20210401</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get update
 <span class="k">RUN</span><span class="w"> </span>apt-get install figlet
 <span class="k">CMD</span><span class="w"> </span>figlet My image works!
 </code></pre></div>
 <p>A <code>Dockerfile</code> with exec notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20210401</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get update
 <span class="k">RUN</span><span class="w"> </span>apt-get install figlet
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;figlet My image works!&quot;</span><span class="p">]</span>
