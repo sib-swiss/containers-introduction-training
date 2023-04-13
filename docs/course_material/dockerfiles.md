@@ -190,296 +190,189 @@ CMD figlet My image works!
 
 ### Build image for your own script
 
-Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. 
+Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
-In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
-
-```sh
-chmod +x daterange.py
-```
-
-!!! note
-    Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
+=== "R"
+    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
-    ./daterange.py --date 20220226
+    chmod +x daterange.py
     ```
 
-    Giving a list of dates starting from 26-FEB-2022:
+    !!! note
+        Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
 
-    ```
-    2022-02-26 00:00:00
-    2022-02-27 00:00:00
-    2022-02-28 00:00:00
-    2022-03-01 00:00:00
-    2022-03-02 00:00:00
-    2022-03-03 00:00:00
-    2022-03-04 00:00:00
-    ```
-
-In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
-
-```dockerfile
-FROM python:3.9.15
-
-RUN pip install pandas 
-
-COPY daterange.py /opt 
-```
-
-!!! note
-    In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
-
-**Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
-
-!!! hint
-    Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
-
-??? done "Answer"
-    Build the container:
-
-    === "x86_64 / AMD64"
         ```sh
-        docker build -t daterange .
-        ```
-    === "ARM64 (MacOS M1 chip)"
-        ```sh
-        docker build --platform amd64 -t daterange .
+        ./daterange.py --date 20220226
         ```
 
-    Run the container:
-
-    ```sh
-    docker run -it --rm daterange /bin/bash
-    ```
-
-    Inside the container we look up the script:
-
-    ```sh
-    cd /opt
-    ls
-    ```
-
-    This should return `daterange.py`. 
-
-    Now you can execute it from inside the container:
-
-    ```sh
-    ./daterange.py --date 20220226
-    ```
-
-That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
-
-!!! note "The `$PATH` variable"
-    The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
-
-```dockerfile
-FROM python:3.9.15
-
-RUN pip install pandas 
-
-COPY daterange.py /opt 
-
-ENV PATH=/opt:$PATH
-```
-
-!!! note
-    The `ENV` instruction can be used to set any variable. 
-
-**Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
-
-??? done "Answer"
-    After re-building we start an interactive session:
-
-    ```sh
-    docker run -it --rm daterange /bin/bash
-    ```
-
-    The path is upated, `/opt` is appended to the beginning of the variable:
-
-    ```sh
-    echo $PATH
-    ```
-
-    returns:
-
-    ```
-    /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    ```
-
-    Now you can try to execute it from the root directory (or any other):
-
-    ```sh
-    daterange.py --date 20220226
-    ```
-
-Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
-
-```sh
-docker run --rm daterange daterange.py --date 20220226
-```
-
-Now it will directly print the output of `daterange.py` to stdout. 
-
-In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
-
-* `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
-* The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
-
-Let's try it out:
-
-```dockerfile
-FROM python:3.9.15
-
-RUN pip install pandas 
-
-COPY daterange.py /opt 
-
-ENV PATH=/opt:$PATH
-
-# note that if you want to be able to combine the two
-# both ENTRYPOINT and CMD need to written in the exec form
-ENTRYPOINT ["daterange.py"]
-
-# default option (if positional arguments are not specified)
-CMD ["--date", "20220226"]
-```
-
-**Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
-
-??? done "Answer"
-    Just running the container non-interactively would be:
-
-    ```sh
-    docker run --rm daterange
-    ```
-
-    Passing a different argument (i.e. overwriting `CMD`) would be:
-
-    ```sh
-    docker run --rm daterange --date 20210330
-    ```
-
-    Here, the container behaves as the executable itself to which you can pass arguments. 
-
-Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
-
-```dockerfile
-FROM python:3.9.15
-
-RUN pip install pandas 
-
-WORKDIR /opt
-
-# we don't have to specify /opt as target dir but the current dir
-COPY daterange.py .
-
-ENV PATH=/opt:$PATH
-
-# note that if you want to be able to combine the two
-# both ENTRYPOINT and CMD need to written in the exec form
-ENTRYPOINT ["daterange.py"]
-
-# default option (if positional arguments are not specified)
-CMD ["--date", "20220226"]
-```
-
-**Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
-
-!!! note 
-    You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
-
-??? done "Answer"
-    Running the container interactively would be:
-
-    ```sh
-    docker run -it --rm --entrypoint /bin/bash daterange
-    ```
-    
-    Which should result in a terminal looking something like this:
-
-    ```
-    root@9a27da455fb1:/opt#
-    ```
-
-    Meaning that indeed the default directory has changed to `/opt`
-
-    Pushing it to dockerhub: 
-
-    ```sh
-    docker tag daterage [USER NAME]/daterange:v1
-    docker push [USER NAME]/daterange:v1
-    ```
-
-### Get information on your image with `docker inspect`
-
-We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
-
-```
-"Config": {
-        "Hostname": "",
-        "Domainname": "",
-        "User": "",
-        "AttachStdin": false,
-        "AttachStdout": false,
-        "AttachStderr": false,
-        "Tty": false,
-        "OpenStdin": false,
-        "StdinOnce": false,
-        "Env": [
-            "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-            "LANG=C.UTF-8",
-            "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568",
-            "PYTHON_VERSION=3.9.4",
-            "PYTHON_PIP_VERSION=21.1.1",
-            "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py",
-            "PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993"
-        ],
-        "Cmd": [
-            "--date",
-            "20220226"
-        ],
-        "ArgsEscaped": true,
-        "Image": "",
-        "Volumes": null,
-        "WorkingDir": "/opt",
-        "Entrypoint": [
-            "daterange.py"
-        ],
-        "OnBuild": null,
-        "Labels": null
-    },
-```
-
-### Adding metadata to your image
-
-You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
-
-**Exercise**: Annotate our `Dockerfile` with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with `docker inspect`. 
-
-!!! note
-    You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
-
-    ```dockerfile
-    LABEL keyx="valuex" keyy="valuey"
-    ```
-
-??? done "Answer"
-
-    The `Dockerfile` would look like:
+        Giving a list of dates starting from 26-FEB-2022:
+
+        ```
+        2022-02-26 00:00:00
+        2022-02-27 00:00:00
+        2022-02-28 00:00:00
+        2022-03-01 00:00:00
+        2022-03-02 00:00:00
+        2022-03-03 00:00:00
+        2022-03-04 00:00:00
+        ```
+
+    In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
 
     ```dockerfile
     FROM python:3.9.15
 
-    LABEL org.opencontainers.image.created="2022-04-12" \
-        org.opencontainers.image.authors="Geert van Geest" \
-        org.opencontainers.image.description="Great container for getting all dates in a week! \
-        You will never use a calender again"
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+    ```
+
+    !!! note
+        In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+
+    **Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
+
+    !!! hint
+        Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
+
+    ??? done "Answer"
+        Build the container:
+
+        === "x86_64 / AMD64"
+            ```sh
+            docker build -t daterange .
+            ```
+        === "ARM64 (MacOS M1 chip)"
+            ```sh
+            docker build --platform amd64 -t daterange .
+            ```
+
+        Run the container:
+
+        ```sh
+        docker run -it --rm daterange /bin/bash
+        ```
+
+        Inside the container we look up the script:
+
+        ```sh
+        cd /opt
+        ls
+        ```
+
+        This should return `daterange.py`. 
+
+        Now you can execute it from inside the container:
+
+        ```sh
+        ./daterange.py --date 20220226
+        ```
+
+    That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
+
+    !!! note "The `$PATH` variable"
+        The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+
+    ENV PATH=/opt:$PATH
+    ```
+
+    !!! note
+        The `ENV` instruction can be used to set any variable. 
+
+    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
+
+    ??? done "Answer"
+        After re-building we start an interactive session:
+
+        ```sh
+        docker run -it --rm daterange /bin/bash
+        ```
+
+        The path is upated, `/opt` is appended to the beginning of the variable:
+
+        ```sh
+        echo $PATH
+        ```
+
+        returns:
+
+        ```
+        /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        ```
+
+        Now you can try to execute it from the root directory (or any other):
+
+        ```sh
+        daterange.py --date 20220226
+        ```
+
+    Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
+
+    ```sh
+    docker run --rm daterange daterange.py --date 20220226
+    ```
+
+    Now it will directly print the output of `daterange.py` to stdout. 
+
+    In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
+
+    * `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+    * The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
+
+    Let's try it out:
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+
+    ENV PATH=/opt:$PATH
+
+    # note that if you want to be able to combine the two
+    # both ENTRYPOINT and CMD need to written in the exec form
+    ENTRYPOINT ["daterange.py"]
+
+    # default option (if positional arguments are not specified)
+    CMD ["--date", "20220226"]
+    ```
+
+    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
+
+    ??? done "Answer"
+        Just running the container non-interactively would be:
+
+        ```sh
+        docker run --rm daterange
+        ```
+
+        Passing a different argument (i.e. overwriting `CMD`) would be:
+
+        ```sh
+        docker run --rm daterange --date 20210330
+        ```
+
+        Here, the container behaves as the executable itself to which you can pass arguments. 
+
+    Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
+
+    ```dockerfile
+    FROM python:3.9.15
 
     RUN pip install pandas 
 
     WORKDIR /opt
 
+    # we don't have to specify /opt as target dir but the current dir
     COPY daterange.py .
 
     ENV PATH=/opt:$PATH
@@ -490,81 +383,567 @@ You can annotate your `Dockerfile` and the image by using the instruction `LABEL
 
     # default option (if positional arguments are not specified)
     CMD ["--date", "20220226"]
-
     ```
 
-    The `Config` record in the output of `docker inspect` was updated with:
+    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
 
-    ```
-    "Labels": {
-                "org.opencontainers.image.authors": "Geert van Geest",
-                "org.opencontainers.image.created": "2022-04-12",
-                "org.opencontainers.image.description": "Great container for getting all dates in a week!     You will never use a calender again"
-            }
-    ```
+    !!! note 
+        You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
-### Building an image with a browser interface
+    ??? done "Answer"
+        Running the container interactively would be:
 
-In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
-
-```dockerfile
-FROM python:3.9.15
-
-RUN pip install jupyterlab
-
-CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
-```
-
-This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
-
-!!! note "Ports"
-    We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
-
-**Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
-
-??? done "Answer"
-    === "x86_64 / AMD64"
         ```sh
-        docker build -t jupyter-lab .
+        docker run -it --rm --entrypoint /bin/bash daterange
         ```
-    === "ARM64 (MacOS M1 chip)"
-        ```sh
-        docker build --platform amd64 -t jupyter-lab .
+        
+        Which should result in a terminal looking something like this:
+
+        ```
+        root@9a27da455fb1:/opt#
         ```
 
-You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+        Meaning that indeed the default directory has changed to `/opt`
 
-```sh
-docker run --rm -it -p 8888:8888 jupyter-lab
-```
+        Pushing it to dockerhub: 
 
-!!! note "Networking"
-    More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+        ```sh
+        docker tag daterage [USER NAME]/daterange:v1
+        docker push [USER NAME]/daterange:v1
+        ```
 
-By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+    ### Get information on your image with `docker inspect`
 
-We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+    We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
-```sh
-docker run \
--it \
---rm \
--p 8888:8888 \
---mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
-jupyter-lab
-```
+    ```
+    "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568",
+                "PYTHON_VERSION=3.9.4",
+                "PYTHON_PIP_VERSION=21.1.1",
+                "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py",
+                "PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993"
+            ],
+            "Cmd": [
+                "--date",
+                "20220226"
+            ],
+            "ArgsEscaped": true,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "/opt",
+            "Entrypoint": [
+                "daterange.py"
+            ],
+            "OnBuild": null,
+            "Labels": null
+        },
+    ```
 
-By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
+    ### Adding metadata to your image
 
-!!! note
-    Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
+    You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
+
+    **Exercise**: Annotate our `Dockerfile` with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with `docker inspect`. 
+
+    !!! note
+        You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
+
+        ```dockerfile
+        LABEL keyx="valuex" keyy="valuey"
+        ```
+
+    ??? done "Answer"
+
+        The `Dockerfile` would look like:
+
+        ```dockerfile
+        FROM python:3.9.15
+
+        LABEL org.opencontainers.image.created="2022-04-12" \
+            org.opencontainers.image.authors="Geert van Geest" \
+            org.opencontainers.image.description="Great container for getting all dates in a week! \
+            You will never use a calender again"
+
+        RUN pip install pandas 
+
+        WORKDIR /opt
+
+        COPY daterange.py .
+
+        ENV PATH=/opt:$PATH
+
+        # note that if you want to be able to combine the two
+        # both ENTRYPOINT and CMD need to written in the exec form
+        ENTRYPOINT ["daterange.py"]
+
+        # default option (if positional arguments are not specified)
+        CMD ["--date", "20220226"]
+
+        ```
+
+        The `Config` record in the output of `docker inspect` was updated with:
+
+        ```
+        "Labels": {
+                    "org.opencontainers.image.authors": "Geert van Geest",
+                    "org.opencontainers.image.created": "2022-04-12",
+                    "org.opencontainers.image.description": "Great container for getting all dates in a week!     You will never use a calender again"
+                }
+        ```
+
+    ### Building an image with a browser interface
+
+    In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install jupyterlab
+
+    CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+    ```
+
+    This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
+
+    !!! note "Ports"
+        We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
+
+    **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
+
+    ??? done "Answer"
+        === "x86_64 / AMD64"
+            ```sh
+            docker build -t jupyter-lab .
+            ```
+        === "ARM64 (MacOS M1 chip)"
+            ```sh
+            docker build --platform amd64 -t jupyter-lab .
+            ```
+
+    You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+
+    ```sh
+    docker run --rm -it -p 8888:8888 jupyter-lab
+    ```
+
+    !!! note "Networking"
+        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+
+    By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+
+    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
 
     ```sh
     docker run \
+    -it \
     --rm \
-    -e JUPYTER_ENABLE_LAB=yes \
     -p 8888:8888 \
-    jupyter/base-notebook
+    --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
+    jupyter-lab
     ```
 
-    Using the above will also give you easier control over security, users and permissions.
+    By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
+
+    !!! note
+        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
+
+        ```sh
+        docker run \
+        --rm \
+        -e JUPYTER_ENABLE_LAB=yes \
+        -p 8888:8888 \
+        jupyter/base-notebook
+        ```
+
+        Using the above will also give you easier control over security, users and permissions.
+
+=== "Python"
+    In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
+
+    ```sh
+    chmod +x daterange.py
+    ```
+
+    !!! note
+        Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
+
+        ```sh
+        ./daterange.py --date 20220226
+        ```
+
+        Giving a list of dates starting from 26-FEB-2022:
+
+        ```
+        2022-02-26 00:00:00
+        2022-02-27 00:00:00
+        2022-02-28 00:00:00
+        2022-03-01 00:00:00
+        2022-03-02 00:00:00
+        2022-03-03 00:00:00
+        2022-03-04 00:00:00
+        ```
+
+    In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+    ```
+
+    !!! note
+        In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+
+    **Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
+
+    !!! hint
+        Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
+
+    ??? done "Answer"
+        Build the container:
+
+        === "x86_64 / AMD64"
+            ```sh
+            docker build -t daterange .
+            ```
+        === "ARM64 (MacOS M1 chip)"
+            ```sh
+            docker build --platform amd64 -t daterange .
+            ```
+
+        Run the container:
+
+        ```sh
+        docker run -it --rm daterange /bin/bash
+        ```
+
+        Inside the container we look up the script:
+
+        ```sh
+        cd /opt
+        ls
+        ```
+
+        This should return `daterange.py`. 
+
+        Now you can execute it from inside the container:
+
+        ```sh
+        ./daterange.py --date 20220226
+        ```
+
+    That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
+
+    !!! note "The `$PATH` variable"
+        The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+
+    ENV PATH=/opt:$PATH
+    ```
+
+    !!! note
+        The `ENV` instruction can be used to set any variable. 
+
+    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
+
+    ??? done "Answer"
+        After re-building we start an interactive session:
+
+        ```sh
+        docker run -it --rm daterange /bin/bash
+        ```
+
+        The path is upated, `/opt` is appended to the beginning of the variable:
+
+        ```sh
+        echo $PATH
+        ```
+
+        returns:
+
+        ```
+        /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        ```
+
+        Now you can try to execute it from the root directory (or any other):
+
+        ```sh
+        daterange.py --date 20220226
+        ```
+
+    Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
+
+    ```sh
+    docker run --rm daterange daterange.py --date 20220226
+    ```
+
+    Now it will directly print the output of `daterange.py` to stdout. 
+
+    In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
+
+    * `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+    * The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
+
+    Let's try it out:
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    COPY daterange.py /opt 
+
+    ENV PATH=/opt:$PATH
+
+    # note that if you want to be able to combine the two
+    # both ENTRYPOINT and CMD need to written in the exec form
+    ENTRYPOINT ["daterange.py"]
+
+    # default option (if positional arguments are not specified)
+    CMD ["--date", "20220226"]
+    ```
+
+    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
+
+    ??? done "Answer"
+        Just running the container non-interactively would be:
+
+        ```sh
+        docker run --rm daterange
+        ```
+
+        Passing a different argument (i.e. overwriting `CMD`) would be:
+
+        ```sh
+        docker run --rm daterange --date 20210330
+        ```
+
+        Here, the container behaves as the executable itself to which you can pass arguments. 
+
+    Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install pandas 
+
+    WORKDIR /opt
+
+    # we don't have to specify /opt as target dir but the current dir
+    COPY daterange.py .
+
+    ENV PATH=/opt:$PATH
+
+    # note that if you want to be able to combine the two
+    # both ENTRYPOINT and CMD need to written in the exec form
+    ENTRYPOINT ["daterange.py"]
+
+    # default option (if positional arguments are not specified)
+    CMD ["--date", "20220226"]
+    ```
+
+    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
+
+    !!! note 
+        You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
+
+    ??? done "Answer"
+        Running the container interactively would be:
+
+        ```sh
+        docker run -it --rm --entrypoint /bin/bash daterange
+        ```
+        
+        Which should result in a terminal looking something like this:
+
+        ```
+        root@9a27da455fb1:/opt#
+        ```
+
+        Meaning that indeed the default directory has changed to `/opt`
+
+        Pushing it to dockerhub: 
+
+        ```sh
+        docker tag daterage [USER NAME]/daterange:v1
+        docker push [USER NAME]/daterange:v1
+        ```
+
+    ### Get information on your image with `docker inspect`
+
+    We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
+
+    ```
+    "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568",
+                "PYTHON_VERSION=3.9.4",
+                "PYTHON_PIP_VERSION=21.1.1",
+                "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py",
+                "PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993"
+            ],
+            "Cmd": [
+                "--date",
+                "20220226"
+            ],
+            "ArgsEscaped": true,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "/opt",
+            "Entrypoint": [
+                "daterange.py"
+            ],
+            "OnBuild": null,
+            "Labels": null
+        },
+    ```
+
+    ### Adding metadata to your image
+
+    You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
+
+    **Exercise**: Annotate our `Dockerfile` with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with `docker inspect`. 
+
+    !!! note
+        You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
+
+        ```dockerfile
+        LABEL keyx="valuex" keyy="valuey"
+        ```
+
+    ??? done "Answer"
+
+        The `Dockerfile` would look like:
+
+        ```dockerfile
+        FROM python:3.9.15
+
+        LABEL org.opencontainers.image.created="2022-04-12" \
+            org.opencontainers.image.authors="Geert van Geest" \
+            org.opencontainers.image.description="Great container for getting all dates in a week! \
+            You will never use a calender again"
+
+        RUN pip install pandas 
+
+        WORKDIR /opt
+
+        COPY daterange.py .
+
+        ENV PATH=/opt:$PATH
+
+        # note that if you want to be able to combine the two
+        # both ENTRYPOINT and CMD need to written in the exec form
+        ENTRYPOINT ["daterange.py"]
+
+        # default option (if positional arguments are not specified)
+        CMD ["--date", "20220226"]
+
+        ```
+
+        The `Config` record in the output of `docker inspect` was updated with:
+
+        ```
+        "Labels": {
+                    "org.opencontainers.image.authors": "Geert van Geest",
+                    "org.opencontainers.image.created": "2022-04-12",
+                    "org.opencontainers.image.description": "Great container for getting all dates in a week!     You will never use a calender again"
+                }
+        ```
+
+    ### Building an image with a browser interface
+
+    In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+
+    ```dockerfile
+    FROM python:3.9.15
+
+    RUN pip install jupyterlab
+
+    CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+    ```
+
+    This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
+
+    !!! note "Ports"
+        We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
+
+    **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
+
+    ??? done "Answer"
+        === "x86_64 / AMD64"
+            ```sh
+            docker build -t jupyter-lab .
+            ```
+        === "ARM64 (MacOS M1 chip)"
+            ```sh
+            docker build --platform amd64 -t jupyter-lab .
+            ```
+
+    You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+
+    ```sh
+    docker run --rm -it -p 8888:8888 jupyter-lab
+    ```
+
+    !!! note "Networking"
+        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+
+    By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+
+    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+
+    ```sh
+    docker run \
+    -it \
+    --rm \
+    -p 8888:8888 \
+    --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
+    jupyter-lab
+    ```
+
+    By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
+
+    !!! note
+        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
+
+        ```sh
+        docker run \
+        --rm \
+        -e JUPYTER_ENABLE_LAB=yes \
+        -p 8888:8888 \
+        jupyter/base-notebook
+        ```
+
+        Using the above will also give you easier control over security, users and permissions.
