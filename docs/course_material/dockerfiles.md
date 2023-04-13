@@ -188,50 +188,65 @@ CMD figlet My image works!
     docker push [USER NAME]/ubuntu-figlet:v3
     ```
 
-### Build image for your own script
+### Build an image for your own script
 
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
 === "R"
-    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
+    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R). After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
-    chmod +x daterange.py
+    chmod +x search_biomart_datasets.R
     ```
 
     !!! note
-        Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
+        Have a look at `search_biomart_datasets.R`. It is a simple script that searches for datasets in ensembl with `biomaRt` based on a pattern that is specified by the user. An example for execution would be:
 
         ```sh
-        ./daterange.py --date 20220226
+        ./search_biomart_datasets.R --pattern "mouse"
         ```
 
-        Giving a list of dates starting from 26-FEB-2022:
+        Returning a list with all mouse datasets:
 
         ```
-        2022-02-26 00:00:00
-        2022-02-27 00:00:00
-        2022-02-28 00:00:00
-        2022-03-01 00:00:00
-        2022-03-02 00:00:00
-        2022-03-03 00:00:00
-        2022-03-04 00:00:00
+                             dataset                                      description
+        94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
+        109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
+        111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
+        112    mspretus_gene_ensembl              Algerian mouse genes (SPRET_EiJ_v1)
+        149   pmbairdii_gene_ensembl Northern American deer mouse genes (HU_Pman_2.1)
+                    version
+        94  CAROLI_EIJ_v1.1
+        109 PAHARI_EIJ_v1.1
+        111         MUSP714
+        112    SPRET_EiJ_v1
+        149     HU_Pman_2.1
         ```
 
-    In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
+    In the `Dockerfile` below we give the the following instructions:
+    - use the [R base container](https://hub.docker.com/_/r-base) version 4.2.3
+    - install the package `optparse` from CRAN and `biomaRt` from Biconductor with `apt-get`. 
+    - copy `search_biomart_datasets.R` to `/opt` inside the container:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM r-base:4.2.3
 
-    RUN pip install pandas 
+    RUN apt-get update
+    RUN apt-get install -y \
+        r-cran-optparse \
+        r-bioc-biomart
 
-    COPY daterange.py /opt 
+    COPY search_biomart_datasets.R /opt 
     ```
 
     !!! note
         In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
 
-    **Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
+    !!! note "R image stack"
+        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` is possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+
+
+    **Exercise:** Download the `search_biomart_datasets.R` and build the image with `docker build`. After that, execute the script inside the container. 
 
     !!! hint
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
@@ -241,17 +256,17 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         === "x86_64 / AMD64"
             ```sh
-            docker build -t daterange .
+            docker build -t search_biomart_datasets .
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t daterange .
+            docker build --platform amd64 -t search_biomart_datasets .
             ```
 
         Run the container:
 
         ```sh
-        docker run -it --rm daterange /bin/bash
+        docker run -it --rm search_biomart_datasets /bin/bash
         ```
 
         Inside the container we look up the script:
@@ -261,25 +276,28 @@ Often containers are built for a specific purpose. For example, you can use a co
         ls
         ```
 
-        This should return `daterange.py`. 
+        This should return `search_biomart_datasets.R`. 
 
         Now you can execute it from inside the container:
 
         ```sh
-        ./daterange.py --date 20220226
+        ./search_biomart_datasets.R --pattern sapiens
         ```
 
-    That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
+    That's kind of nice. We can ship our R script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
 
     !!! note "The `$PATH` variable"
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM r-base:4.2.3
 
-    RUN pip install pandas 
+    RUN apt-get update
+    RUN apt-get install -y \
+        r-cran-optparse \
+        r-bioc-biomart
 
-    COPY daterange.py /opt 
+    COPY search_biomart_datasets.R /opt 
 
     ENV PATH=/opt:$PATH
     ```
@@ -287,13 +305,13 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note
         The `ENV` instruction can be used to set any variable. 
 
-    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
+    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `search_biomart_datasets.R` from anywhere?)
 
     ??? done "Answer"
         After re-building we start an interactive session:
 
         ```sh
-        docker run -it --rm daterange /bin/bash
+        docker run -it --rm search_biomart_datasets /bin/bash
         ```
 
         The path is upated, `/opt` is appended to the beginning of the variable:
@@ -311,16 +329,16 @@ Often containers are built for a specific purpose. For example, you can use a co
         Now you can try to execute it from the root directory (or any other):
 
         ```sh
-        daterange.py --date 20220226
+        search_biomart_datasets.R --pattern "(C|c)ow"
         ```
 
     Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
     ```sh
-    docker run --rm daterange daterange.py --date 20220226
+    docker run --rm search_biomart_datasets search_biomart_datasets.R --pattern "(R|r)at"
     ```
 
-    Now it will directly print the output of `daterange.py` to stdout. 
+    Now it will directly print the output of `search_biomart_datasets.R` to stdout. 
 
     In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
@@ -330,35 +348,38 @@ Often containers are built for a specific purpose. For example, you can use a co
     Let's try it out:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM r-base:4.2.3
 
-    RUN pip install pandas 
+    RUN apt-get update
+    RUN apt-get install -y \
+        r-cran-optparse \
+        r-bioc-biomart
 
-    COPY daterange.py /opt 
+    COPY search_biomart_datasets.R /opt 
 
     ENV PATH=/opt:$PATH
 
     # note that if you want to be able to combine the two
     # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["daterange.py"]
+    ENTRYPOINT ["search_biomart_datasets.R"]
 
     # default option (if positional arguments are not specified)
-    CMD ["--date", "20220226"]
+    CMD ["--pattern", "mouse"]
     ```
 
-    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
+    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different pattern to `--pattern`. How do the commands look?
 
     ??? done "Answer"
         Just running the container non-interactively would be:
 
         ```sh
-        docker run --rm daterange
+        docker run --rm search_biomart_datasets
         ```
 
         Passing a different argument (i.e. overwriting `CMD`) would be:
 
         ```sh
-        docker run --rm daterange --date 20210330
+        docker run --rm search_biomart_datasets.R --pattern "sapiens"
         ```
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
@@ -366,23 +387,26 @@ Often containers are built for a specific purpose. For example, you can use a co
     Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM r-base:4.2.3
 
-    RUN pip install pandas 
+    RUN apt-get update
+    RUN apt-get install -y \
+        r-cran-optparse \
+        r-bioc-biomart
 
     WORKDIR /opt
 
-    # we don't have to specify /opt as target dir but the current dir
-    COPY daterange.py .
+    COPY search_biomart_datasets.R .
 
     ENV PATH=/opt:$PATH
 
     # note that if you want to be able to combine the two
     # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["daterange.py"]
+    ENTRYPOINT ["search_biomart_datasets.R"]
 
     # default option (if positional arguments are not specified)
-    CMD ["--date", "20220226"]
+    CMD ["--pattern", "mouse"]
+
     ```
 
     **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
@@ -394,7 +418,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         Running the container interactively would be:
 
         ```sh
-        docker run -it --rm --entrypoint /bin/bash daterange
+        docker run -it --rm --entrypoint /bin/bash search_biomart_datasets
         ```
         
         Which should result in a terminal looking something like this:
@@ -408,15 +432,15 @@ Often containers are built for a specific purpose. For example, you can use a co
         Pushing it to dockerhub: 
 
         ```sh
-        docker tag daterage [USER NAME]/daterange:v1
-        docker push [USER NAME]/daterange:v1
+        docker tag search_biomart_datasets [USER NAME]/search_biomart_datasets:v1
+        docker push [USER NAME]/search_biomart_datasets:v1
         ```
 
     ### Get information on your image with `docker inspect`
 
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
-    ```
+    ```yaml
     "Config": {
             "Hostname": "",
             "Domainname": "",
@@ -428,28 +452,30 @@ Often containers are built for a specific purpose. For example, you can use a co
             "OpenStdin": false,
             "StdinOnce": false,
             "Env": [
-                "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                "LANG=C.UTF-8",
-                "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568",
-                "PYTHON_VERSION=3.9.4",
-                "PYTHON_PIP_VERSION=21.1.1",
-                "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py",
-                "PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993"
+                "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LC_ALL=en_US.UTF-8",
+                "LANG=en_US.UTF-8",
+                "R_BASE_VERSION=4.2.3"
             ],
             "Cmd": [
-                "--date",
-                "20220226"
+                "--pattern",
+                "mouse"
             ],
             "ArgsEscaped": true,
             "Image": "",
             "Volumes": null,
             "WorkingDir": "/opt",
             "Entrypoint": [
-                "daterange.py"
+                "search_biomart_datasets.R"
             ],
             "OnBuild": null,
-            "Labels": null
-        },
+            "Labels": {
+                "org.opencontainers.image.authors": "Dirk Eddelbuettel <edd@debian.org>",
+                "org.opencontainers.image.licenses": "GPL-2.0-or-later",
+                "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
+                "org.opencontainers.image.vendor": "Rocker Project"
+            }
+        }
     ```
 
     ### Adding metadata to your image
@@ -470,79 +496,86 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Dockerfile` would look like:
 
         ```dockerfile
-        FROM python:3.9.15
+        FROM r-base:4.2.3
 
-        LABEL org.opencontainers.image.created="2022-04-12" \
+        LABEL org.opencontainers.image.created="2023-04-12" \
             org.opencontainers.image.authors="Geert van Geest" \
-            org.opencontainers.image.description="Great container for getting all dates in a week! \
-            You will never use a calender again"
+            org.opencontainers.image.description="Container to search ensembl datasets with biomart"
 
-        RUN pip install pandas 
+        RUN apt-get update
+        RUN apt-get install -y \
+            r-cran-optparse \
+            r-bioc-biomart
 
         WORKDIR /opt
 
-        COPY daterange.py .
+        COPY search_biomart_datasets.R .
 
         ENV PATH=/opt:$PATH
 
         # note that if you want to be able to combine the two
         # both ENTRYPOINT and CMD need to written in the exec form
-        ENTRYPOINT ["daterange.py"]
+        ENTRYPOINT ["search_biomart_datasets.R"]
 
         # default option (if positional arguments are not specified)
-        CMD ["--date", "20220226"]
+        CMD ["--pattern", "mouse"]
 
         ```
 
         The `Config` record in the output of `docker inspect` was updated with:
 
-        ```
-        "Labels": {
-                    "org.opencontainers.image.authors": "Geert van Geest",
-                    "org.opencontainers.image.created": "2022-04-12",
-                    "org.opencontainers.image.description": "Great container for getting all dates in a week!     You will never use a calender again"
-                }
+        ```yaml
+         "Labels": {
+                "org.opencontainers.image.authors": "Geert van Geest",
+                "org.opencontainers.image.created": "2023-04-12",
+                "org.opencontainers.image.description": "Container to search ensembl datasets with biomart",
+                "org.opencontainers.image.licenses": "GPL-2.0-or-later",
+                "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
+                "org.opencontainers.image.vendor": "Rocker Project"
+            }
         ```
 
     ### Building an image with a browser interface
 
-    In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM rocker/rstudio:4
 
-    RUN pip install jupyterlab
+    RUN apt-get update && \
+        apt-get install -y libz-dev
 
-    CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+    RUN install2.r \
+        optparse \
+        BiocManager
+
+    RUN R -q -e 'BiocManager::install("biomaRt")'
     ```
 
-    This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
-
-    !!! note "Ports"
-        We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
+    This will create an image from the existing `rstudio` image. It will also install `libz-dev` with `apt-get`, `BiocManager` with `install2.r` and `biomaRt` with an R command. Despiste we're installing the same packages, the installation steps need to be different from the `r-base` image. This is because in the `rocker/rstudio` images R is installed from source, and therefore you can't install packages with `apt-get`. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
     ??? done "Answer"
         === "x86_64 / AMD64"
             ```sh
-            docker build -t jupyter-lab .
+            docker build -t rstudio-server .
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t jupyter-lab .
+            docker build --platform amd64 -t rstudio-server .
             ```
 
-    You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
-    docker run --rm -it -p 8888:8888 jupyter-lab
+    docker run --rm -it -p 8787:8787 rstudio-server
     ```
 
     !!! note "Networking"
         More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of jupyterhub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
 
     We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
 
@@ -550,25 +583,12 @@ Often containers are built for a specific purpose. For example, you can use a co
     docker run \
     -it \
     --rm \
-    -p 8888:8888 \
-    --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
-    jupyter-lab
+    -p 8787:8787 \
+    --mount type=bind,source=/Users/myusername/working_dir,target=/home/rstudio/working_dir \
+    rstudio-server
     ```
 
-    By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
-
-    !!! note
-        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
-
-        ```sh
-        docker run \
-        --rm \
-        -e JUPYTER_ENABLE_LAB=yes \
-        -p 8888:8888 \
-        jupyter/base-notebook
-        ```
-
-        Using the above will also give you easier control over security, users and permissions.
+    By doing this you have a completely isolated and shareable R environment running Rstudio server, but with your local files available to it. Pretty neat right? 
 
 === "Python"
     In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
@@ -794,7 +814,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
-    ```
+    ```yaml
     "Config": {
             "Hostname": "",
             "Domainname": "",
@@ -874,7 +894,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         The `Config` record in the output of `docker inspect` was updated with:
 
-        ```
+        ```yaml
         "Labels": {
                     "org.opencontainers.image.authors": "Geert van Geest",
                     "org.opencontainers.image.created": "2022-04-12",
@@ -887,11 +907,9 @@ Often containers are built for a specific purpose. For example, you can use a co
     In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM jupyter/base-notebook:python-3.9
 
-    RUN pip install jupyterlab
-
-    CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+    RUN pip install pandas
     ```
 
     This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
@@ -936,14 +954,4 @@ Often containers are built for a specific purpose. For example, you can use a co
     By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
 
     !!! note
-        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). Example syntax with a pre-built jupyter image would look like:
-
-        ```sh
-        docker run \
-        --rm \
-        -e JUPYTER_ENABLE_LAB=yes \
-        -p 8888:8888 \
-        jupyter/base-notebook
-        ```
-
-        Using the above will also give you easier control over security, users and permissions.
+        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html).

@@ -1,5 +1,9 @@
-FROM python:3.9.15
+FROM jupyter/base-notebook:python-3.9
 
-RUN pip install jupyterlab
+RUN pip install pandas
 
-CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+# FROM python:3.9.15
+
+# RUN pip install jupyterlab
+
+# CMD jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
