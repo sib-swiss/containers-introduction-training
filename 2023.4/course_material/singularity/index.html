@@ -701,7 +701,7 @@ This will result in a file called <code>ubuntu-figlet_v3.sif</code></p>
 </code></pre></div>
 <p>However, most applications require <code>singularity run</code>. Especially if you want to provide options like <code>--bind</code> (for mounting directories). </p>
 </div>
-<p><strong>Exercise:</strong> Run the <code>.sif</code> file without a command, and with a command that runs <code>figlet</code>. Do you get expected output? Do the same for the <code>daterange</code> image (pull from dockerhub first).</p>
+<p><strong>Exercise:</strong> Run the <code>.sif</code> file without a command, and with a command that runs <code>figlet</code>. Do you get expected output? Do the same for the python or R image you&rsquo;ve created in the previous chapter.</p>
 <div class="admonition note">
 <p class="admonition-title">Entrypoint and singularity</p>
 <p>The <code>daterange</code> image has an entrypoint set, and <code>singularity run</code> does not overwrite it. In order to ignore both the entrypoint and cmd use <code>singularity exec</code>.  </p>
@@ -728,6 +728,23 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 |____/ \___/|_| |_| |_|\___|\__|_| |_|_|_| |_|\__, |  \___|_|___/\___|
                                              |___/
 </code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">R</label><label for="__tabbed_2_2">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Pulling the <code>search_biomart_datasets</code> image:</p>
+<div class="highlight"><pre><span></span><code>singularity<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
+</code></pre></div>
+<p>Running it without command:</p>
+<div class="highlight"><pre><span></span><code>./search_biomart_datasets_v1.sif
+</code></pre></div>
+<p>Running with a command:</p>
+<div class="highlight"><pre><span></span><code>./search_biomart_datasets_v1.sif<span class="w"> </span>--pattern<span class="w"> </span>sapiens
+</code></pre></div>
+<p>To overwrite both entrypoint and the command:</p>
+<div class="highlight"><pre><span></span><code>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>search_biomart_datasets_v1.sif<span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(R|r)at&quot;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
 <p>Pulling the <code>daterange.py</code> image:</p>
 <div class="highlight"><pre><span></span><code>singularity<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1
 </code></pre></div>
@@ -740,6 +757,9 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <p>To overwrite both entrypoint and the command:</p>
 <div class="highlight"><pre><span></span><code>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>daterange_v1.sif<span class="w"> </span>daterange.py<span class="w"> </span>--date<span class="w"> </span><span class="m">20221005</span>
 </code></pre></div>
+</div>
+</div>
+</div>
 </details>
 <h3 id="mounting-with-singularity">Mounting with Singularity</h3>
 <p>Singularity is also different from Docker in the way it handles mounting. By default, Singularity binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.  </p>
