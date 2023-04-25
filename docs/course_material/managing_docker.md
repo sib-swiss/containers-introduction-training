@@ -136,16 +136,21 @@ Resulting in just the output of the `figlet` command.
 
 In the previous exercises we have run containers without a command as positional argument. This doesn't mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by `docker image inspect [IMAGE NAME]`.  
 
-**Exercise:** What is the default command (`CMD`) of the ubuntu image?
+**Exercise:** Have a look at the output of `docker image inspect`, particularly at `"Config"` (ignore `"ContainerConfig"` for now). What is the default command (`CMD`) of the ubuntu image?
 
 ??? done "Answer"
     Running `docker image inspect ubuntu` gives (amongst other information):
-    ```
+    
+    ```yaml
     "Cmd": [
-        "bash"
+        "/bin/bash"
     ],
     ```
+
     In the case of the ubuntu the default command is `bash`, returning a shell in `bash` (i.e. *Bourne again shell*). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](dockerfiles.md).
+
+!!! note "The difference between `Config` and `ContainerConfig`"
+    The configuration at `Config` represents the image, the configuration at `ContainerConfig` the last step during the build of the image, i.e. the last layer. More info e.g. at [this post at stackoverflow](https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect).
 
 ### Removing containers
 
