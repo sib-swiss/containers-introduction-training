@@ -740,16 +740,20 @@ ubuntu                            latest    f63181f19b2f   29 hours ago    72.9M
 </code></pre></div>
 <p>Resulting in just the output of the <code>figlet</code> command.</p>
 <p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
-<p><strong>Exercise:</strong> What is the default command (<code>CMD</code>) of the ubuntu image?</p>
+<p><strong>Exercise:</strong> Have a look at the output of <code>docker image inspect</code>, particularly at <code>"Config"</code> (ignore <code>"ContainerConfig"</code> for now). What is the default command (<code>CMD</code>) of the ubuntu image?</p>
 <details class="done">
 <summary>Answer</summary>
-<p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):
-<div class="highlight"><pre><span></span><code>&quot;Cmd&quot;: [
-    &quot;bash&quot;
-],
+<p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):</p>
+<div class="highlight"><pre><span></span><code><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="s">&quot;/bin/bash&quot;</span>
+<span class="p p-Indicator">]</span><span class="err">,</span>
 </code></pre></div>
-In the case of the ubuntu the default command is <code>bash</code>, returning a shell in <code>bash</code> (i.e. <em>Bourne again shell</em>). Adding the options <code>-i</code> and <code>-t</code> (<code>-it</code>) to your <code>docker run</code> command will therefore result in an interactive <code>bash</code> shell. You can modify this default behaviour. More on that later, when we will work on <a href="../dockerfiles/">Dockerfiles</a>.</p>
+<p>In the case of the ubuntu the default command is <code>bash</code>, returning a shell in <code>bash</code> (i.e. <em>Bourne again shell</em>). Adding the options <code>-i</code> and <code>-t</code> (<code>-it</code>) to your <code>docker run</code> command will therefore result in an interactive <code>bash</code> shell. You can modify this default behaviour. More on that later, when we will work on <a href="../dockerfiles/">Dockerfiles</a>.</p>
 </details>
+<div class="admonition note">
+<p class="admonition-title">The difference between <code>Config</code> and <code>ContainerConfig</code></p>
+<p>The configuration at <code>Config</code> represents the image, the configuration at <code>ContainerConfig</code> the last step during the build of the image, i.e. the last layer. More info e.g. at <a href="https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect">this post at stackoverflow</a>.</p>
+</div>
 <h3 id="removing-containers">Removing containers</h3>
 <p>In the meantime, with every call of <code>docker run</code> we have created a new container (check your containers with <code>docker container ls -a</code>). You probably don&rsquo;t want to remove those one-by-one. These two commands are very useful to clean up your Docker cache:</p>
 <ul>

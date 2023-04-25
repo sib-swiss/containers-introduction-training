@@ -685,13 +685,13 @@
 <p>To make your images shareable and adjustable, it&rsquo;s good practice to work with a <code>Dockerfile</code>. This is a script with a set of instructions to build your image from an existing image.</p>
 <h3 id="basic-dockerfile">Basic <code>Dockerfile</code></h3>
 <p>You can generate an image from a <code>Dockerfile</code> using the command <code>docker build</code>. A <code>Dockerfile</code> has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with <code>FROM</code> that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with <code>RUN</code>.  In our <code>figlet</code> example that would be:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">On writing reproducible <code>Dockerfiles</code></p>
-<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>focal-20221019</code>). We could also have written:</p>
+<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>jammy-20230308</code>). We could also have written:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
@@ -754,7 +754,7 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
 <p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
@@ -809,13 +809,13 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 <p class="admonition-title">Two flavours of <code>CMD</code></p>
 <p>You have seen in the output of <code>docker inspect</code> that docker translates the command (i.e. <code>figlet "my image works!"</code>) into this: <code>["/bin/sh", "-c", "figlet 'My image works!'"]</code>. The notation we used in the <code>Dockerfile</code> is the <em>shell notation</em> while the notation with the square brackets (<code>[]</code>) is the <em>exec-notation</em>. You can use both notations in your <code>Dockerfile</code>. Altough the <em>shell notation</em> is more readable, the <em>exec notation</em> is directly used by the image, and therefore less ambiguous.</p>
 <p>A <code>Dockerfile</code> with shell notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
 </code></pre></div>
 <p>A <code>Dockerfile</code> with exec notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:focal-20221019</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;figlet My image works!&quot;</span><span class="p">]</span>
@@ -833,16 +833,37 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">R</label><label for="__tabbed_4_2">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>In the exercises will use a simple script called <code>search_biomart_datasets.R</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R">here</a>. After you have downloaded it, make sure to set the permissions to executable:</p>
-<div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>search_biomart_datasets.R
+<p>In the exercises will use a simple script called <code>search_biomart_datasets.R</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R">here</a>, or copy-paste it:</p>
+<div class="highlight"><span class="filename">search_biomart_datasets.R</span><pre><span></span><code><span class="c1">#!/usr/bin/env Rscript</span>
+
+<span class="nf">library</span><span class="p">(</span><span class="n">biomaRt</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
+
+<span class="n">option_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<span class="w">    </span><span class="nf">make_option</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;--pattern&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;character&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Search pattern [default = %default]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mouse&quot;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">opt_parser</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">OptionParser</span><span class="p">(</span>
+<span class="w">    </span><span class="n">option_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">option_list</span><span class="p">,</span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Searches biomaRt ensembl datasets&quot;</span>
+<span class="p">)</span>
+<span class="n">opt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">(</span><span class="n">opt_parser</span><span class="p">)</span>
+
+<span class="n">ensembl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">useEnsembl</span><span class="p">(</span><span class="n">biomart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ensembl&quot;</span><span class="p">)</span>
+<span class="nf">searchDatasets</span><span class="p">(</span><span class="n">mart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ensembl</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">opt</span><span class="o">$</span><span class="n">pattern</span><span class="p">)</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Have a look at <code>search_biomart_datasets.R</code>. It is a simple script that searches for datasets in ensembl with <code>biomaRt</code> based on a pattern that is specified by the user. An example for execution would be:</p>
+<p>After you have downloaded it, make sure to set the permissions to executable:</p>
+<p><div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>search_biomart_datasets.R
+</code></pre></div>
+It is a relatively simple script that searches for datasets in ensembl with <code>biomaRt</code> based on a pattern that is specified by the user. An example for execution would be:</p>
 <div class="highlight"><pre><span></span><code>./search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;mouse&quot;</span>
 </code></pre></div>
 <p>Returning a list with all mouse datasets:</p>
-<div class="highlight"><pre><span></span><code>                     dataset                                      description
+<div class="highlight"><pre><span></span><code>                        dataset                                      description
 94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
 109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
 111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
@@ -855,11 +876,12 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 112    SPRET_EiJ_v1
 149     HU_Pman_2.1
 </code></pre></div>
-</div>
-<p>In the <code>Dockerfile</code> below we give the the following instructions:
-- use the <a href="https://hub.docker.com/_/r-base">R base container</a> version 4.2.3
-- install the package <code>optparse</code> from CRAN and <code>biomaRt</code> from Biconductor with <code>apt-get</code>. 
-- copy <code>search_biomart_datasets.R</code> to <code>/opt</code> inside the container:</p>
+<p>From the script you can see it has two dependencies: <code>biomaRt</code> and <code>optparse</code>. If we want to run it inside a container, we would have to install these. We do this in the <code>Dockerfile</code> below. We give the the following instructions:</p>
+<ul>
+<li>use the <a href="https://hub.docker.com/_/r-base">R base container</a> version 4.2.3</li>
+<li>install the package <code>optparse</code> from CRAN (<code>r-cran-optparse</code>) and <code>biomaRt</code> from Bioconductor (<code>r-bioc-biomart</code>) with <code>apt-get</code>. </li>
+<li>copy the script <code>search_biomart_datasets.R</code> to <code>/opt</code> inside the container:</li>
+</ul>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
 
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
@@ -929,7 +951,7 @@ ls
 <p class="admonition-title">Note</p>
 <p>The <code>ENV</code> instruction can be used to set any variable. </p>
 </div>
-<p><strong>Exercise</strong>: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute <code>search_biomart_datasets.R</code> from anywhere?)</p>
+<p><strong>Exercise</strong>: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute <code>search_biomart_datasets.R</code> from anywhere?)</p>
 <details class="done">
 <summary>Answer</summary>
 <p>After re-building we start an interactive session:</p>
@@ -1158,12 +1180,28 @@ rstudio-server
 <p>By doing this you have a completely isolated and shareable R environment running Rstudio server, but with your local files available to it. Pretty neat right? </p>
 </div>
 <div class="tabbed-block">
-<p>In the exercises will use a simple script called <code>daterange.py</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py">here</a>. After you have downloaded it, make sure to set the permissions to executable:</p>
+<p>In the exercises will use a simple script called <code>daterange.py</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/daterange.py">here</a>. Or copy-paste it from here:</p>
+<div class="highlight"><span class="filename">daterange.py</span><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get a daterange&quot;</span><span class="p">)</span>
+
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--date&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                    <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Date. Format: [YYYYMMDD]&#39;</span><span class="p">)</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">dates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>After you have downloaded it, make sure to set the permissions to executable:</p>
 <div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>daterange.py
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Have a look at <code>daterange.py</code>. It is a simple script that uses <code>pandas</code>. It takes a date (in the format <code>YYYYMMDD</code>) as provided by the option <code>--date</code>, and returns a list of all dates in the week starting from that date. An example for execution would be:</p>
+<p>Have a look at <code>daterange.py</code>. It is a simple script that uses <code>pandas</code> and <code>argparse</code>. It takes a date (in the format <code>YYYYMMDD</code>) as provided by the option <code>--date</code>, and returns a list of all dates in the week starting from that date. An example for execution would be:</p>
 <div class="highlight"><pre><span></span><code>./daterange.py<span class="w"> </span>--date<span class="w"> </span><span class="m">20220226</span>
 </code></pre></div>
 <p>Giving a list of dates starting from 26-FEB-2022:</p>
@@ -1175,9 +1213,8 @@ rstudio-server
 2022-03-03 00:00:00
 2022-03-04 00:00:00
 </code></pre></div>
-</div>
-<p>In the <code>Dockerfile</code> below we give the instruction to copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
+<p>From the script, you can see it has the dependecy <code>pandas</code>, which is not a <a href="https://docs.python.org/3/py-modindex.html">built-in module</a>. In the <code>Dockerfile</code> below we give the instruction to install <code>pandas</code> with <code>pip</code> and copy <code>daterange.py</code> to <code>/opt</code> inside the container:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas<span class="w"> </span>
 
@@ -1224,7 +1261,7 @@ ls
 <p class="admonition-title">The <code>$PATH</code> variable</p>
 <p>The path variable is a special variable that consists of a list of path seperated by colons (<code>:</code>). These paths are searched if you are trying to run an executable. More info this topic at e.g. <a href="https://en.wikipedia.org/wiki/PATH_(variable)">wikipedia</a>. </p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas<span class="w"> </span>
 
@@ -1262,7 +1299,7 @@ ls
 <li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> command. This means that you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
 </ul>
 <p>Let&rsquo;s try it out:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas<span class="w"> </span>
 
@@ -1289,7 +1326,7 @@ ls
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
 <p>Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with <code>WORKDIR</code>. This instruction will set the default directory for all other instructions (like <code>RUN</code>, <code>COPY</code> etc.). It will also change the directory in which you will land if you run the container interactively.</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas<span class="w"> </span>
 
@@ -1374,7 +1411,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <details class="done">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.15</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
 
 <span class="k">LABEL</span><span class="w"> </span>org.opencontainers.image.created<span class="o">=</span><span class="s2">&quot;2022-04-12&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -1405,7 +1442,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 </code></pre></div>
 </details>
 <h3 id="building-an-image-with-a-browser-interface_1">Building an image with a browser interface</h3>
-<p>In this exercise, we will use the same base image (<code>python:3.9.15</code>), but instead of installing <code>pandas</code>, we will install <code>jupyterlab</code>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
+<p>In this exercise, we will use a different base image from the <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html">jupyter docker image stack</a>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">jupyter/base-notebook:python-3.9</span>
 
 <span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas
