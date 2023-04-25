@@ -1,4 +1,4 @@
-FROM python:3.9.15
+FROM python:3.9.16
 
 LABEL org.opencontainers.image.created="2022-04-12" \
     org.opencontainers.image.authors="Geert van Geest" \

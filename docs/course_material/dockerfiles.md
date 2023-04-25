@@ -193,40 +193,66 @@ CMD figlet My image works!
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
 === "R"
-    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R). After you have downloaded it, make sure to set the permissions to executable:
+    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R), or copy-paste it:
+
+    ```R title="search_biomart_datasets.R"
+    #!/usr/bin/env Rscript
+
+    library(biomaRt)
+    library(optparse)
+
+    option_list <- list(
+        make_option(c("--pattern"),
+            type = "character",
+            help = "Search pattern [default = %default]",
+            default = "mouse"
+        )
+    )
+
+    opt_parser <- OptionParser(
+        option_list = option_list,
+        description = "Searches biomaRt ensembl datasets"
+    )
+    opt <- parse_args(opt_parser)
+
+    ensembl <- useEnsembl(biomart = "ensembl")
+    searchDatasets(mart = ensembl, pattern = opt$pattern)
+    ```
+    
+    
+    After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
     chmod +x search_biomart_datasets.R
     ```
+    It is a relatively simple script that searches for datasets in ensembl with `biomaRt` based on a pattern that is specified by the user. An example for execution would be:
 
-    !!! note
-        Have a look at `search_biomart_datasets.R`. It is a simple script that searches for datasets in ensembl with `biomaRt` based on a pattern that is specified by the user. An example for execution would be:
+    ```sh
+    ./search_biomart_datasets.R --pattern "mouse"
+    ```
 
-        ```sh
-        ./search_biomart_datasets.R --pattern "mouse"
-        ```
+    Returning a list with all mouse datasets:
 
-        Returning a list with all mouse datasets:
+    ```
+                            dataset                                      description
+    94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
+    109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
+    111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
+    112    mspretus_gene_ensembl              Algerian mouse genes (SPRET_EiJ_v1)
+    149   pmbairdii_gene_ensembl Northern American deer mouse genes (HU_Pman_2.1)
+                version
+    94  CAROLI_EIJ_v1.1
+    109 PAHARI_EIJ_v1.1
+    111         MUSP714
+    112    SPRET_EiJ_v1
+    149     HU_Pman_2.1
+    ```
 
-        ```
-                             dataset                                      description
-        94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
-        109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
-        111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
-        112    mspretus_gene_ensembl              Algerian mouse genes (SPRET_EiJ_v1)
-        149   pmbairdii_gene_ensembl Northern American deer mouse genes (HU_Pman_2.1)
-                    version
-        94  CAROLI_EIJ_v1.1
-        109 PAHARI_EIJ_v1.1
-        111         MUSP714
-        112    SPRET_EiJ_v1
-        149     HU_Pman_2.1
-        ```
+    From the script you can see it has two dependencies: `biomaRt` and `optparse`. If we want to run it inside a container, we would have to install these. We do this in the `Dockerfile` below. We give the the following instructions:
 
-    In the `Dockerfile` below we give the the following instructions:
     - use the [R base container](https://hub.docker.com/_/r-base) version 4.2.3
-    - install the package `optparse` from CRAN and `biomaRt` from Biconductor with `apt-get`. 
-    - copy `search_biomart_datasets.R` to `/opt` inside the container:
+    - install the package `optparse` from CRAN (`r-cran-optparse`) and `biomaRt` from Bioconductor (`r-bioc-biomart`) with `apt-get`. 
+    - copy the script `search_biomart_datasets.R` to `/opt` inside the container:
 
     ```dockerfile
     FROM r-base:4.2.3
@@ -305,7 +331,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note
         The `ENV` instruction can be used to set any variable. 
 
-    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `search_biomart_datasets.R` from anywhere?)
+    **Exercise**: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute `search_biomart_datasets.R` from anywhere?)
 
     ??? done "Answer"
         After re-building we start an interactive session:
@@ -591,35 +617,55 @@ Often containers are built for a specific purpose. For example, you can use a co
     By doing this you have a completely isolated and shareable R environment running Rstudio server, but with your local files available to it. Pretty neat right? 
 
 === "Python"
-    In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_own_script/daterange.py). After you have downloaded it, make sure to set the permissions to executable:
+    In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/daterange.py). Or copy-paste it from here:
+
+    ```python title="daterange.py"
+    #!/usr/bin/env python3
+
+    import pandas as pd
+    import argparse
+
+    parser = argparse.ArgumentParser(description = "Get a daterange")
+
+    parser.add_argument('-d', '--date', type=str, required=True, 
+                        help='Date. Format: [YYYYMMDD]')
+
+    args = parser.parse_args()
+
+    dates = pd.date_range(args.date, periods=7)
+
+    for d in dates:
+        print(d)
+    ```
+    
+    After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
     chmod +x daterange.py
     ```
+    
+    Have a look at `daterange.py`. It is a simple script that uses `pandas` and `argparse`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
 
-    !!! note
-        Have a look at `daterange.py`. It is a simple script that uses `pandas`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
+    ```sh
+    ./daterange.py --date 20220226
+    ```
 
-        ```sh
-        ./daterange.py --date 20220226
-        ```
+    Giving a list of dates starting from 26-FEB-2022:
 
-        Giving a list of dates starting from 26-FEB-2022:
+    ```
+    2022-02-26 00:00:00
+    2022-02-27 00:00:00
+    2022-02-28 00:00:00
+    2022-03-01 00:00:00
+    2022-03-02 00:00:00
+    2022-03-03 00:00:00
+    2022-03-04 00:00:00
+    ```
 
-        ```
-        2022-02-26 00:00:00
-        2022-02-27 00:00:00
-        2022-02-28 00:00:00
-        2022-03-01 00:00:00
-        2022-03-02 00:00:00
-        2022-03-03 00:00:00
-        2022-03-04 00:00:00
-        ```
-
-    In the `Dockerfile` below we give the instruction to copy `daterange.py` to `/opt` inside the container:
+    From the script, you can see it has the dependecy `pandas`, which is not a [built-in module](https://docs.python.org/3/py-modindex.html). In the `Dockerfile` below we give the instruction to install `pandas` with `pip` and copy `daterange.py` to `/opt` inside the container:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM python:3.9.16
 
     RUN pip install pandas 
 
@@ -673,7 +719,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM python:3.9.16
 
     RUN pip install pandas 
 
@@ -728,7 +774,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     Let's try it out:
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM python:3.9.16
 
     RUN pip install pandas 
 
@@ -764,7 +810,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
 
     ```dockerfile
-    FROM python:3.9.15
+    FROM python:3.9.16
 
     RUN pip install pandas 
 
@@ -868,7 +914,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Dockerfile` would look like:
 
         ```dockerfile
-        FROM python:3.9.15
+        FROM python:3.9.16
 
         LABEL org.opencontainers.image.created="2022-04-12" \
             org.opencontainers.image.authors="Geert van Geest" \
@@ -904,7 +950,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ### Building an image with a browser interface
 
-    In this exercise, we will use the same base image (`python:3.9.15`), but instead of installing `pandas`, we will install `jupyterlab`. [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image from the [jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 
     ```dockerfile
     FROM jupyter/base-notebook:python-3.9
