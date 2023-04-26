@@ -405,7 +405,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         Passing a different argument (i.e. overwriting `CMD`) would be:
 
         ```sh
-        docker run --rm search_biomart_datasets.R --pattern "sapiens"
+        docker run --rm search_biomart_datasets --pattern "sapiens"
         ```
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
