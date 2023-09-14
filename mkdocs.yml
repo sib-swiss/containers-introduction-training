@@ -1,9 +1,9 @@
-site_name: Introduction to containers
+site_name: Introduction to Containers and Snakemake
 nav:
     - Home: index.md
     - Precourse preparations: precourse.md
     - Course schedule: course_schedule.md
-    - Course material:
+    - Day 1 - Containers:
       - Introduction to containers: course_material/introduction_containers.md
       - Managing containers and images: course_material/managing_docker.md
       - Working with dockerfiles: course_material/dockerfiles.md
@@ -22,24 +22,14 @@ theme:
 extra:
   version:
     provider: mike
-  consent:
-    title: Cookie consent
-    description: >- 
-      We use cookies to recognize your repeated visits and preferences, as well
-      as to measure the effectiveness of our documentation and whether users
-      find what they're searching for. With your consent, you're helping us to
-      make our documentation better.
-  analytics:
-    provider: google
-    property: G-1HJVS56CBX
 
 copyright: >
   Copyright &copy; 2021-2022 SIB Swiss institute of Bioinformatics –
   <a href="#__consent">Change cookie settings</a>
 
 # Repository
-repo_name: sib-swiss/containers-introduction-training
-repo_url: https://github.com/sib-swiss/containers-introduction-training
+repo_name: sib-swiss/containers-snakemake-training
+repo_url: https://github.com/sib-swiss/containers-snakemake-training
 edit_uri: edit/main/docs/
 
 markdown_extensions:

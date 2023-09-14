@@ -1,10 +1,14 @@
 {
-    "title": "Course material Docker and Singularity for reproducible research",
+    "title": " Introduction to Containers and Snakemake for Reproducible Research",
     "keywords": [
       "Docker",
       "Singularity",
       "Containers",
       "Reproducibility",
+      "Snakemake",
+      "Workflows",
+      "Workflow management",
+      "Pipeline",
       "course",
       "training"
     ],
@@ -13,6 +17,11 @@
         "name": "Geert van Geest",
         "affiliation": "SIB Swiss Institute of Bioinformatics",
         "orcid": "0000-0002-1561-078X"
+      },
+      {
+        "name": " Antonin Thiébaut",
+        "affiliation": "University of Lausanne",
+        "orcid": "0000-0002-7587-5587"
       },
       {
         "name": "Patricia Palagi",

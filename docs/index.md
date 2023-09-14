@@ -3,10 +3,13 @@
 ## Teachers 
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+- Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+- Damir Zhakparov
 
 ## Authors
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+- Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
 - Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 
 ## Attribution
@@ -15,16 +18,14 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 
 ## License & copyright
 
-**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/single-cell-training/master/LICENCE)
+**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/LICENSE.md)
 
 **Copyright:** [SIB Swiss Institute of Bioinformatics](https://www.sib.swiss/)
 
 ## Material
 
 * This website
-* Zoom meeting (through mail)
 * Google doc (through mail)
-* Slack channel
 
 ## Learning outcomes
 
@@ -33,9 +34,10 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 After this course, you will be able to:
 
 * Understand the basic concepts and terminology associated with virtualization with containers
-* Be able to customize, store and share a containerized environment with Docker
-* Understand the essential differences between Docker and Singularity
-* Be able to use Singularity to run containers on a shared computer environment (e.g. a HPC cluster)
+* Customize, store, manage and share containerized environments with Docker
+* Use Singularity to run containers on a shared computer environment (e.g. a HPC cluster)
+* Understand the basic concepts and terminology associated with workflow management systems
+* Create a computational workflow that uses containers with Snakemake
 
 ### Learning outcomes explained
 
