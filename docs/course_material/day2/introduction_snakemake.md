@@ -9,8 +9,8 @@
 
 ## Exercises
 
-!!! note "Command &lt;cmd_name&gt; not found"  <!-- AT. Check if special characters worked -->
-    If you try to rum a command and get an error such as _Command 'snakemake' not found_, you are probably not in the right environment. To list them, use `mamba env list`. Then activate the right environment with `mamba activate <env_name>`. You can deactivate an environment with `mamba deactivate`.
+!!! note "Command &lt;cmd_name&gt; not found"
+    If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably not in the right environment. To list them, use `mamba env list`. Then activate the right environment with `mamba activate <env_name>`. You can deactivate an environment with `mamba deactivate`.
 
 ### Workflow structure
 
@@ -20,7 +20,7 @@ It is strongly advised to implement your answers in a directory called `workflow
 
 Rules are the basic blocks of a Snakemake workflow. A **rule** is like a recipe indicating how to produce a specific **output**; the actual application of a rule to create an output is called a **job**. A rule is defined in a Snakefile with the _keyword_ `rule`, and contains _directives_ which indicate the rule's properties. We will learn about other directives later in the course.
 
-To create the simplest rule possible, we need at least two directives: 
+To create the simplest rule possible, we need at least two _directives_:
 - `output`: path of the output file for this rule
 - `shell`: shell commands to execute in order to generate the output
 
@@ -46,9 +46,9 @@ Rules are defined and written in a file called **Snakefile** (note the capital `
 
 ### Executing a workflow with a precise output
 
-It is now time to execute your first worklow!
+It is now time to execute your first worklow! To do this, you need to tell Snakemake what is your target, *i.e.* what is the output that you want to generate.
 
-**Exercise:** Execute the workflow with `snakemake --cores 1 <output_name>`. What value should you use as _output_name_? Do you see the file?
+**Exercise:** Execute the workflow with `snakemake --cores 1 <target>`. What value should you use for &lt;target&gt;? Once Snakemake execution is finished, can you locate the output file?
 
 ??? done "Answer"
     Execute the workflow: `snakemake --cores 1 results/first_step.txt`
@@ -61,7 +61,7 @@ Note that during the execution of the workflow, Snakemake automatically created 
 
 ??? done "Answer"
 <!-- AT. Check how this looks -->
-    Well... Nothing! You get a message saying that Snakemake did not do anything:
+    Nothing! You get a message saying that Snakemake did not do anything:
 
     ```
     Building DAG of jobs...
@@ -70,12 +70,15 @@ Note that during the execution of the workflow, Snakemake automatically created 
 
     By default, existing outputs are only generated again if the input of the rule that generates them is newer than them, based on file modification dates. You can change this behaviour and force the rerun by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or the `-F` option to force recreate ALL the outputs of the workflow.
 
-Note that in the previous example, values for these two directives are **strings**. For the `shell` directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:
-<!-- AT. Check how next lines look -->
+In the previous example, values for these two directives are **strings**. For the `shell` directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:
+
 ```python
-shell:
-    'echo "I want to print a very very very very very very '
-    'very very very very long string in my output" > results/first_step.txt'
+rule first_step:
+    output:
+        'results/first_step.txt'
+    shell:
+        'echo "I want to print a very very very very very very '
+        'very very very very long string in my output" > results/first_step.txt'
 ```
 
 ### Using the input directive
@@ -103,13 +106,13 @@ Note that with this rule definition, Snakemake **will not run** if `data/first_s
 
 ### Using several rules in a workflow
 
-Creating one Snakefile per rule doesn't seem like a good solution, so let's try to improve this.
+Creating one Snakefile per rule does not seem like a good solution, so let's try to improve this.
 
 **Exercise:** Delete the `results/` folder, gather the two previous rules in the same Snakefile (place the `first_step` rule first) and try to run the workflow **without specifying an output**. What happens?
 
 ??? done "Answer"
     Execute the workflow without outputs: `snakemake --cores 1`.
-    When executed, Snakemake tries to generate a specific output called **target**, and resolves all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here `results/first_step.txt`. If you had placed the `second_step` rule in first position, Snakemake would have crashed because the input for this rule does not exist. If you are in advance, feel free to try this!
+    When executed, Snakemake tries to generate a specific output called **target**, and resolves all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here `results/first_step.txt`. If you had placed the `second_step` rule in first position, Snakemake would have crashed because the input for this rule does not exist. If you have enough time, feel free to try it!
 
 **Exercise:** With this in mind, use a space-separated list of targets (instead of one filename) in your command to generate multiple targets. Use the `-F` to force the rerun of the whole workflow or delete your `results/` folder beforehand.
 
@@ -119,7 +122,7 @@ Creating one Snakefile per rule doesn't seem like a good solution, so let's try 
 
 ### Chaining rules
 
-Once again, writing all the outputs in the `snakemake` command is very time-consuming, error-prone and annoying! Imagine what happens when your workflow generate tens of outputs? Fortunately, there is a way to simplify this, which relies on rules dependency. The core principle of Snakemake's execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all inputs and outputs required to generate the final desired output. For each job, starting from the jobs generating the final output, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates the input. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
+Once again, writing all the outputs in the `snakemake` command does not look like a good solution: it is very time-consuming, error-prone and annoying! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency. The core principle of Snakemake's execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all inputs and outputs required to generate the final desired output. For each job, starting from the jobs generating the final output, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates the input. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
 
 !!! hint
     Your Snakefile should look like this:
@@ -146,7 +149,7 @@ Once again, writing all the outputs in the `snakemake` command is very time-cons
 ??? done "Answer"
     Execute the workflow: `snakemake --cores 1 results/second_step.txt`
     Visualise your directory content: `ls -alh results/`
-    You should now see Snakemake execute the 2 rules and produce both targets/outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the first defined rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require an input, so all dependencies are resolved, and Snakemake can generate the DAG.
+    You should now see Snakemake execute the 2 rules and produce both outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the first defined rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require an input, so all dependencies are resolved, and Snakemake can generate the DAG.
 
 ### Important notes on chaining rules
 
