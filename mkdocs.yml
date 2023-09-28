@@ -8,6 +8,9 @@ nav:
       - Managing containers and images: course_material/managing_docker.md
       - Working with dockerfiles: course_material/dockerfiles.md
       - Running containers with singularity: course_material/singularity.md
+    - Day 2 - Snakemake:
+      - General guidelines: course_material/day2/guidelines.md
+      - Introduction to Snakemake: course_material/day2/introduction_snakemake.md
 
 theme:
   name: material
