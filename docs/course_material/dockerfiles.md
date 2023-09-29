@@ -27,7 +27,7 @@ RUN apt-get install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
-    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20230308`). We could also have written:
+    At the `FROM` statement in the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20230308`). We could also have written:
 
     ```dockerfile
     FROM ubuntu
@@ -192,14 +192,43 @@ CMD figlet My image works!
 
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
-In the exercises will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R), or copy-paste it:
+In the exercises will use a script called `test_deseq2.R`. This script will:
+
+- Load the `DESeq2` and `optparse` packages
+- Load some additional packages to test their installations. We will use those packages later on in the course.
+- Create and parse an option called `--rows` with `optparse`
+- Create a dummy count matrix
+- Run DESeq2 on the dummy count matrix
+- Print the results to stdout
+
+ You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R), or copy-paste it:
 
 ```R title="test_deseq2.R"
 #!/usr/bin/env Rscript
 
-library(DESeq2)
-library(optparse)
+# load packages required for this script
+write("Loading packages required for this script", stderr())
+suppressPackageStartupMessages({
+    library(DESeq2)
+    library(optparse)
+})
 
+# load dependency packages for testing installations
+write("Loading dependency packages for testing installations", stderr())
+suppressPackageStartupMessages({
+    library(apeglm)
+    library(IHW)
+    library(limma)
+    library(data.table)
+    library(ggplot2)
+    library(ggrepel)
+    library(pheatmap)
+    library(RColorBrewer)
+    library(scales)
+    library(stringr)
+})
+
+# parse options with optparse
 option_list <- list(
     make_option(c("--rows"),
         type = "integer",
@@ -214,10 +243,7 @@ opt_parser <- OptionParser(
 )
 opt <- parse_args(opt_parser)
 
-
-
-# see vignette for suggestions on generating
-# count tables from RNA-Seq data
+# create a random dummy count matrix
 cnts <- matrix(rnbinom(n = opt$row * 10, mu = 100, size = 1 / 0.5), ncol = 10)
 cond <- factor(rep(1:2, each = 5))
 
@@ -228,7 +254,9 @@ dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~cond)
 dds <- DESeq(dds)
 res <- results(dds)
 
+# print results to stdout
 print(res)
+
 ```
 
 
@@ -237,13 +265,13 @@ After you have downloaded it, make sure to set the permissions to executable:
 ```sh
 chmod +x test_deseq2.R
 ```
-It is a relatively simple script that searches for datasets in ensembl with `biomaRt` based on a pattern that is specified by the user. An example for execution would be:
+It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:
 
 ```sh
-./test_deseq2.R 
+./test_deseq2.R --rows 100
 ```
 
-Returning a bunch of messages and at the end an overview of differential gene expression analysis results:
+Here, `--rows` is a optional arguments that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
 
 ```
      baseMean log2FoldChange     lfcSE         stat    pvalue      padj
@@ -261,28 +289,25 @@ Returning a bunch of messages and at the end an overview of differential gene ex
 100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
 ```
 
-From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below. We give the the following instructions:
+From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below. We give it the following instructions:
 
-- use the [r2u base image](https://hub.docker.com/rocker/r2u) version jammy
-- install the package `DESeq2`, `optparse` and some additional packages we will need later on with `install2.r` 
+- use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
+- install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r). 
 - copy the script `test_deseq2.R` to `/opt` inside the container:
 
 ```dockerfile
 FROM rocker/r2u:jammy
 
 RUN install2.r \
-DESeq2 \
-optparse \
-apeglm \
-IHW \
-limma \
-data.table \
-ggplot2 \
-ggrepel \
-pheatmap \
-RColorBrewer \
-scales \
-stringr
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
 
 COPY test_deseq2.R /opt 
 ```
@@ -294,7 +319,7 @@ COPY test_deseq2.R /opt
     The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` or `install2.r` are possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
 
-**Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. After that, execute the script inside the container. 
+**Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. Name the image `deseq2`. After that, start an interactive session and execute the script inside the container. 
 
 !!! hint
     Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
@@ -304,17 +329,17 @@ COPY test_deseq2.R /opt
 
     === "x86_64 / AMD64"
         ```sh
-        docker build -t test_deseq2 .
+        docker build -t deseq2 .
         ```
     === "ARM64 (MacOS M1 chip)"
         ```sh
-        docker build --platform amd64 -t test_deseq2 .
+        docker build --platform amd64 -t deseq2 .
         ```
 
     Run the container:
 
     ```sh
-    docker run -it --rm test_deseq2 /bin/bash
+    docker run -it --rm deseq2 /bin/bash
     ```
 
     Inside the container we look up the script:
@@ -329,7 +354,7 @@ COPY test_deseq2.R /opt
     Now you can execute it from inside the container:
 
     ```sh
-    ./test_deseq2.R 
+    ./test_deseq2.R --rows 100
     ```
 
 That's kind of nice. We can ship our R script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
@@ -341,18 +366,15 @@ That's kind of nice. We can ship our R script inside our container. However, we 
 FROM rocker/r2u:jammy
 
 RUN install2.r \
-DESeq2 \
-optparse \
-apeglm \
-IHW \
-limma \
-data.table \
-ggplot2 \
-ggrepel \
-pheatmap \
-RColorBrewer \
-scales \
-stringr
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
 
 COPY test_deseq2.R /opt 
 
@@ -368,7 +390,7 @@ ENV PATH=/opt:$PATH
     After re-building we start an interactive session:
 
     ```sh
-    docker run -it --rm test_deseq2 /bin/bash
+    docker run -it --rm deseq2 /bin/bash
     ```
 
     The path is upated, `/opt` is appended to the beginning of the variable:
@@ -392,7 +414,7 @@ ENV PATH=/opt:$PATH
 Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
 ```sh
-docker run --rm test_deseq2 test_deseq2.R
+docker run --rm deseq2 test_deseq2.R --rows 100
 ```
 
 Now it will directly print the output of `test_deseq2.R` to stdout. 
@@ -408,18 +430,15 @@ Let's try it out:
 FROM rocker/r2u:jammy
 
 RUN install2.r \
-DESeq2 \
-optparse \
-apeglm \
-IHW \
-limma \
-data.table \
-ggplot2 \
-ggrepel \
-pheatmap \
-RColorBrewer \
-scales \
-stringr
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
 
 COPY test_deseq2.R /opt 
 
@@ -439,13 +458,13 @@ CMD ["--rows", "100"]
     Just running the container non-interactively would be:
 
     ```sh
-    docker run --rm test_deseq2
+    docker run --rm deseq2
     ```
 
     Passing a different argument (i.e. overwriting `CMD`) would be:
 
     ```sh
-    docker run --rm test_deseq2 --rows 200
+    docker run --rm deseq2 --rows 200
     ```
 
     Here, the container behaves as the executable itself to which you can pass arguments. 
@@ -456,18 +475,15 @@ Most containerized applications need multiple build steps. Often, you want to pe
 FROM rocker/r2u:jammy
 
 RUN install2.r \
-DESeq2 \
-optparse \
-apeglm \
-IHW \
-limma \
-data.table \
-ggplot2 \
-ggrepel \
-pheatmap \
-RColorBrewer \
-scales \
-stringr
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
 
 WORKDIR /opt
 
@@ -493,7 +509,7 @@ CMD ["--rows", "100"]
     Running the container interactively would be:
 
     ```sh
-    docker run -it --rm --entrypoint /bin/bash test_deseq2
+    docker run -it --rm --entrypoint /bin/bash deseq2
     ```
     
     Which should result in a terminal looking something like this:
@@ -507,8 +523,8 @@ CMD ["--rows", "100"]
     Pushing it to dockerhub: 
 
     ```sh
-    docker tag test_deseq2 [USER NAME]/test_deseq2:v1
-    docker push [USER NAME]/test_deseq2:v1
+    docker tag deseq2 [USER NAME]/deseq2:v1
+    docker push [USER NAME]/deseq2:v1
     ```
 
 ### Get information on your image with `docker inspect`
@@ -517,40 +533,41 @@ We have used `docker inspect` already in the previous chapter to find the defaul
 
 ```yaml
 "Config": {
-        "Hostname": "",
-        "Domainname": "",
-        "User": "",
-        "AttachStdin": false,
-        "AttachStdout": false,
-        "AttachStderr": false,
-        "Tty": false,
-        "OpenStdin": false,
-        "StdinOnce": false,
-        "Env": [
-            "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-            "LC_ALL=en_US.UTF-8",
-            "LANG=en_US.UTF-8",
-            "R_BASE_VERSION=4.2.3"
-        ],
-        "Cmd": [
-            "--pattern",
-            "mouse"
-        ],
-        "ArgsEscaped": true,
-        "Image": "",
-        "Volumes": null,
-        "WorkingDir": "/opt",
-        "Entrypoint": [
-            "test_deseq2.R"
-        ],
-        "OnBuild": null,
-        "Labels": {
-            "org.opencontainers.image.authors": "Dirk Eddelbuettel <edd@debian.org>",
-            "org.opencontainers.image.licenses": "GPL-2.0-or-later",
-            "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
-            "org.opencontainers.image.vendor": "Rocker Project"
-        }
+    "Hostname": "",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+        "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LC_ALL=en_US.UTF-8",
+        "LANG=en_US.UTF-8",
+        "DEBIAN_FRONTEND=noninteractive",
+        "TZ=UTC"
+    ],
+    "Cmd": [
+        "--rows",
+        "100"
+    ],
+    "ArgsEscaped": true,
+    "Image": "",
+    "Volumes": null,
+    "WorkingDir": "/opt",
+    "Entrypoint": [
+        "test_deseq2.R"
+    ],
+    "OnBuild": null,
+    "Labels": {
+        "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+        "org.label-schema.license": "GPL-2.0",
+        "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+        "org.label-schema.vendor": "Rocker Project"
     }
+}
 ```
 
 ### Adding metadata to your image
@@ -578,18 +595,15 @@ You can annotate your `Dockerfile` and the image by using the instruction `LABEL
             org.opencontainers.image.description="Container with DESeq2 and friends"
 
     RUN install2.r \
-    DESeq2 \
-    optparse \
-    apeglm \
-    IHW \
-    limma \
-    data.table \
-    ggplot2 \
-    ggrepel \
-    pheatmap \
-    RColorBrewer \
-    scales \
-    stringr
+        DESeq2 \
+        optparse \
+        apeglm \
+        IHW \
+        limma \
+        data.table \
+        ggrepel \
+        pheatmap \
+        stringr
 
     WORKDIR /opt
 
@@ -636,7 +650,12 @@ RUN install2.r \
 RUN R -q -e 'BiocManager::install("biomaRt")'
 ```
 
-This will create an image from the existing `rstudio` image. It will also install `libz-dev` with `apt-get`, `BiocManager` with `install2.r` and `biomaRt` with an R command. Despiste we're installing the same packages, the installation steps need to be different from the `r-base` image. This is because in the `rocker/rstudio` images R is installed from source, and therefore you can't install packages with `apt-get`. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+This will create an image from the existing `rstudio` image. It will also install `libz-dev` with `apt-get`, `BiocManager` with `install2.r` and `DESeq2` with an R command. Despite we're installing the same packages, the installation steps need to be different from the `r-base` image. This is because in the `rocker/rstudio` images R is installed from source, and therefore you can't install packages with `apt-get`. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+
+!!! warning "Installation will take a while"
+    The installation of CRAN packages will go relatively quickly, because can use the binary packages supplied by [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/). However, the installation of Bioconductor packages will take a while, because they need to be installed from source. 
+
+    If you don't have time, you can skip the DESeq2 installation by removing the last line of the `Dockerfile`.
 
 **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
@@ -659,9 +678,9 @@ docker run --rm -it -p 8787:8787 rstudio-server
 !!! note "Networking"
     More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of jupyterhub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
+By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of Rstudio server by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
 
-We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+We can make this even more interesting by mounting a local directory to the container running the Rstudio image:
 
 ```sh
 docker run \
