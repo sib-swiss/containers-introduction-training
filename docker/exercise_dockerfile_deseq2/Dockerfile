@@ -1,22 +1,19 @@
 FROM rocker/r2u:jammy
 
 LABEL org.opencontainers.image.created="2023-04-12" \
-        org.opencontainers.image.authors="Geert van Geest" \
-        org.opencontainers.image.description="Container with DESeq2 and friends"
+    org.opencontainers.image.authors="Geert van Geest" \
+    org.opencontainers.image.description="Container with DESeq2 and friends"
 
 RUN install2.r \
-DESeq2 \
-optparse \
-apeglm \
-IHW \
-limma \
-data.table \
-ggplot2 \
-ggrepel \
-pheatmap \
-RColorBrewer \
-scales \
-stringr
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
 
 WORKDIR /opt
 
