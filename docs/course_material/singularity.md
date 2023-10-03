@@ -96,7 +96,7 @@ singularity run [IMAGE NAME].sif [COMMAND]
     However, most applications require `singularity run`. Especially if you want to provide options like `--bind` (for mounting directories). 
 
 
-**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the python or R image you've created in the previous chapter.
+**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the R image you've created in the previous chapter.
 
 !!! note "Entrypoint and singularity"
     The `daterange` image has an entrypoint set, and `singularity run` does not overwrite it. In order to ignore both the entrypoint and cmd use `singularity exec`.  
@@ -131,55 +131,32 @@ singularity run [IMAGE NAME].sif [COMMAND]
                                                  |___/
 
     ```
-    === "R"
-        Pulling the `search_biomart_datasets` image:
+    
+    Pulling the `deseq2` image:
 
-        ```sh
-        singularity pull docker://[USER NAME]/search_biomart_datasets:v1
-        ```
+    ```sh
+    singularity pull docker://[USER NAME]/deseq2:v1
+    ```
 
-        Running it without command:
+    Running it without command:
 
-        ```sh
-        ./search_biomart_datasets_v1.sif
-        ```
+    ```sh
+    ./deseq2.sif
+    ```
 
-        Running with a command:
+    Running with a command:
 
-        ```sh
-        ./search_biomart_datasets_v1.sif --pattern sapiens
-        ```
+    ```sh
+    ./deseq2.sif --rows 100
+    ```
 
-        To overwrite both entrypoint and the command:
+    To overwrite both entrypoint and the command:
 
-        ```sh
-        singularity exec search_biomart_datasets_v1.sif search_biomart_datasets.R --pattern "(R|r)at"
-        ```
+    ```sh
+    singularity exec deseq2.sif test_deseq2.R --rows 200
+    ```
         
-    === "Python"
-        Pulling the `daterange.py` image:
-
-        ```sh
-        singularity pull docker://[USER NAME]/daterange:v1
-        ```
-
-        Running it without command:
-
-        ```sh
-        ./daterange_v1.sif
-        ```
-
-        Running with a command:
-
-        ```sh
-        ./daterange_v1.sif --date 20221005
-        ```
-
-        To overwrite both entrypoint and the command:
-
-        ```sh
-        singularity exec daterange_v1.sif daterange.py --date 20221005
-        ```
+    
 
 ### Mounting with Singularity
 
