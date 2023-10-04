@@ -9,8 +9,8 @@ nav:
       - Working with dockerfiles: course_material/dockerfiles.md
       - Running containers with singularity: course_material/singularity.md
     - Day 2 - Snakemake:
-      - General guidelines: course_material/day2/guidelines.md
-      - Introduction to Snakemake: course_material/day2/introduction_snakemake.md
+      - General guidelines: course_material/day2/1_guidelines.md
+      - Introduction to Snakemake: course_material/day2/2_introduction_snakemake.md
 
 theme:
   name: material
