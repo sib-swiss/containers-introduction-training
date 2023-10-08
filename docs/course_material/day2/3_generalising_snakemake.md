@@ -225,7 +225,7 @@ Once you have trimmed reads, the next step is to map those reads onto a referenc
     * The path of the mapped reads file (_i.e._ output file, in SAM format) is specified with the option `-S` (do not forget the .sam extension to the filename)
     * The path of the mapping report (_i.e._ output file, in text format) is specified with the option `--summary-file`
     * HISAT2 also outputs information in the terminal (stderr to be exact); do not forget to redirect these to the log file with `2>> {log}`
-    * This step is the longest of the workflow. With the current settings, it should take ~6 min to complete
+    * This step is the longest of the workflow. With the current settings, it should take ~6 min to complete. If you decide to run it now, you should launch it and start working on the next rules
 
 Please give it a try before looking at the answer!
 
