@@ -58,8 +58,6 @@ VScode is a code editor that can be used to edit files and run commands locally,
     mv key_username.pem ~/.ssh
     ```
 
-
-
 Open VScode and click on the green or blue button in the bottom left corner. Select `Connect to Host...`, and then on `Configure SSH Host...`. Specify a the location for the config file. Use the same directory as where your keys are stored (so `~/.ssh`). A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and specify the correct IP at `HostName`):
 
 === "Windows"
