@@ -11,6 +11,8 @@ nav:
     - Day 2 - Snakemake:
       - General guidelines: course_material/day2/1_guidelines.md
       - Introduction to Snakemake: course_material/day2/2_introduction_snakemake.md
+      - Making a more general-purpose Snakemake workflow: course_material/day2/3_generalising_snakemake.md
+      - Decorating and optimising a Snakemake workflow: course_material/day2/4_decorating_workflow.md
 
 theme:
   name: material
