@@ -23,8 +23,9 @@ In this series of exercises, we will create the 'backbone' of the workflow, _i.e
 * A rule to count the reads mapping on each gene
 
 At the end of this series of exercises, the DAG of your workflow should look like this:
-<figure align="center">
-  <img src="../../assets/images/backbone_rulegraph.png"/>
+<figure markdown align="center">
+  ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
+  <figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
 </figure>
 
 !!! note "Designing and debugging a workflow"
@@ -479,20 +480,17 @@ There are actually 3 types of DAG:
 **Exercise:** Generate the filegraph and rulegraph of your workflow. Feel free to try different pictures format. What are the differences between the plots?
 
 ??? done "Answer"
-
     * Generate the rulegraph: `snakemake --cores 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf > images/rulegraph.pdf`
     * Generate the filegraph: `snakemake --cores 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg > images/filegraph.jpg`
 
-You should obtain the 3 following figures, respectively DAG, rulegraph and filegraph:
-<figure align="center">
-  <img src="../../assets/images/backbone_dag.png" width="30%" height="450"/>
-  &nbsp;&nbsp;
-  <img src="../../assets/images/backbone_rulegraph.png" width="30%" height="450"/>
-  &nbsp;&nbsp;
-  <img src="../../assets/images/backbone_filegraph.png" width="30%" height="450"/>
+You should obtain the 3 following figures:
+
+<figure markdown align="center">
+  ![backbone_dag](../../../assets/images/backbone_dag.png){ width="30%" height="450" } ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png){ width="30%" height="450" } ![backbone_filegraph](../../../assets/images/backbone_filegraph.png){ width="30%" height="450" }
+  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
 
-The differences are:
+The differences between these plots are:
 
 * `--dag`: dependency graph of all the jobs
 * `--filegraph`: dependency graph of rules with inputs and outputs (rule appears once, with wildcards)
