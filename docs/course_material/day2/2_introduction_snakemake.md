@@ -7,25 +7,27 @@
 * Chain rules together
 * Run a Snakemake workflow
 
-## Exercises
+## Structuring a workflow
+
+It is advised to implement your code in a directory called `workflow` (more information about this in the next series of exercises). You are free to choose the names and location of files for the different steps of your workflow, but, for now, we recommend that you at least group all outputs from the workflow in a `results` folder within the `workflow` directory.
 
 !!! warning "A small reminder about conda environment"
     If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably not in the right environment. To list them, use `conda env list`. Then activate the right environment with `conda activate <env_name>`. You can deactivate an environment with `conda deactivate`. To list the packages installed in an environment, activate it and use `conda list`.
 
-### Structuring a workflow
+## Exercises
 
-It is advised to implement your code in a directory called `workflow` (more information about this in the next series of exercises). You are free to choose the names and location of files for the different steps of your workflow, but, for now, we recommend that you at least group all outputs from the workflow in a `results` folder within the `workflow` directory.
+This series of exercises will bear no biological meaning, on purpose: it is designed to show you the fundamentals of Snakemake.
 
 ### Creating a basic rule
 
 Rules are the basic blocks of a Snakemake workflow. A **rule** is like a recipe indicating how to produce a specific **output** . The actual application of a rule to create an output is called a **job**. A rule is defined in a Snakefile with the _keyword_ `rule` and contains _directives_ which indicate the rule's properties.
 
-To create the simplest rule possible, you need at least two _directives_:
+To create the simplest rule possible, we need at least two _directives_:
 
 * `output`: path of the output file for this rule
 * `shell`: shell commands to execute in order to generate the output
 
-You will see other directives later in the course.
+We will see other directives later in the course.
 
 **Exercise:** The following example shows the minimal syntax to implement a rule. What do you think it does? Does it create a file? If so, how is it called?
 
@@ -61,7 +63,7 @@ Note that during the execution of the workflow, Snakemake automatically created 
 
 ??? done "Answer"
 <!-- AT. Check how this looks -->
-    Nothing! You get a message saying that Snakemake did not run anything:
+    Nothing! We get a message saying that Snakemake did not run anything:
 
     ```
     Building DAG of jobs...
@@ -73,9 +75,9 @@ Note that during the execution of the workflow, Snakemake automatically created 
     * An intermediate file is missing and is required produce a target file
     * It notices input files newer than output files, based on file modification dates. In this case, Snakemake will generate again the existing outputs.
 
-    You can change this behaviour and force the re-run of a specific target by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or force recreate ALL the outputs of the workflow using the `-F` option: `snakemake --cores 1 -F`. In practice, you can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/stable/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
+    We can change this behaviour and force the re-run of a specific target by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or force recreate ALL the outputs of the workflow using the `-F` option: `snakemake --cores 1 -F`. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/stable/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 
-In the previous example, the values of the two rule directives are **strings**. For the `shell` directive (you will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:
+In the previous example, the values of the two rule directives are **strings**. For the `shell` directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:
 
 ```python
 rule first_step:
@@ -110,7 +112,7 @@ Note that with this rule definition, Snakemake **will not run** if `results/firs
     * Execute the workflow: `snakemake --cores 1 results/second_step.txt`
     * Visualise the content of the `results` folder: `ls -alh results/`
     * Check that the files are identical: `diff results/first_step.txt results/second_step.txt`
-    * If the input file is missing, you can create it with `echo “snakemake” > results/first_step.txt` and then execute the workflow. You will see later why this happened and how to avoid it!
+    * If the input file is missing, you can create it with `echo “snakemake” > results/first_step.txt` and then execute the workflow. We will see later why this happened and how to avoid it!
 
 ### Creating a workflow with several rules
 
@@ -132,7 +134,7 @@ Creating one Snakefile per rule does not seem like a good solution, so let's try
     * Delete the `results` folder: using the graphic interface or `rm -rf results/`
     * Execute the workflow with multiple targets: `snakemake --cores 1 results/first_step.txt results/second_step.txt`
 
-    You should now see Snakemake execute the 2 rules and produce both targets/outputs.
+    We should now see Snakemake execute the 2 rules and produce both targets/outputs.
 
 ### Chaining rules
 
@@ -164,7 +166,7 @@ Once again, writing all the outputs in the `snakemake` command does not look lik
     * Execute the workflow: `snakemake --cores 1 results/second_step.txt`
     * Visualise the content of the `results` folder: `ls -alh results/`
 
-    You should now see Snakemake executing the 2 rules and producing both outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.
+    We should now see Snakemake executing the 2 rules and producing both outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.
 
 ### Important notes on rules dependency
 
@@ -194,6 +196,6 @@ rule second_step:
 
 This method has several advantages, among which:
 
-* It limits the risk of error because you do not have to write the same filename at several locations
+* It limits the risk of error because we do not have to write the same filename at several locations
 * A change in output name will be automatically propagated to rules that depend on it, *i.e.* the name only has to be changed once
-* This makes the code much clearer and easier to understand: with this syntax, you instantly know the object type (`rule`), how/where it is created (`first_step`), and what it is (`output`)
+* This makes the code much clearer and easier to understand: with this syntax, we instantly know the object type (`rule`), how/where it is created (`first_step`), and what it is (`output`)

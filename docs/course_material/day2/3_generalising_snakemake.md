@@ -3,20 +3,20 @@
 **After having completed this chapter you will be able to:**
 
 * Create rules with multiple inputs and outputs
-* Render your code shorter and more general by using placeholders and wildcards
-* Optimise the memory usage of your workflow and checking its performances
-* Visualise your workflow DAG
+* Make the code shorter and more general by using placeholders and wildcards
+* Optimise the memory usage of a workflow and checking its performances
+* Visualise a workflow DAG
 
 ## Data origin
 
 <!-- AT. Check the number of samples after computation tests -->
-The data you will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different amount of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high** CO<sub>2</sub>) and **down-sampled** them to **1 million read-pairs each** to reduce computation times.
+The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different amount of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high** CO<sub>2</sub>) and **down-sampled** them to **1 million read-pairs each** to reduce computation times.
 
 ## Exercises
 
 One of the aims of today's course is to develop a basic, yet efficient, workflow to analyse RNAseq data. This workflow takes reads coming from RNA sequencing as inputs and outputs a list of genes that are differentially expressed between two conditions. The files containing the reads are in [FASTQ format](https://en.wikipedia.org/wiki/FASTQ_format) and the output will be a tab-separated file containing a list of genes with expression changes, results of statistical tests...
 
-In this series of exercises, you will create the 'backbone' of the workflow, _i.e._ the rules that are the most computationally expensive, namely:
+In this series of exercises, we will create the 'backbone' of the workflow, _i.e._ the rules that are the most computationally expensive, namely:
 
 * A rule to trim poor-quality reads
 * A rule to map the trimmed reads on a reference genome
@@ -53,7 +53,7 @@ If you have a doubt, do not hesitate to test your workflow logic with a dry-run 
 
 ### Downloading the data and setting up the directory structure
 
-In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html). You already starting doing so in the previous series of exercises and ultimately, it should resemble this:
+In this part, we will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html). We already starting doing so in the previous series of exercises and ultimately, it should resemble this:
 
 ```
 │── .gitignore
@@ -100,9 +100,9 @@ For now, the main thing to remember is that the workflow code goes into a subfol
 Now, let's download the data, uncompress it and build the first part of the directory structure.
 
 ```sh
-wget https://apollo.vital-it.ch/trackvis/snakemake_rnaseq.tar.gz  # AT. Check URL to download file
-tar -xvf snakemake_rnaseq.tar.gz
-rm snakemake_rnaseq.tar.gz
+wget https://apollo.vital-it.ch/trackvis/snakemake_rnaseq.tar.gz  # Download the data # AT. Check URL to download file
+tar -xvf snakemake_rnaseq.tar.gz  # Uncompress the archive
+rm snakemake_rnaseq.tar.gz  # Delete the archive
 cd snakemake_rnaseq/  # Start developing in a new folder
 ```
 
@@ -114,25 +114,25 @@ In this new folder, you should now see 2 subfolders:
 Let's create another subfolder, this time to host all the files containing the code, as well as the Snakefile:
 
 ```sh
-mkdir workflow
-touch workflow/Snakefile
+mkdir workflow  # Create a new folder
+touch workflow/Snakefile  # Create an empty Snakefile
 ```
 
-The Snakefile marks the entrypoint of the workflow. It will be automatically discovered when running Snakemake from the root of the above structure, here `snakemake_rnaseq/`. You can also tell Snakemake to use a specific Snakefile with the `-s` flag: `snakemake --cores 1 -s <Snakefile_path> <target>`, but it is highly discouraged as it hampers reproducibility.
+The Snakefile marks the entrypoint of the workflow. It will be automatically discovered when running Snakemake from the root of the structure, here `snakemake_rnaseq/`. We can also tell Snakemake to use a specific Snakefile with the `-s` flag: `snakemake --cores 1 -s <Snakefile_path> <target>`, but it is highly discouraged as it hampers reproducibility.
 
-If you follow the [general instructions](#general-instructions-and-reminders), Snakemake should create all the other missing folders by itself (except one that you will discover at the end of this series of exercises), so it is now time to create the rules mentioned [earlier](#exercises). Have a look [here](#designing-a-workflow) for a few pieces of advice on workflow design.
+If you followed the [general instructions](#general-instructions-and-reminders), Snakemake should create all the other missing folders by itself (except one that you will discover at the end of this series of exercises), so it is now time to create the rules mentioned [earlier](#exercises). Have a look [here](#designing-a-workflow) for a few pieces of advice on workflow design.
 
 !!! note "'bottom-up' or 'top-down' development?"
     Even if it is often easier to start from the final outputs and work backwards to the first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand. That being said, feel free to work and develop your code in the order you prefer!
 
-**Even if we asked you to use wildards, do not try to process all the samples yet. Choose and work with one sample (which means two .fastq files because reads are paired-end) in this series of exercises. You will see an efficient way to process list of files in the next series of exercises.**
+**Even if we asked you to use wildards, do not try to process all the samples yet. Choose and work with one sample (which means two .fastq files because reads are paired-end) in this series of exercises. We will see an efficient way to process list of files in the next series of exercises.**
 
 ### Creating a rule to trim reads
 
 Usually, the first step in dealing with sequencing data is to improve the reads quality by removing low quality bases, stretches of As and Ns and reads that are too short.
 
 !!! note "Adapters trimming"
-    In theory, trimming also removes sequencing adapters, but you will not do it here to keep computation time low and avoid having to parse other files to extract the adapter sequences.
+    In theory, trimming also removes sequencing adapters, but we will not do it here to keep computation time low and avoid having to parse other files to extract the adapter sequences.
 
 **Exercise:** Implement a rule to trim the reads contained in .fastq files using [atropos](https://peerj.com/articles/3720/).
 
@@ -180,7 +180,10 @@ Please give it a try before looking at the answer!
             '''
     ```
 
-    Note that we also added a memory limit for this job: 500 MB. Because we have limited resources in this server compared to a High Performance Computing cluster (HPC), this will help Snakemake to better allocate resources and parallelise jobs. You can determine the maximum amount of memory used by a rule thanks to the max_rss column in a benchmark result (results are shown in MB). More information [here](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules)
+    Note 2 things that are happening here:
+
+    1. We used the {sample} wildcards twice in the output paths. This is because we prefer to have all the files linked to a sample in the same directory
+    1. We added a memory limit for this job: 500 MB. Because we have limited resources in this server compared to a High Performance Computing cluster (HPC), this will help Snakemake to better allocate resources and parallelise jobs. You can determine the maximum amount of memory used by a rule thanks to the max_rss column in a benchmark result (results are shown in MB). More information [here](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules)
 
 !!! warning "Paths in Snakemake"
     All the paths in the Snakefile are relative to the working directory in which the `snakemake` command is executed.
@@ -207,12 +210,12 @@ Please give it a try before looking at the answer!
 
 ### Creating a rule to map trimmed reads on a reference genome
 
-Once you have trimmed reads, the next step is to map those reads onto a reference assembly, here _S. cerevisiae_ strain S288C, to eventually obtain read counts. The assembly used in this exercise is [RefSeq GCF_000146045.2](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) and was retrieved via the NCBI genome website.
+Once we have trimmed reads, the next step is to map those reads onto a reference assembly, here _S. cerevisiae_ strain S288C, to eventually obtain read counts. The assembly used in this exercise is [RefSeq GCF_000146045.2](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) and was retrieved via the NCBI genome website.
 
 **Exercise:** Implement a rule to map the trimmed reads on the _S. cerevisiae_ assembly using [HISAT2](https://www.nature.com/articles/s41587-019-0201-4).
 
 !!! note "HISAT2 genome index"
-    To align reads on a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta Scerevisiae_genome_index`.
+    To align reads on a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
     <br>`-p` is the number of threads to use, `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format) and `Scerevisiae_genome_index` is the global name shared by all the index files.
 
 <!-- AT. Check if I need to add a newline -->
@@ -350,10 +353,10 @@ Please give it a try before looking at the answer!
 
 ### Creating a rule to count mapped reads
 
-Most of the analyses happening downstream the alignment step, including Differential Expression Analyses, are starting off read counts, either by exon or gene. However, you are still missing those counts!
+Most of the analyses happening downstream the alignment step, including Differential Expression Analyses, are starting off read counts, either by exon or gene. However, we are still missing those counts!
 
 !!! note "Counting reads on exons/genes"
-    To count reads mapping on genomic features, you first need a definition of those features. In this case, we picked one of the best-known model organism, _S. cerevisiae_, which has been annotated for a long time. These annotations are easily available on the [NCBI](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) or the [Saccharomyces Genome Database](https://www.yeastgenome.org/). If your organism has not been annotated yet, there are ways to work around this problem, but this is an entirely different field that we won't discuss here!
+    To count reads mapping on genomic features, we first need a definition of those features. In this case, we picked one of the best-known model organism, _S. cerevisiae_, which has been annotated for a long time. These annotations are easily available on the [NCBI](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) or the [Saccharomyces Genome Database](https://www.yeastgenome.org/). If your organism has not been annotated yet, there are ways to work around this problem, but this is an entirely different field that we won't discuss here!
 
 !!! warning "Chromosome names"
     If you are working with genome sequences and annotations from different sources, remember that they **must** contain the chromosome names, otherwise counting will not work.
@@ -418,51 +421,51 @@ Please give it a try before looking at the answer!
 * `-F`: specify format of the provided annotation file
 * `--verbose`: output verbose information, such as unmatched chromosome/contig names
 
-### Run the workflow
+### Running the workflow
 
 **Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it?
 
 ??? done "Answer"
-    Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules: `snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
-    You can add the `-F` flag to force an entire re-run. The entire run should take about ~10 min to complete
+    Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules: `snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`.
+    You can add the `-F` flag to force an entire re-run. The entire run should take about ~10 min to complete.
 
 **Exercise:** Check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially the wildcards values, input and output names etc...?
 
 ??? done "Answer"
     `cat .snakemake/log/<latest_log>`
 
-### Visualising the DAG of your workflow
+### Visualising the DAG of the workflow
 
-You have now implemented and run the main steps of your workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake's has a built-in workflow visualisation feature to do this.
+We have now implemented and run the main steps of our workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake's has a built-in workflow visualisation feature to do this.
 
 **Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using the `--dag` flag. Do you need to specify a target?
 
 <!-- AT. Check if I need to add a newline -->
 !!! hint
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
-    * Snakemake prints a DAG in text format, so you need to use the `dot` command to transform it into a picture
+    * Snakemake prints a DAG in text format, so we need to use the `dot` command to transform it into a picture
     * Save the result as a PNG picture
 
 <!-- AT. Check if I need to add a newline -->
 ??? done "Answer"
-    If you run the command without target: `snakemake --cores 1 --dag -F | dot -Tpng > images/dag.png`, you will get a `Target rules may not contain wildcards.` error, which means you need to add a target. Same as before, it makes sense to use one of the final outputs to get the entire workflow: `snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png`. But once again, you will get an error: `BrokenPipeError: [Errno 32] Broken pipe`. This is because you are piping the command output to a folder (`images/`) that does not exist yet The folder is not created by Snakemake because it isn't handled as part of an actual run. So you have to create the folder before generating the DAG:
+    If we run the command without target: `snakemake --cores 1 --dag -F | dot -Tpng > images/dag.png`, we will get a `Target rules may not contain wildcards.` error, which means we need to add a target. Same as before, it makes sense to use one of the final outputs to get the entire workflow: `snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png`. But once again, we will get an error: `BrokenPipeError: [Errno 32] Broken pipe`. This is because we are piping the command output to a folder (`images/`) that does not exist yet The folder is not created by Snakemake because it isn't handled as part of an actual run. So we have to create the folder before generating the DAG:
 
     ```
     mkdir images
     snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
     ```
 
-    Some explanation on the command:
+    Some explanations on the command:
 
     * `-F`: force to show the entire worklow and ensures all jobs are shown. You can also use `-f <target>` to show fewer jobs
     * [`dot`](https://graphviz.org/docs/layouts/dot/): tool that is a part of the [graphviz package](https://graphviz.org/) and is used to draw hierarchical or layered drawings of directed graphs, _i.e._ graphs in which edges (arrows) have a direction
     * `-T`: control the image format. Available formats are listed [here](https://graphviz.org/docs/outputs/)
 
 !!! note "DAG aspect"
-    If you already computed all the outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs
+    If you already computed all the outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs.
 
 !!! note "DAG = dry-run"
-    The `--dag` flag implicitly activates the `--dry-run/--dryrun/-n` option, which means that no jobs are executed during the plot creation
+    The `--dag` flag implicitly activates the `--dry-run/--dryrun/-n` option, which means that no jobs are executed during the plot creation.
 
 There are actually 3 types of DAG:
 
@@ -501,7 +504,7 @@ There are many ways to design a new workflow, but these few pieces of advice wil
 
 * Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!
     * Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first
-    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (you will see how these functions work in session 4)  <!-- Double check sessio number -->
+    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)  <!-- Double check sessio number -->
 * Make sure your input and output directives are right before worrying about anything else, especially the shell sections.
     * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `--dryrun` option to test the workflow before running it. You can even do that without writing all the shell commands!
 * List any parameters or settings that might need to be adjusted
