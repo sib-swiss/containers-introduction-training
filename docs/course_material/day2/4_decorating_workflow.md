@@ -25,14 +25,12 @@ When working with real datasets, most processes are very long and computationall
 1. Identify in each software the parameter that controls multi-threading
 1. Implement the multi-threading
 
-<!-- AT. Check if I need to add a newline -->
 !!! hint
     * Check the software documentation and parameters with the `-h/--help` flags
-    * Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelize a software automatically
+    * Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelise a software automatically
     * Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads
-    * Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel! <!-- AT. Change the value of threads? -->
+    * Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel!
 
-<!-- AT. Check if I need to add a newline -->
 ??? done "Answer"
     It turns out that all the software except `samtools index` can handle multi-threading:
 
@@ -64,7 +62,9 @@ When working with real datasets, most processes are very long and computationall
         shell:
             '''
             echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
-            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
+            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
+            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
+            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
             echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
             echo "Trimming report saved in <{log}>" >> {log}
             '''
@@ -89,7 +89,9 @@ When working with real datasets, most processes are very long and computationall
         shell:
             '''
             echo "Mapping the reads" > {log}
-            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x resources/genome_indices/Scerevisiae_index --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
+            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
+            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}
             '''
@@ -143,7 +145,8 @@ When working with real datasets, most processes are very long and computationall
         shell:
             '''
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-            featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
+            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
             echo "Results saved in <{output.gene_level}>" >> {log}
@@ -154,12 +157,16 @@ When working with real datasets, most processes are very long and computationall
 **Exercise:** Finally, test the effect of the number of threads on the workflow's runtime. What command will you use to run the workflow? Does the workflow run faster?
 
 ??? done "Answer"
-    The command to use is `snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`. Do not forget to provide additional cores to Snakemake in the execution command with `--cores 4`. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing `--cores` allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
+    The command to use is:
+
+    `snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
+
+    Do not forget to provide additional cores to Snakemake in the execution command with `--cores 4`. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing `--cores` allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
 
 !!! note "Explicit is better than implicit"
     Even if a software cannot multi-thread, it is useful to add `threads: 1` in the rule to keep the rule consistency and clearly state that the software works with a single thread.
 
-!!! note "Keep in mind when using parallel execution"
+!!! note "Things to keep in mind when using parallel execution"
     * Parallel jobs will use more RAM. If you run out then either your OS will swap data to disk, or a process will crash
     * The on-screen output from parallel jobs will be mixed, so save any output to log files instead
 
@@ -172,7 +179,13 @@ As we have seen, Snakemake's execution is based around inputs and outputs of eac
 * In the `rule read_mapping`, the index parameter `-x resources/genome_indices/Scerevisiae_index`
 * In the `rule reads_quantification_genes`, the annotation parameter `-a resources/Scerevisiae.gtf`
 
-This reduces readability and also makes it very hard to change the value of these parameters. The `params` directive was designed for this purpose: it allows to specify additional parameters that can also depend on the wildcards values and use input functions (see Session 4 for more information on this). `params` values can be of any type (integer, string, list  etc...) and similarly to the `{input}` and `{output}` placeholders, they can also be accessed from the shell command with the placeholder `arams}`. Just like for the `input` and `output` directives, you can define multiple parameters (in this case, do not forget the comma between each entry!) and they can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should always be named!). It also helps readability and clarity to use the `params` section to name and assign parameters and variables for your shell command. Here is an example on how to use `params`:
+This reduces readability and also makes it very hard to change the value of these parameters.
+
+The `params` directive was designed for this purpose: it allows to specify additional parameters that can also depend on the wildcards values and use input functions (see Session 4 for more information on this). `params` values can be of any type (integer, string, list  etc...) and similarly to the `{input}` and `{output}` placeholders, they can also be accessed from the shell command with the placeholder `{params}`. Just like for the `input` and `output` directives, you can define multiple parameters (in this case, do not forget the comma between each entry!) and they can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should always be named!).
+
+It also helps readability and clarity to use the `params` section to name and assign parameters and variables for your shell command.
+
+Here is an example on how to use `params`:
 
 ```python
 rule example:
@@ -187,7 +200,7 @@ rule example:
 ```
 
 !!! note "Parameters arguments"
-    In contrast to the `input` directive, the `params` directive can optionally take more arguments than only wildcards, namely input, output, threads, and resources.
+    In contrast to the `input` directive, the `params` directive can optionally take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`.
 
 **Exercise:** Replace the two hard-coded paths mentioned earlier by `params`.
 
@@ -203,7 +216,9 @@ rule example:
     params:
         index = 'resources/genome_indices/Scerevisiae_index'
     shell:
-        'hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x {params.index} --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}'
+        'hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+        -x {params.index} --threads {threads} \
+        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}'
     ```
 
     * `rule reads_quantification_genes`
@@ -212,11 +227,14 @@ rule example:
     params:
         annotations = 'resources/Scerevisiae.gtf'
     shell:
-        'featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'
+        'featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
+        -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'
     ```
 
 !!! note "Snakemake re-run behaviour"
-    If you try to re-run only the last rule with `snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`, Snakemake will actually try to re-run 3 rules in total. This is because the code changed in 2 rules (see `reason` field in Snakemake's log), which triggered an update of the inputs in the 3rd rule (`sam_to_bam`). To avoid this, first `touch` the files with `snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv` then re-run the last rule.
+    If you try to re-run only the last rule with `snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`, Snakemake will actually try to re-run 3 rules in total.
+
+    This is because the code changed in 2 rules (see `reason` field in Snakemake's log), which triggered an update of the inputs in the 3rd rule (`sam_to_bam`). To avoid this, first `touch` the files with `snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv` then re-run the last rule.
 
 #### Config files
 
@@ -394,7 +412,6 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
 
 **Choose only one solution to implement:**
 
-<!-- AT. Check whether this works -->
 === "Solution 3"
 
     This option amounts to tell Snakemake not to worry about individual files at all and consider the output of the rule as an entire directory.
@@ -429,12 +446,14 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
                 echo "Creating output directory <{output.before_trim}>" > {log}
                 mkdir -p {output.before_trim} 2>> {log}
                 echo "Performing QC of reads before trimming in <{input.reads1}> and <{input.reads2}>" >> {log}
-                fastqc --format fastq --threads {threads} --outdir {output.before_trim} --dir {output.before_trim} {input.reads1} {input.reads2} &>> {log}
+                fastqc --format fastq --threads {threads} --outdir {output.before_trim} \
+                --dir {output.before_trim} {input.reads1} {input.reads2} &>> {log}
                 echo "Results saved in <{output.before_trim}>" >> {log}
                 echo "Creating output directory <{output.after_trim}>" >> {log}
                 mkdir -p {output.after_trim} 2>> {log}
                 echo "Performing QC of reads after trimming in <{input.trim1}> and <{input.trim2}>" >> {log}
-                fastqc --format fastq --threads {threads} --outdir {output.after_trim} --dir {output.after_trim} {input.trim1} {input.trim2} &>> {log}
+                fastqc --format fastq --threads {threads} --outdir {output.after_trim} \
+                --dir {output.after_trim} {input.trim1} {input.trim2} &>> {log}
                 echo "Results saved in <{output.after_trim}>" >> {log}
                 '''
         ```
@@ -496,14 +515,16 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
             shell:
                 '''
                 echo "Performing QC of reads before trimming in <{input.reads1}> and <{input.reads2}>" >> {log}
-                fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.reads1} {input.reads2} &>> {log}
+                fastqc --format fastq --threads {threads} --outdir {params.wd} \
+                --dir {params.wd} {input.reads1} {input.reads2} &>> {log}
                 echo "Renaming results from original fastq analysis" >> {log}  # Renames files because we can't choose fastqc output
                 mv {params.html1_before} {output.html1_before} 2>> {log}
                 mv {params.zipfile1_before} {output.zipfile1_before} 2>> {log}
                 mv {params.html2_before} {output.html2_before} 2>> {log}
                 mv {params.zipfile2_before} {output.zipfile2_before} 2>> {log}
                 echo "Performing QC of reads after trimming in <{input.trim1}> and <{input.trim2}>" >> {log}
-                fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.trim1} {input.trim2} &>> {log}
+                fastqc --format fastq --threads {threads} --outdir {params.wd} \
+                --dir {params.wd} {input.trim1} {input.trim2} &>> {log}
                 echo "Renaming results from trimmed fastq analysis" >> {log}  # Renames files because we can't choose fastqc output
                 mv {params.html1_after} {output.html1_after} 2>> {log}
                 mv {params.zipfile1_after} {output.zipfile1_after} 2>> {log}
@@ -551,7 +572,9 @@ Several interesting things are happening in both versions of this rule:
         shell:
             '''
             echo "Mapping the reads" > {log}
-            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x {params.index} --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
+            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+            -x {params.index} --threads {threads} \
+            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}
             '''
@@ -671,10 +694,14 @@ Using a target rule like the one presented in the previous paragraph gives anoth
 **Exercise:** Write an `expand()` syntax to generate a list of outputs from `rule reads_quantification_genes` **with all the RNAseq samples**. What do you need to write this?
 
 ??? done "Answer"
-    The output of `rule reads_quantification_genes` has the following syntax: `'results/{sample}/{sample}_genes_read_quantification.tsv'`. First, we need to create a Python list containing all the values that the `{sample}` wildcards can take:
+    The output of `rule reads_quantification_genes` has the following syntax: `'results/{sample}/{sample}_genes_read_quantification.tsv'`.
+
+    First, we need to create a Python list containing all the values that the `{sample}` wildcards can take:
+
     `SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']`
 
     Then, we can transform the output syntax with `expand()`:
+
     `expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)`
 
 **Exercise:** Use these two elements (the list of samples and the `expand()` syntax) in the target rule to ask Snakemake to generate all the outputs.
@@ -757,33 +784,35 @@ But we can do even better! At the moment, samples are defined in a list at the t
     Here, `config['samples']` is a Python list containing strings, each string being a sample name. This is because a list of parameters become a list during the config file parsing.
 
 !!! note "An even more Snakemake-idiomatic solution"
-    There is an even better and more Snakemake-idiomatic version of the `expand()` syntax: `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`. While it may not seem easy to use and understand, this entirely removes the need to write the output paths!
+    There is an even better and more Snakemake-idiomatic version of the `expand()` syntax:
+
+    `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`.
+
+    While it may not seem easy to use and understand, this entirely removes the need to write the output paths!
 
 ### Running the other samples of the workflow
 
 **Exercise:** Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.
 
 ??? done "Answer"
-
-    * To touch the existing files, you can use: `snakemake --cores 1 --touch`
-    * To run the workflow, you can use `snakemake --cores 4 -r -p`
+    * Touch the existing files: `snakemake --cores 1 --touch`
+    * Run the workflow `snakemake --cores 4 -r -p`
 
 Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!
 
 **Exercise:** Generate the workflow DAG and filegraph.
 
 ??? done "Answer"
-
     * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
     * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
 
-<!-- AT. Check this on website -->
 Your DAG should resemble this:
+
 <figure align="center">
   <img src="../../assets/images/all_samples_dag.png" width="100%"/>
 </figure>
 
-And your filegraph, this:
+And this should be your filegraph:
 
 <figure align="center">
   <img src="../../assets/images/all_samples_filegraph.png" height=500/>

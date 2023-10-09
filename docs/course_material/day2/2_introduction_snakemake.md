@@ -57,12 +57,11 @@ It is now time to execute your first worklow! To do this, you need to tell Snake
     * Visualise the content of the `results` folder: `ls -alh results/`
     * Check the output content: `cat results/first_step.txt`
 
-Note that during the execution of the workflow, Snakemake automatically created the **missing folder** (`results/`) in the output path. If several folders are missing (for example, here, `test1/test2/test3/first_step.txt`), Snakemake will create **all of them**.
+Note that during the execution of the workflow, Snakemake automatically created the **missing folder** (`results/`) in the output path. If several folders are missing (for example, `test1/test2/test3/first_step.txt`), Snakemake will create **all of them**.
 
 **Exercise:** Re-run the exact same command. What happens?
 
 ??? done "Answer"
-<!-- AT. Check how this looks -->
     Nothing! We get a message saying that Snakemake did not run anything:
 
     ```
@@ -121,7 +120,6 @@ Creating one Snakefile per rule does not seem like a good solution, so let's try
 **Exercise:** Delete the `results/` folder, copy the two previous rules (`first_step` and `second_step`) in the same Snakefile (place the `first_step` rule first) and try to run the workflow **without specifying an output**. What happens?
 
 ??? done "Answer"
-<!-- AT. Check how this looks -->
     * Delete the `results` folder: using the graphic interface or `rm -rf results/`
     * Execute the workflow without output: `snakemake --cores 1`
 
@@ -130,7 +128,6 @@ Creating one Snakefile per rule does not seem like a good solution, so let's try
 **Exercise:** With this in mind, instead of one target, use a space-separated list of targets in your command, to generate multiple targets. Use the `-F` to force the re-run of the whole workflow or delete your `results/` folder beforehand.
 
 ??? done "Answer"
-<!-- AT. Check how this looks -->
     * Delete the `results` folder: using the graphic interface or `rm -rf results/`
     * Execute the workflow with multiple targets: `snakemake --cores 1 results/first_step.txt results/second_step.txt`
 
@@ -138,7 +135,9 @@ Creating one Snakefile per rule does not seem like a good solution, so let's try
 
 ### Chaining rules
 
-Once again, writing all the outputs in the `snakemake` command does not look like a good solution: it is very time-consuming, error-prone (and annoying)! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency. The core principle of Snakemake's execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all the inputs and outputs required to generate the final desired outputs. For each job, starting from the jobs generating the final outputs, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
+Once again, writing all the outputs in the `snakemake` command does not look like a good solution: it is very time-consuming, error-prone (and annoying)! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency.
+
+The core principle of Snakemake's execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all the inputs and outputs required to generate the final desired outputs. For each job, starting from the jobs generating the final outputs, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
 
 !!! hint
     Your Snakefile should look like this:
@@ -166,7 +165,7 @@ Once again, writing all the outputs in the `snakemake` command does not look lik
     * Execute the workflow: `snakemake --cores 1 results/second_step.txt`
     * Visualise the content of the `results` folder: `ls -alh results/`
 
-    We should now see Snakemake executing the 2 rules and producing both outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.
+    You should now see Snakemake executing the two rules and producing both outputs. To generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, in this case the rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.
 
 ### Important notes on rules dependency
 
