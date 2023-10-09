@@ -769,3 +769,22 @@ But we can do even better! At the moment, samples are defined in a list at the t
     * To run the workflow, you can use `snakemake --cores 4 -r -p`
 
 Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!
+
+**Exercise:** Generate the workflow DAG and filegraph.
+
+??? done "Answer"
+
+    * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
+    * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
+
+<!-- AT. Check this on website -->
+Your DAG should resemble this:
+<figure align="center">
+  <img src="../../assets/images/all_samples_dag.png" width="100%"/>
+</figure>
+
+And your filegraph, this:
+
+<figure align="center">
+  <img src="../../assets/images/all_samples_filegraph.png" height=500/>
+</figure>
