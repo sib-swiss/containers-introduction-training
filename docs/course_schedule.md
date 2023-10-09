@@ -20,5 +20,5 @@
 |         	| 12:30 PM 	| 1:30 PM  	| BREAK                                       	|
 | Block 3 	| 1:30 PM  	| 3:00 PM  	| Decorating a Snakemake workflow             	|
 |         	| 3:00 PM  	| 3:30 PM  	| BREAK                                       	|
-| Block 4 	| 3:30 PM  	| 4:30 PM  	| Whole workflow                               	|
+| Block 4 	| 3:30 PM  	| 4:30 PM  	| Snakemake, package managers and containers  	|
 |         	| 4:30 PM  	| 5:00 PM  	| Wrap-up & Open Q&A                          	|
