@@ -815,5 +815,5 @@ Your DAG should resemble this:
 And this should be your filegraph:
 
 <figure align="center">
-  <img src="../../../assets/images/all_samples_filegraph.png" height=500/>
+  <img src="../../../assets/images/all_samples_filegraph.png" height=250/>
 </figure>

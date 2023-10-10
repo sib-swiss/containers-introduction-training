@@ -485,8 +485,10 @@ There are actually 3 types of DAG:
 
 You should obtain the 3 following figures:
 
-<figure markdown align="center">
-  ![backbone_dag](../../assets/images/backbone_dag.png){ width="30%" height="450" } ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png){ width="30%" height="450" } ![backbone_filegraph](../../assets/images/backbone_filegraph.png){ width="30%" height="450" }
+<figure align="center">
+  <img src="../../assets/images/backbone_dag.png" width="32%" height="450"/>
+  <img src="../../assets/images/backbone_rulegraph.png" width="32%" height="450"/>
+  <img src="../../assets/images/backbone_filegraph.png" width="32%" height="450"/>
   <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
 
