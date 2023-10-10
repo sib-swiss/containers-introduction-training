@@ -24,7 +24,7 @@ In this series of exercises, we will create the 'backbone' of the workflow, _i.e
 
 At the end of this series of exercises, the DAG of your workflow should look like this:
 <figure markdown align="center">
-  ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
+  ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png)
   <figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
 </figure>
 
@@ -486,7 +486,7 @@ There are actually 3 types of DAG:
 You should obtain the 3 following figures:
 
 <figure markdown align="center">
-  ![backbone_dag](../../../assets/images/backbone_dag.png){ width="30%" height="450" } ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png){ width="30%" height="450" } ![backbone_filegraph](../../../assets/images/backbone_filegraph.png){ width="30%" height="450" }
+  ![backbone_dag](../../assets/images/backbone_dag.png){ width="30%" height="450" } ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png){ width="30%" height="450" } ![backbone_filegraph](../../assets/images/backbone_filegraph.png){ width="30%" height="450" }
   <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
 

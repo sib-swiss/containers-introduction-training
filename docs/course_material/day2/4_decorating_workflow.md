@@ -809,11 +809,11 @@ Thanks to the parallelisation, the workflow execution should take less than 10 m
 Your DAG should resemble this:
 
 <figure align="center">
-  <img src="../../assets/images/all_samples_dag.png" width="100%"/>
+  <img src="../../../assets/images/all_samples_dag.png" width="100%"/>
 </figure>
 
 And this should be your filegraph:
 
 <figure align="center">
-  <img src="../../assets/images/all_samples_filegraph.png" height=500/>
+  <img src="../../../assets/images/all_samples_filegraph.png" height=500/>
 </figure>

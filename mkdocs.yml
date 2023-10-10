@@ -13,7 +13,7 @@ nav:
       - Introduction to Snakemake: course_material/day2/2_introduction_snakemake.md
       - Making a more general-purpose Snakemake workflow: course_material/day2/3_generalising_snakemake.md
       - Decorating and optimising a Snakemake workflow: course_material/day2/4_decorating_workflow.md
-      - Running containers with singularity: course_material/day2/5_reproducibility_snakemake.md
+      - Reproducibility with snakemake: course_material/day2/5_reproducibility_snakemake.md
 
 theme:
   name: material
@@ -50,6 +50,7 @@ markdown_extensions:
   - smarty
   - toc
   - pymdownx.superfences
+  - md_in_html
   - attr_list
   - pymdownx.tabbed:
       alternate_style: true
