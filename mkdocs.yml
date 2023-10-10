@@ -7,7 +7,7 @@ nav:
       - Introduction to containers: course_material/day1/introduction_containers.md
       - Managing containers and images: course_material/day1/managing_docker.md
       - Working with dockerfiles: course_material/day1/dockerfiles.md
-      - Running containers with singularity: course_material/day1/singularity.md
+      - Running containers with apptainer: course_material/day1/apptainer.md
     - Day 2 - Snakemake:
       - General guidelines: course_material/day2/1_guidelines.md
       - Introduction to Snakemake: course_material/day2/2_introduction_snakemake.md

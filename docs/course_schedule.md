@@ -8,7 +8,7 @@
 |         	| 12:30 PM 	| 1:30 PM  	| BREAK                                       	|
 | Block 3 	| 1:30 PM  	| 3:00 PM  	| Working with `dockerfiles`                  	|
 |         	| 3:00 PM  	| 3:30 PM  	| BREAK                                       	|
-| Block 4 	| 3:30 PM  	| 5:00 PM  	| Running containers with singularity         	|
+| Block 4 	| 3:30 PM  	| 5:00 PM  	| Running containers with apptainer         	|
 
 ## Day 2 - Snakemake
 

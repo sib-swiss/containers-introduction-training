@@ -3,6 +3,7 @@
     "keywords": [
       "Docker",
       "Singularity",
+      "apptainer",
       "Containers",
       "Reproducibility",
       "Snakemake",
