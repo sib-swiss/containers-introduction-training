@@ -41,7 +41,7 @@ After this course, you will be able to:
 
 ### Learning outcomes explained
 
-To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/introduction_containers.md)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
+To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/day1/introduction_containers.md)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
 
 ## Learning experiences
 

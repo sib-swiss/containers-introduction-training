@@ -11,7 +11,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/apptainer.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/apptainer.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -76,6 +76,14 @@ Open VScode and click on the green or blue button in the bottom left corner. Sel
     ```
 
 Save and close the config file. Now click again the green or blue button in the bottom left corner. Select `Connect to Host...`, and then on `sib_course_remote`. You will be asked which operating system is used on the remote. Specify 'Linux'. 
+
+At first login, initiate conda (for tomorrow):
+
+```sh
+/opt/miniconda3/bin/conda init
+```
+
+Close this terminal and open a new one, and you are good to go!
 
 ### Pulling an image
 
