@@ -217,14 +217,14 @@ Once we have trimmed reads, the next step is to map those reads onto a reference
 **Exercise:** Implement a rule to map the trimmed reads on the _S. cerevisiae_ assembly using [HISAT2](https://www.nature.com/articles/s41587-019-0201-4).
 
 !!! note "HISAT2 genome index"
-    To align reads on a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
-    <br>`-p` is the number of threads to use, `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format) and `Scerevisiae_genome_index` is the global name shared by all the index files.
+    To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
+    <br>`-p` is the number of threads to use, `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format) and `Scerevisiae_index` is the global name shared by all the index files.
 
 !!! hint
     * You can find information on how to use HISAT2 and its parameters with `hisat2 -h`
     * The base of the mapping command is `hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal`
         * If you are interested in what these options mean, see [below](#hisat2-options) for an explanation
-    * The path of the genome indices (_i.e._ input files, in binary format) is specified with the option `-x`. The files have a shared title of `resources/genome_indices/Scerevisiae_genome_index`, which is the value you need to use for `-x`
+    * The path of the genome indices (_i.e._ input files, in binary format) is specified with the option `-x`. The files have a shared title of `resources/genome_indices/Scerevisiae_index`, which is the value you need to use for `-x`
     * The paths of the trimmed files (_i.e._ input files) are specified with the options `-1` (first read) and `-2` (second read)
     * The path of the mapped reads file (_i.e._ output file, in SAM format) is specified with the option `-S` (do not forget the .sam extension to the filename)
     * The path of the mapping report (_i.e._ output file, in text format) is specified with the option `--summary-file`
@@ -255,7 +255,7 @@ Please give it a try before looking at the answer!
             '''
             echo "Mapping the reads" > {log}
             hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_genome_index \
+            -x resources/genome_indices/Scerevisiae_index \
             -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}

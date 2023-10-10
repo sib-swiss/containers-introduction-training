@@ -36,11 +36,11 @@ rule first_step:
     output:
         'results/first_step.txt'
     shell:
-        'echo “snakemake” > results/first_step.txt'
+        'echo "Hello world!" > results/first_step.txt'
 ```
 
 ??? done "Answer"
-    This rule uses the `echo` shell command to print the line "snakemake" in an output file called `first_step.txt`, located in the `results` folder.
+    This rule uses the `echo` shell command to print the line `Hello world!` in an output file called `first_step.txt`, located in the `results` folder.
 
 Rules are defined and written in a file called **Snakefile** (note the capital `S` and the absence of extension in the filename). This file should be located at the root of the workflow directory (here, `workflow/Snakefile`).
 
@@ -70,9 +70,10 @@ Note that during the execution of the workflow, Snakemake automatically created 
     ```
 
     By default, Snakemake only runs a job if:
+
     * A target file explicitly requested in the `snakemake` command is missing
-    * An intermediate file is missing and is required produce a target file
-    * It notices input files newer than output files, based on file modification dates. In this case, Snakemake will generate again the existing outputs.
+    * An intermediate file is missing and is required to produce a target file
+    * It detects when input files that have been modified more recently than output files, based on their modification dates. In this case, Snakemake will generate again the existing outputs.
 
     We can change this behaviour and force the re-run of a specific target by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or force recreate ALL the outputs of the workflow using the `-F` option: `snakemake --cores 1 -F`. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/stable/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 
@@ -111,7 +112,7 @@ Note that with this rule definition, Snakemake **will not run** if `results/firs
     * Execute the workflow: `snakemake --cores 1 results/second_step.txt`
     * Visualise the content of the `results` folder: `ls -alh results/`
     * Check that the files are identical: `diff results/first_step.txt results/second_step.txt`
-    * If the input file is missing, you can create it with `echo “snakemake” > results/first_step.txt` and then execute the workflow. We will see later why this happened and how to avoid it!
+    * If the input file is missing, you can create it with `echo "Hello world!" > results/first_step.txt` and then execute the workflow. We will see later why this happened and how to avoid it!
 
 ### Creating a workflow with several rules
 
@@ -147,7 +148,7 @@ The core principle of Snakemake's execution is to compute a Directed Acyclic Gra
         output:
             'results/first_step.txt'
         shell:
-            'echo “snakemake” > results/first_step.txt'
+            'echo "Hello world!" > results/first_step.txt'
 
     rule second_step:
         input:
@@ -182,7 +183,7 @@ rule first_step:
     output:
         'results/first_step.txt'
     shell:
-        'echo “snakemake” > results/first_step.txt'
+        'echo "Hello world!" > results/first_step.txt'
 
 rule second_step:
     input:
