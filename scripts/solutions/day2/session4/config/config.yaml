@@ -1,0 +1,16 @@
+# Configuration options of RNAseq-analysis workflow
+
+# Location of the genome indices
+index: 'resources/genome_indices/Scerevisiae_index'
+
+# Location of the annotation file
+annotations: 'resources/Scerevisiae.gtf'
+
+# Sample names
+samples:
+  - highCO2_sample1
+  - highCO2_sample2
+  - highCO2_sample3
+  - lowCO2_sample1
+  - lowCO2_sample2
+  - lowCO2_sample3
