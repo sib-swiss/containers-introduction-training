@@ -433,7 +433,7 @@ Please give it a try before looking at the answer!
 
     You can add the `-F` flag to force an entire re-run. The entire run should take about ~10 min to complete.
 
-**Exercise:** Check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially the wildcards values, input and output names etc...?
+**Exercise:** Check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially the wildcard values, input and output names etc...?
 
 ??? done "Answer"
     `cat .snakemake/log/<latest_log>`
