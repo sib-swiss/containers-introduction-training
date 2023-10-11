@@ -1,0 +1,19 @@
+'''
+Main Snakefile of the RNAseq analysis workflow. This workflow can clean and
+map reads, and perform Differential Expression Analyses.
+'''
+
+# Path of the config file
+configfile: 'config/config.yaml'
+
+# Rules to execute the workflow
+include: 'rules/read_mapping.smk'
+
+# Master rule that launches the workflow
+rule all:
+    '''
+    Dummy rule to automatically generate the required outputs.
+    '''
+    input:
+        expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])
+

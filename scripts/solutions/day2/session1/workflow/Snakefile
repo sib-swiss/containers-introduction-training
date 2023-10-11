@@ -1,0 +1,13 @@
+rule first_step:
+    output:
+        'results/first_step.txt'
+    shell:
+        'echo "Hello world! > results/first_step.txt'
+
+rule second_step:
+    input:
+        rules.first_step.output
+    output:
+        'results/second_step.txt'
+    shell:
+        'cp results/first_step.txt results/second_step.txt'
