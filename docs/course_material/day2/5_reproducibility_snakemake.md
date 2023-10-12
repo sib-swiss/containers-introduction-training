@@ -41,6 +41,7 @@ To perform a Differential Expression Analysis (DEA), it is easier to have a sing
 
 !!! hint
     While the goal of this rule is quite easy to grasp, setting it up requires using several advanced notions of Snakemake, so here is a little outline of the steps you should take:
+
     1. Build the basic structure of your rule: name, output, log, benchmark
         * Memory should be set at 500 MB
         * Threads should be set at 1
@@ -264,6 +265,7 @@ It is now time to write the final rule of the workflow. This rule will perform t
 
 !!! hint
     While not being trivial, this rule is much easier than the previous one and some things work similarly. Still, here is a little outline of the steps you should take:
+
     1. Build the basic structure of your rule: name, input, outputs, log, benchmark
         * Memory should be set at 1 GB
         * Threads should be set at 2
@@ -331,12 +333,12 @@ You have done that a few times already, so it should not be too difficult.
     If you placed included files in subfolders (like `rules/analysis.smk`), you need to change relative paths for external script files, hence the `../` in the script path.
 
 !!! hint
-    Inside the script, an S4 object named `snakemake` analogous to the Python case available and allows access to input and output files and other parameters. Here the syntax follows that of S4 classes with attributes that are R lists, _e.g._ you can access the first input file with snakemake@input[[1]] (note that the first file does not have index 0 here, because R starts counting from 1). Named input and output files can be accessed in the same way, by just providing the name instead of an index, _e.g._ snakemake@input[["myfile"]].
+    Inside the script, an S4 object named `snakemake` analogous to the Python case available and allows access to input and output files and other parameters. Here the syntax follows that of S4 classes with attributes that are R lists, _e.g._ you can access the first input file with `snakemake@input[[1]]` (note that the first file does not have index 0 here, because R starts counting from 1). Named input and output files can be accessed in the same way, by just providing the name instead of an index, _e.g._ `snakemake@input[["myfile"]]`.
 
 **Exercise:** Find an efficient way to create a computing environment for the rule.
 
 !!! hint
-    Remember what you did during 1, session 3 "Working with Dockerfiles"!
+    Remember what you did during Day 1, session 3 "Working with Dockerfiles"!
 
 ??? done "Answer"
     During Day 1, you built your own docker image, called deseq2. This image actually contains everything we need to run DEA, so let's use it again, but with Snakemake this time! This means that you need to add the following to your `rule differential_expression`:
@@ -345,8 +347,8 @@ You have done that a few times already, so it should not be too difficult.
         'docker://geertvangeest/deseq2:v1'
     ```
 
-!!! note "yourownimage/deseq2:v1"
-    First try with your own image. If it doesn't work, then you can use Geert's image: geertvangeest/deseq2:v1.
+!!! note "Your own Docker image"
+    First try with your own image. If it doesn't work, then you can use Geert's image: `geertvangeest/deseq2:v1`.
 
 After all these modifcations, this is what your final rule should look like:
 
@@ -426,7 +428,14 @@ Now, all that is left is to run the rule to create the DEG list.
 **Exercise:** How many DEG were detected?
 
 ??? done "Answer"
-    Have a look at the list that just created: `cat results/deg_list.tsv`. 8 genes are differentially expressed!
+    Have a look at the list that was just created: `cat results/deg_list.tsv`. 8 genes are differentially expressed!
+
+**Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
+
+??? done "Answer"
+    You would need to execute `snakemake --cores 4 -r -p --use-conda --use-singularity -F`.
+    * `-F` is to force the execution of the entire workflow
+    * Don't forget `--use-conda --use-singularity`! Otherwise, you will lack some software and packages and the workflow will crash!
 
 **Exercise:** Visualise the DAG of the entire workflow.
 
@@ -436,7 +445,7 @@ Now, all that is left is to run the rule to create the DEG list.
 This is the DAG you should see:
 
 <figure align="center">
-  <img src="../../assets/images/total_dag.png" width="100%"/>
+  <img src="../../../assets/images/total_dag.png" width="100%"/>
 </figure>
 
-Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html)!
+Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html)!
