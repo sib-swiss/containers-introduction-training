@@ -6,6 +6,16 @@
 * Deploy a conda environment and run scripts within it
 * Deploy a Docker/Singularity container and run scripts within it
 
+## Material
+
+**Reproducibility in Snakemake:**
+
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/3_reproducibility_snakemake.pdf){: .md-button }
+
+**Additional advanced concepts:**
+
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/4_additional_concepts.pdf){: .md-button }
+
 ## Exercises
 
 In this series of exercises, we will create the last two rules of the workflow. Each rule will execute a script, one in Python and one in R, and both rules will have dedicated environment that you will need to take into account in the snakefiles. These last two rules are quite different from the previous ones, so it would be a good idea to implement them in a new snakefile in `workflow/rules`, for example called `analysis.smk`.

@@ -7,6 +7,10 @@
 * Optimise the memory usage of a workflow and checking its performances
 * Visualise a workflow DAG
 
+## Material
+
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/2_generalising_snakemake.pdf){: .md-button }
+
 ## Data origin
 
 The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different amount of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high CO<sub>2</sub>**) and **down-sampled** them to **1 million read-pairs each** to reduce computation times.

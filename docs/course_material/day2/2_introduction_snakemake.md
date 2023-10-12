@@ -7,6 +7,10 @@
 * Chain rules together
 * Run a Snakemake workflow
 
+## Material
+
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/1_introduction_snakemake.pdf){: .md-button }
+
 ## Structuring a workflow
 
 It is advised to implement your code in a directory called `workflow` (more information about this in the next series of exercises). You are free to choose the names and location of files for the different steps of your workflow, but, for now, we recommend that you at least group all outputs from the workflow in a `results` folder within the `workflow` directory.
