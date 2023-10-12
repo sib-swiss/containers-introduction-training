@@ -489,7 +489,7 @@ There are actually 3 types of DAG:
 
 You should obtain the 3 following figures:
 
-<figure align="center">
+<figure>
   <img src="../../../assets/images/backbone_dag.png" width="30%" height="450" align="center"/>
   <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450" align="center"/>
   <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450" align="center"/>
