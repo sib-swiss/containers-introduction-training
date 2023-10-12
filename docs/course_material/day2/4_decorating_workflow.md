@@ -815,6 +815,5 @@ Your DAG should resemble this:
 And this should be your filegraph (open the picture in a new tab to zoom in):
 
 <figure align="center">
-  <img src="../../../assets/images/all_samples_filegraph.png"/>
+  <img src="../../../assets/images/all_samples_filegraph.png" width="30%" height="450"/>
 </figure>
-
