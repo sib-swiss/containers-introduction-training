@@ -490,9 +490,9 @@ There are actually 3 types of DAG:
 You should obtain the 3 following figures:
 
 <figure align="center">
-  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450"/>
-  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450"/>
-  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450"/>
+  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450" align="center"/>
+  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450" align="center"/>
+  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450" align="center"/>
   <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
 
@@ -511,7 +511,7 @@ There are many ways to design a new workflow, but these few pieces of advice wil
 
 * Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!
     * Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first
-    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)  <!-- Double check sessio number -->
+    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)
 * Make sure your input and output directives are right before worrying about anything else, especially the shell sections.
     * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `--dryrun` option to test the workflow before running it. You can even do that without writing all the shell commands!
 * List any parameters or settings that might need to be adjusted
