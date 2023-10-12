@@ -15,8 +15,11 @@
 
 It is advised to implement your code in a directory called `workflow` (more information about this in the next series of exercises). You are free to choose the names and location of files for the different steps of your workflow, but, for now, we recommend that you at least group all outputs from the workflow in a `results` folder within the `workflow` directory.
 
+!!! warning "Development and computation"
+    You can develop and write your scripts in a distant folder (using an ssh connection via VS code) or locally (if you do so, you will need to copy them on the server (with `scp`) before running them), but **remember that all the computations should be performed on the server, so don't forget to log in with `ssh -i key_username.pem username@18.195.170.182`**
+
 !!! warning "A small reminder about conda environment"
-    If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably not in the right environment. To list them, use `conda env list`. Then activate the right environment with `conda activate <env_name>`. You can deactivate an environment with `conda deactivate`. To list the packages installed in an environment, activate it and use `conda list`.
+    If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably not in the right conda environment. To list them, use `conda env list`. Then activate the right environment with `conda activate <env_name>`. You can deactivate an environment with `conda deactivate`. To list the packages installed in an environment, activate it and use `conda list`. **The computing environment on the server is called `snake_course`.**
 
 ## Exercises
 

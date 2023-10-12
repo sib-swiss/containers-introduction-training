@@ -100,8 +100,6 @@ In this part, we will download the data and start building the directory structu
 
 For now, the main thing to remember is that the workflow code goes into a subfolder called `workflow` and the rest is mostly input/output files, except for the `config` subfolder, which will be explained later. All output files generated in the workflow should be stored under `results/`.
 
-**You can develop and write your scripts locally (if you do so, you will need to copy them (with `scp`) on the server to run them), but remember that all the computations should be performed on the server, so don't forget to log in!**
-
 Now, let's download the data, uncompress it and build the first part of the directory structure.
 
 ```sh
