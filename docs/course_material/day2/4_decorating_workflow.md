@@ -814,6 +814,11 @@ Your DAG should resemble this:
 
 And this should be your filegraph (open the picture in a new tab to zoom in):
 
+<figure markdown align="center">
+  ![backbone_rulegraph](../../assets/images/all_samples_dag.png){ height=250 }
+</figure>
+
 <figure align="center">
   <img src="../../../assets/images/all_samples_filegraph.png" height="25%"/>
 </figure>
+
