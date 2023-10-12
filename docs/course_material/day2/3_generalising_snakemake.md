@@ -103,7 +103,7 @@ For now, the main thing to remember is that the workflow code goes into a subfol
 Now, let's download the data, uncompress it and build the first part of the directory structure.
 
 ```sh
-wget https://apollo.vital-it.ch/trackvis/snakemake_rnaseq.tar.gz  # Download the data
+wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download the data
 tar -xvf snakemake_rnaseq.tar.gz  # Uncompress the archive
 rm snakemake_rnaseq.tar.gz  # Delete the archive
 cd snakemake_rnaseq/  # Start developing in a new folder
