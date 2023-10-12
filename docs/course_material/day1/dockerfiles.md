@@ -201,7 +201,7 @@ In the exercises will use a script called `test_deseq2.R`. This script will:
 - Run DESeq2 on the dummy count matrix
 - Print the results to stdout
 
- You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R), or copy-paste it:
+ You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R), or copy-paste it:
 
 ```R title="test_deseq2.R"
 #!/usr/bin/env Rscript
