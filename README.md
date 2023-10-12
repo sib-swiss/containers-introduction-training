@@ -2,7 +2,7 @@
 [![DOI](https://zenodo.org/badge/331890430.svg)](https://zenodo.org/badge/latestdoi/331890430)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
-Website is hosted at: [https://sib-swiss.github.io/containers-introduction-training/](https://sib-swiss.github.io/containers-introduction-training/)
+Website is hosted at: [https://sib-swiss.github.io/containers-snakemake-training/](https://sib-swiss.github.io/containers-snakemake-training/)
 
 Please refer to [issues](https://github.com/sib-swiss/containers-introduction-training/issues) for improvements/bugs for course material or the website. 
 
