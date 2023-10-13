@@ -111,7 +111,7 @@ rule second_step:
         'cp results/first_step.txt results/second_step.txt'
 ```
 
-Note that with this rule definition, Snakemake **will not run** if `results/first_step.tsv` does not exist!
+Note that with this rule definition, Snakemake **will not run** if `results/first_step.txt` does not exist!
 
 **Exercise:** Modify your first rule to add an `input` directive and execute the workflow. Check that the output was created and that the files are identical. If you get a `Missing input files for rule <rule_name>` error, that means that the input file is missing and cannot be created. How can you solve this problem?
 

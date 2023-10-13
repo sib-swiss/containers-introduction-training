@@ -434,7 +434,7 @@ Please give it a try before looking at the answer!
 ??? done "Answer"
     Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules:
 
-    `snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`.
+    `snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
 
     You can add the `-F` flag to force an entire re-run. The entire run should take about ~10 min to complete.
 
