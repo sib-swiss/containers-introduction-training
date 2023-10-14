@@ -243,7 +243,7 @@ Now, all that is left is to run the rule to create the table.
             'results/total_count_table.tsv'
     ```
 
-    Finally, run the workflow with `snakemake --cores 1 -r -p --use-conda`
+    Finally, run the workflow with `snakemake --cores 4 -r -p --use-conda`
 
 !!! note "--use-conda"
     Do not forget `--use-conda` otherwise Snakemake will not use the environments!!!
@@ -408,7 +408,7 @@ Now, all that is left is to run the rule to create the DEG list.
             'results/deg_list.tsv'
     ```
 
-    Finally, run the workflow with `snakemake --cores 1 -r -p --use-singularity`. You should see new Snakemake information messages:
+    Finally, run the workflow with `snakemake --cores 4 -r -p --use-singularity`. You should see new Snakemake information messages:
     ```
     Rscript --vanilla /path/to/snakemake_rnaseq/.snakemake/scripts/tmpge97d_lz.DESeq2.R
     Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
