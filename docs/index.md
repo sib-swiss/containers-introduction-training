@@ -14,7 +14,7 @@
 
 ## Attribution
 
-This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/) and the [official Snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html).
+This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/), the [official Snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) and the [Introduction to Snakemake workshop from SIB-Days 2022](https://github.com/RomainFeron/workshop-snakemake-sibdays2022).
 
 ## License & copyright
 
