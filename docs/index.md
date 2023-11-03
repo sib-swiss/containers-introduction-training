@@ -16,12 +16,6 @@
 
 This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/), the [official Snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) and the [Introduction to Snakemake workshop from SIB-Days 2022](https://github.com/RomainFeron/workshop-snakemake-sibdays2022).
 
-## License & copyright
-
-**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/LICENSE.md)
-
-**Copyright:** [SIB Swiss Institute of Bioinformatics](https://www.sib.swiss/)
-
 ## Material
 
 * This website
