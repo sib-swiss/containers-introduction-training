@@ -46,11 +46,12 @@ RUN apt-get install figlet
     ```
 === "ARM64 (MacOS M1 chip)"
     ```sh
-    docker build --platform amd64 .
+    export DOCKER_DEFAULT_PLATFORM=linux/amd64
+    docker build .
     ```
 
 !!! warning "If using an Apple M1 chip (newer Macs)"
-    If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it's best to specify the `--platform amd64` flag. 
+    If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it's best to set the `DOCKER_DEFAULT_PLATFORM` to `linux/amd64` with `export DOCKER_DEFAULT_PLATFORM=linux/amd64`. 
 
 !!! note "The argument of `docker build`"
     The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.
@@ -85,7 +86,8 @@ What has happened? What is the name of the build image?
         ```
     === "ARM (MacOS M1 chip)"
         ```sh
-        docker build --platform amd64 -t ubuntu-figlet:v2 .
+        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        docker build -t ubuntu-figlet:v2 .
         ```
 
 ### Using `CMD`
@@ -110,7 +112,8 @@ CMD figlet My image works!
         ```
     === "ARM64 (MacOS M1 chip)"
         ```sh
-        docker build --platform amd64 -t ubuntu-figlet:v3 .
+        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        docker build ubuntu-figlet:v3 .
         ```
 
     The command `docker inspect ubuntu-figlet:v3` will give:
@@ -286,7 +289,8 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t search_biomart_datasets .
+            DOCKER_DEFAULT_PLATFORM=linux/amd64
+            docker build -t search_biomart_datasets .
             ```
 
         Run the container:
@@ -589,7 +593,8 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t rstudio-server .
+            export DOCKER_DEFAULT_PLATFORM=linux/amd64
+            docker build -t rstudio-server .
             ```
 
     You can now run a container from the image. However, you will have to tell docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
@@ -689,7 +694,8 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t daterange .
+            export DOCKER_DEFAULT_PLATFORM=linux/amd64
+            docker build -t daterange .
             ```
 
         Run the container:
@@ -972,7 +978,8 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            docker build --platform amd64 -t jupyter-lab .
+            export DOCKER_DEFAULT_PLATFORM=linux/amd64
+            docker build -t jupyter-lab .
             ```
 
     You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
