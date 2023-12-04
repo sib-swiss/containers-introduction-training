@@ -1,8 +1,8 @@
 {
-    "title": "Course material Docker and Singularity for reproducible research",
+    "title": "Course material Docker and Apptainer for reproducible research",
     "keywords": [
       "Docker",
-      "Singularity",
+      "Apptainer",
       "Containers",
       "Reproducibility",
       "course",

@@ -34,8 +34,8 @@ After this course, you will be able to:
 
 * Understand the basic concepts and terminology associated with virtualization with containers
 * Be able to customize, store and share a containerized environment with Docker
-* Understand the essential differences between Docker and Singularity
-* Be able to use Singularity to run containers on a shared computer environment (e.g. a HPC cluster)
+* Understand the essential differences between Docker and Apptainer
+* Be able to use Apptainer to run containers on a shared computer environment (e.g. a HPC cluster)
 
 ### Learning outcomes explained
 

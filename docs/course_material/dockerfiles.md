@@ -183,7 +183,7 @@ CMD figlet My image works!
     CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
-**Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`singularity` exercises](singularity.md).
+**Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`apptainer` exercises](apptainer.md).
 
 ??? done "Answer"
     ```sh
@@ -439,7 +439,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ```
 
-    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
+    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.
 
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
@@ -835,7 +835,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     CMD ["--date", "20220226"]
     ```
 
-    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.
+    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.
 
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
