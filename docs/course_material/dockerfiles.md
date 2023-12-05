@@ -466,7 +466,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         docker push [USER NAME]/search_biomart_datasets:v1
         ```
 
-    ### Get information on your image with `docker inspect`
+    ### Extra: Get information on your image with `docker inspect`
 
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
@@ -508,7 +508,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         }
     ```
 
-    ### Adding metadata to your image
+    ### Extra: Adding metadata to your image
 
     You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
@@ -565,7 +565,7 @@ Often containers are built for a specific purpose. For example, you can use a co
             }
         ```
 
-    ### Building an image with a browser interface
+    ### Extra: Building an image with a browser interface
 
     In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
 
@@ -862,7 +862,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         docker push [USER NAME]/daterange:v1
         ```
 
-    ### Get information on your image with `docker inspect`
+    ### Extra: Get information on your image with `docker inspect`
 
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
@@ -902,7 +902,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         },
     ```
 
-    ### Adding metadata to your image
+    ### Extra: Adding metadata to your image
 
     You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
@@ -954,7 +954,7 @@ Often containers are built for a specific purpose. For example, you can use a co
                 }
         ```
 
-    ### Building an image with a browser interface
+    ### Extra: Building an image with a browser interface
 
     In this exercise, we will use a different base image from the [jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
 

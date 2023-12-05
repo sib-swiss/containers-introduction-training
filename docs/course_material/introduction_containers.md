@@ -20,8 +20,13 @@
 
 ## Exercises
 
+We recommend using a code editor like VScode or Sublime text. If you don't know which one to chose, take VScode as we can provide most support for this editor. 
+
 !!! note "If working on Windows"
-    If you are working on Windows, you can either use [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or the local terminal in [MobaXterm](https://mobaxterm.mobatek.net/). Make sure you install the latest versions before you install docker. In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
+    If you are working on Windows, it is easiest to work with [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10). With VScode use the [WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). Make sure you install the latest versions before you install docker. In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
+
+!!! note "Work in projects"
+    We recommend to work in a project folder. This will make it easier to find your files and to share them with others. You can create a project folder anywhere on your computer. For example, you can create a folder `projects` in your home directory and then create a subfolder `container-course` in it. You can then open this folder in VScode.
 
 Let's create our first container from an existing image. We do this with the image `ubuntu`, generating an environment with a minimal installation of ubuntu.  
 

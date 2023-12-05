@@ -265,7 +265,7 @@ This mounted directory is both available for the host (locally) and for the cont
 !!! note "Using files on the host"
     This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.
 
-### Managing permissions (extra)
+### Extra: Managing permissions
 
 Depending on your system, the user ID and group ID will be taken over from the user inside the container. If the user inside the container is root, this will be root. That's a bit inconvenient if you just want to run the container as a regular user (for example in certain circumstances your container could write in `/`). To do that, use the `-u` option, and specify the group ID and user ID like this:
 

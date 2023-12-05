@@ -26,25 +26,21 @@
 
 If you are enrolled in the course, you have received an e-mail with an IP, username, private key and password. To do the Apptainer exercises we will login to a remote server. Below you can find instructions on how to login.
 
-=== "mac OS/Linux"
-    Open a terminal, and `cd` to the directory where you have stored your private key. After that, change the file permissions of the key:
 
+Login to the remote server with the following command:
+
+```sh
+# replace username with your username and ip_address with the ip address you received
+ssh -i key_username.pem username@ip_address
+```
+
+!!! note "Key permissions"
+    If you're on Linux/Mac you might have to set the permissions for the ssh key:
+    
     ```sh
-    chmod 400 key_<username>.pem
+    chmod 400 key_username.pem
     ```
 
-    Then, login like this:
-
-    ```sh
-    ssh -i key_<username>.pem <username>@<IP>
-    ```
-
-=== "Windows"
-    Below you can find video tutorials and information to log in with MobaXterm.
-
-    MobaXterm is an SSH client for Windows. You can use it to connect to the remote host and edit remote scripts. With MobaXterm, you will automatically login to the remote server once you've started the SSH session. Set it up on your own computer using your own credentials and the video below.
-
-    <iframe src="https://player.vimeo.com/video/473838657" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 
 ### Pulling an image
 
