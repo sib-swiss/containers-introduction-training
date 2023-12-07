@@ -43,19 +43,18 @@ This will give you an interactive shell into the created container (this interac
 
     ```
     root@27f7d11608de:/# cat /etc/os-release
+    PRETTY_NAME="Ubuntu 22.04.3 LTS"
     NAME="Ubuntu"
-    VERSION="20.04.1 LTS (Focal Fossa)"
+    VERSION_ID="22.04"
+    VERSION="22.04.3 LTS (Jammy Jellyfish)"
+    VERSION_CODENAME=jammy
     ID=ubuntu
     ID_LIKE=debian
-    PRETTY_NAME="Ubuntu 20.04.1 LTS"
-    VERSION_ID="20.04"
     HOME_URL="https://www.ubuntu.com/"
     SUPPORT_URL="https://help.ubuntu.com/"
     BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
     PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-
-    VERSION_CODENAME=focal
-    UBUNTU_CODENAME=focal
+    UBUNTU_CODENAME=jammy
     ```
 
 !!! note "Where does the image come from?"

@@ -101,7 +101,7 @@ You can store your changes and create a new image based on the `ubuntu` image li
 docker commit [CONTAINER NAME] ubuntu-figlet
 ```
 
-**Exercise:** Run the above command with the name of the container containing the `figlet` installation. Check out `docker image ls`. What have we just created?
+**Exercise:** Exit the container shell and run the above command  in your local terminal (replace `[CONTAINER NAME]` with the name of the container containing the `figlet` installation). Check out `docker image ls`. What have we just created?
 
 ??? done "Answer"
     A new image called `ubuntu-figlet` based on the status of the container.

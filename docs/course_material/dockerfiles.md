@@ -95,7 +95,7 @@ What has happened? What is the name of the build image?
 As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
-FROM ubuntu:jammy-20230308
+FROM ubuntu:jammy-20231128
 RUN apt-get update
 RUN apt-get install figlet
 CMD figlet My image works!
@@ -414,50 +414,14 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
 
-    Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
-
-    ```dockerfile
-    FROM r-base:4.2.3
-
-    RUN apt-get update
-    RUN apt-get install -y \
-        r-cran-optparse \
-        r-bioc-biomart
-
-    WORKDIR /opt
-
-    COPY search_biomart_datasets.R .
-
-    ENV PATH=/opt:$PATH
-
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["search_biomart_datasets.R"]
-
-    # default option (if positional arguments are not specified)
-    CMD ["--pattern", "mouse"]
-
-    ```
-
-    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.
-
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
+    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
+
+
+
     ??? done "Answer"
-        Running the container interactively would be:
-
-        ```sh
-        docker run -it --rm --entrypoint /bin/bash search_biomart_datasets
-        ```
-        
-        Which should result in a terminal looking something like this:
-
-        ```
-        root@9a27da455fb1:/opt#
-        ```
-
-        Meaning that indeed the default directory has changed to `/opt`
 
         Pushing it to dockerhub: 
 
@@ -813,47 +777,14 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
 
-    Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with `WORKDIR`. This instruction will set the default directory for all other instructions (like `RUN`, `COPY` etc.). It will also change the directory in which you will land if you run the container interactively.
-
-    ```dockerfile
-    FROM python:3.9.16
-
-    RUN pip install pandas 
-
-    WORKDIR /opt
-
-    # we don't have to specify /opt as target dir but the current dir
-    COPY daterange.py .
-
-    ENV PATH=/opt:$PATH
-
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["daterange.py"]
-
-    # default option (if positional arguments are not specified)
-    CMD ["--date", "20220226"]
-    ```
-
-    **Exercise**: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.
-
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
+    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
+
+
+
     ??? done "Answer"
-        Running the container interactively would be:
-
-        ```sh
-        docker run -it --rm --entrypoint /bin/bash daterange
-        ```
-        
-        Which should result in a terminal looking something like this:
-
-        ```
-        root@9a27da455fb1:/opt#
-        ```
-
-        Meaning that indeed the default directory has changed to `/opt`
 
         Pushing it to dockerhub: 
 
