@@ -765,7 +765,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
 <p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20231128</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
@@ -1019,41 +1019,13 @@ ls
 </code></pre></div>
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
-<p>Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with <code>WORKDIR</code>. This instruction will set the default directory for all other instructions (like <code>RUN</code>, <code>COPY</code> etc.). It will also change the directory in which you will land if you run the container interactively.</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
-
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-cran-optparse<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-bioc-biomart
-
-<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/opt</span>
-
-<span class="k">COPY</span><span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>.
-
-<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
-
-<span class="c"># note that if you want to be able to combine the two</span>
-<span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
-<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;search_biomart_datasets.R&quot;</span><span class="p">]</span>
-
-<span class="c"># default option (if positional arguments are not specified)</span>
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--pattern&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mouse&quot;</span><span class="p">]</span>
-</code></pre></div>
-<p><strong>Exercise</strong>: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
 </div>
+<p><strong>Exercise</strong>: Push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
 <details class="done">
 <summary>Answer</summary>
-<p>Running the container interactively would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>/bin/bash<span class="w"> </span>search_biomart_datasets
-</code></pre></div>
-<p>Which should result in a terminal looking something like this:</p>
-<div class="highlight"><pre><span></span><code>root@9a27da455fb1:/opt#
-</code></pre></div>
-<p>Meaning that indeed the default directory has changed to <code>/opt</code></p>
 <p>Pushing it to dockerhub: </p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>search_biomart_datasets<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
@@ -1340,39 +1312,13 @@ ls
 </code></pre></div>
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
-<p>Most containerized applications need multiple build steps. Often, you want to perform these steps and executions in a specific directory. Therefore, it can be in convenient to specify a working directory. You can do that with <code>WORKDIR</code>. This instruction will set the default directory for all other instructions (like <code>RUN</code>, <code>COPY</code> etc.). It will also change the directory in which you will land if you run the container interactively.</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
-
-<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas<span class="w"> </span>
-
-<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/opt</span>
-
-<span class="c"># we don&#39;t have to specify /opt as target dir but the current dir</span>
-<span class="k">COPY</span><span class="w"> </span>daterange.py<span class="w"> </span>.
-
-<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
-
-<span class="c"># note that if you want to be able to combine the two</span>
-<span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
-<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;daterange.py&quot;</span><span class="p">]</span>
-
-<span class="c"># default option (if positional arguments are not specified)</span>
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;20220226&quot;</span><span class="p">]</span>
-</code></pre></div>
-<p><strong>Exercise</strong>: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
 </div>
+<p><strong>Exercise</strong>: Push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
 <details class="done">
 <summary>Answer</summary>
-<p>Running the container interactively would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>/bin/bash<span class="w"> </span>daterange
-</code></pre></div>
-<p>Which should result in a terminal looking something like this:</p>
-<div class="highlight"><pre><span></span><code>root@9a27da455fb1:/opt#
-</code></pre></div>
-<p>Meaning that indeed the default directory has changed to <code>/opt</code></p>
 <p>Pushing it to dockerhub: </p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>daterage<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1

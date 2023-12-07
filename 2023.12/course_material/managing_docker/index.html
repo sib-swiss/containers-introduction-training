@@ -725,7 +725,7 @@ Running the command <code>docker container ls -a</code> results in:</p>
 <p>You can store your changes and create a new image based on the <code>ubuntu</code> image like this:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>commit<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span>ubuntu-figlet
 </code></pre></div>
-<p><strong>Exercise:</strong> Run the above command with the name of the container containing the <code>figlet</code> installation. Check out <code>docker image ls</code>. What have we just created?</p>
+<p><strong>Exercise:</strong> Exit the container shell and run the above command  in your local terminal (replace <code>[CONTAINER NAME]</code> with the name of the container containing the <code>figlet</code> installation). Check out <code>docker image ls</code>. What have we just created?</p>
 <details class="done">
 <summary>Answer</summary>
 <p>A new image called <code>ubuntu-figlet</code> based on the status of the container.
