@@ -1,17 +1,11 @@
 FROM r-base:4.2.3
 
-# LABEL org.opencontainers.image.created="2023-04-12" \
-#     org.opencontainers.image.authors="Geert van Geest" \
-#     org.opencontainers.image.description="Container to search ensembl datasets with biomart"
-
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt-get update
+RUN apt-get install -y \
     r-cran-optparse \
     r-bioc-biomart
 
-WORKDIR /opt
-
-COPY search_biomart_datasets.R .
+COPY search_biomart_datasets.R /opt 
 
 ENV PATH=/opt:$PATH
 
