@@ -21,13 +21,13 @@ To make your images shareable and adjustable, it's good practice to work with a 
 You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with `FROM` that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with `RUN`.  In our `figlet` example that would be:
 
 ```dockerfile
-FROM ubuntu:jammy-20230308
+FROM ubuntu:jammy-20240427
 RUN apt-get update
 RUN apt-get install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
-    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20230308`). We could also have written:
+    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20240427`). We could also have written:
 
     ```dockerfile
     FROM ubuntu
@@ -50,8 +50,8 @@ RUN apt-get install figlet
     docker build .
     ```
 
-!!! warning "If using an Apple M1 chip (newer Macs)"
-    If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it's best to set the `DOCKER_DEFAULT_PLATFORM` to `linux/amd64` with `export DOCKER_DEFAULT_PLATFORM=linux/amd64`. 
+!!! warning "If using an Apple M chip (newer Macs)"
+    If you are using a computer with an Apple M chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M chip (especially if you have sharing in mind), it's best to set the `DOCKER_DEFAULT_PLATFORM` to `linux/amd64` with `export DOCKER_DEFAULT_PLATFORM=linux/amd64`. 
 
 !!! note "The argument of `docker build`"
     The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.
@@ -95,7 +95,7 @@ What has happened? What is the name of the build image?
 As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
-FROM ubuntu:jammy-20231128
+FROM ubuntu:jammy-20240427
 RUN apt-get update
 RUN apt-get install figlet
 CMD figlet My image works!
@@ -168,7 +168,7 @@ CMD figlet My image works!
     A `Dockerfile` with shell notation:
 
     ```dockerfile
-    FROM ubuntu:jammy-20230308
+    FROM ubuntu:jammy-20240427
     RUN apt-get update
     RUN apt-get install figlet
     CMD figlet My image works!
@@ -177,7 +177,7 @@ CMD figlet My image works!
     A `Dockerfile` with exec notation:
 
     ```dockerfile
-    FROM ubuntu:jammy-20230308
+    FROM ubuntu:jammy-20240427
     RUN apt-get update
     RUN apt-get install figlet
     CMD ["/bin/sh", "-c", "figlet My image works!"]
@@ -253,12 +253,12 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     From the script you can see it has two dependencies: `biomaRt` and `optparse`. If we want to run it inside a container, we would have to install these. We do this in the `Dockerfile` below. We give the the following instructions:
 
-    - use the [R base container](https://hub.docker.com/_/r-base) version 4.2.3
+    - use the [R base container](https://hub.docker.com/_/r-base) version 4.4.0
     - install the package `optparse` from CRAN (`r-cran-optparse`) and `biomaRt` from Bioconductor (`r-bioc-biomart`) with `apt-get`. 
     - copy the script `search_biomart_datasets.R` to `/opt` inside the container:
 
     ```dockerfile
-    FROM r-base:4.2.3
+    FROM r-base:4.4.0
 
     RUN apt-get update
     RUN apt-get install -y \
@@ -320,7 +320,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
     ```dockerfile
-    FROM r-base:4.2.3
+    FROM r-base:4.4.0
 
     RUN apt-get update
     RUN apt-get install -y \
@@ -378,7 +378,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     Let's try it out:
 
     ```dockerfile
-    FROM r-base:4.2.3
+    FROM r-base:4.4.0
 
     RUN apt-get update
     RUN apt-get install -y \
@@ -449,7 +449,7 @@ Often containers are built for a specific purpose. For example, you can use a co
                 "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
                 "LC_ALL=en_US.UTF-8",
                 "LANG=en_US.UTF-8",
-                "R_BASE_VERSION=4.2.3"
+                "R_BASE_VERSION=4.4.0"
             ],
             "Cmd": [
                 "--pattern",
@@ -490,7 +490,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Dockerfile` would look like:
 
         ```dockerfile
-        FROM r-base:4.2.3
+        FROM r-base:4.4.0
 
         LABEL org.opencontainers.image.created="2023-04-12" \
             org.opencontainers.image.authors="Geert van Geest" \
