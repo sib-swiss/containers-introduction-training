@@ -807,13 +807,13 @@
 <p>To make your images shareable and adjustable, it&rsquo;s good practice to work with a <code>Dockerfile</code>. This is a script with a set of instructions to build your image from an existing image.</p>
 <h3 id="basic-dockerfile">Basic <code>Dockerfile</code></h3>
 <p>You can generate an image from a <code>Dockerfile</code> using the command <code>docker build</code>. A <code>Dockerfile</code> has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with <code>FROM</code> that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with <code>RUN</code>.  In our <code>figlet</code> example that would be:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20240427</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">On writing reproducible <code>Dockerfiles</code></p>
-<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>jammy-20230308</code>). We could also have written:</p>
+<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>jammy-20240427</code>). We could also have written:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
@@ -835,8 +835,8 @@ docker<span class="w"> </span>build<span class="w"> </span>.
 </div>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">If using an Apple M1 chip (newer Macs)</p>
-<p>If you are using a computer with an Apple M1 chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) <code>x86_64/AMD64</code> machines. When building images on a Mac with an M1 chip (especially if you have sharing in mind), it&rsquo;s best to set the <code>DOCKER_DEFAULT_PLATFORM</code> to <code>linux/amd64</code> with <code>export DOCKER_DEFAULT_PLATFORM=linux/amd64</code>. </p>
+<p class="admonition-title">If using an Apple M chip (newer Macs)</p>
+<p>If you are using a computer with an Apple M chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) <code>x86_64/AMD64</code> machines. When building images on a Mac with an M chip (especially if you have sharing in mind), it&rsquo;s best to set the <code>DOCKER_DEFAULT_PLATFORM</code> to <code>linux/amd64</code> with <code>export DOCKER_DEFAULT_PLATFORM=linux/amd64</code>. </p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">The argument of <code>docker build</code></p>
@@ -878,7 +878,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 </details>
 <h3 id="using-cmd">Using <code>CMD</code></h3>
 <p>As you might remember the second positional argument of <code>docker run</code> is a command (i.e. <code>docker run IMAGE [CMD]</code>). If you leave it empty, it uses the default command. You can change the default command in the <code>Dockerfile</code> with an instruction starting with <code>CMD</code>. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20231128</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20240427</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
@@ -934,13 +934,13 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 <p class="admonition-title">Two flavours of <code>CMD</code></p>
 <p>You have seen in the output of <code>docker inspect</code> that docker translates the command (i.e. <code>figlet "my image works!"</code>) into this: <code>["/bin/sh", "-c", "figlet 'My image works!'"]</code>. The notation we used in the <code>Dockerfile</code> is the <em>shell notation</em> while the notation with the square brackets (<code>[]</code>) is the <em>exec-notation</em>. You can use both notations in your <code>Dockerfile</code>. Altough the <em>shell notation</em> is more readable, the <em>exec notation</em> is directly used by the image, and therefore less ambiguous.</p>
 <p>A <code>Dockerfile</code> with shell notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20240427</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
 </code></pre></div>
 <p>A <code>Dockerfile</code> with exec notation:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20230308</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:jammy-20240427</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;figlet My image works!&quot;</span><span class="p">]</span>
@@ -1003,11 +1003,11 @@ It is a relatively simple script that searches for datasets in ensembl with <cod
 </code></pre></div>
 <p>From the script you can see it has two dependencies: <code>biomaRt</code> and <code>optparse</code>. If we want to run it inside a container, we would have to install these. We do this in the <code>Dockerfile</code> below. We give the the following instructions:</p>
 <ul>
-<li>use the <a href="https://hub.docker.com/_/r-base">R base container</a> version 4.2.3</li>
+<li>use the <a href="https://hub.docker.com/_/r-base">R base container</a> version 4.4.0</li>
 <li>install the package <code>optparse</code> from CRAN (<code>r-cran-optparse</code>) and <code>biomaRt</code> from Bioconductor (<code>r-bioc-biomart</code>) with <code>apt-get</code>. </li>
 <li>copy the script <code>search_biomart_datasets.R</code> to <code>/opt</code> inside the container:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
 
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
@@ -1062,7 +1062,7 @@ ls
 <p class="admonition-title">The <code>$PATH</code> variable</p>
 <p>The path variable is a special variable that consists of a list of path seperated by colons (<code>:</code>). These paths are searched if you are trying to run an executable. More info this topic at e.g. <a href="https://en.wikipedia.org/wiki/PATH_(variable)">wikipedia</a>. </p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
 
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
@@ -1103,7 +1103,7 @@ ls
 <li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> command. This means that you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
 </ul>
 <p>Let&rsquo;s try it out:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
 
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
@@ -1160,7 +1160,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">            </span><span class="s">&quot;PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">            </span><span class="s">&quot;LC_ALL=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">            </span><span class="s">&quot;LANG=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;R_BASE_VERSION=4.2.3&quot;</span>
+<span class="w">            </span><span class="s">&quot;R_BASE_VERSION=4.4.0&quot;</span>
 <span class="w">        </span><span class="p p-Indicator">],</span>
 <span class="w">        </span><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
 <span class="w">            </span><span class="s">&quot;--pattern&quot;</span><span class="p p-Indicator">,</span>
@@ -1194,7 +1194,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <details class="done">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.2.3</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
 
 <span class="k">LABEL</span><span class="w"> </span>org.opencontainers.image.created<span class="o">=</span><span class="s2">&quot;2023-04-12&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span><span class="w"> </span><span class="se">\</span>
