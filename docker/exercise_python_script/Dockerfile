@@ -1,15 +1,8 @@
 FROM python:3.9.16
 
-LABEL org.opencontainers.image.created="2022-04-12" \
-    org.opencontainers.image.authors="Geert van Geest" \
-    org.opencontainers.image.description="Great container for getting all dates in a week! \
-    You will never use a calender again"
-
 RUN pip install pandas 
 
-WORKDIR /opt
-
-COPY daterange.py .
+COPY daterange.py /opt 
 
 ENV PATH=/opt:$PATH
 
