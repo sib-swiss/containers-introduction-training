@@ -32,7 +32,7 @@ extra:
   analytics:
     provider: matomo
     base_url: https://matomo.sib.swiss/
-    site_id: CHANGE_ME_WITH_YOUR_SITE_ID
+    site_id: 220
 
 copyright: >
   Copyright &copy; 2021-2022 SIB Swiss institute of Bioinformatics –
