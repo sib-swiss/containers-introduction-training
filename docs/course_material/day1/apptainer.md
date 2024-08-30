@@ -46,7 +46,7 @@ ssh -i key_username.pem username@ip_address
 
 Apptainer can take several image formats (e.g. a `docker` image), and convert them into it's own `.sif` format. Unlike `docker` this image doesn't live in a local image cache, but it's stored as an actual file.
 
-**Exercise:** On the remote server, pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](../dockerfiles/#using-cmd) (`ubuntu-figlet-df:v3`) with `apptainer pull`. The syntax is:
+**Exercise:** On the remote server, pull the docker image that has the adjusted default `CMD` that we have pushed to dockerhub [in this exercise](dockerfiles.md#using-cmd) (`ubuntu-figlet-df:v3`) with `apptainer pull`. The syntax is:
 
 ```sh
 apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
@@ -261,11 +261,23 @@ During the lecture you have learned that apptainer takes over the user privilege
 
 ### A bioinformatics example (extra)
 
-All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the namespace and tag for the latest fastqc image. Now we can pull it with apptainer like this:
+All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the namespace for the latest fastqc image. 
 
-```sh
-apptainer pull docker://quay.io/biocontainers/fastqc:0.11.9--hdfd78af_1
-```
+**Exercise:** Check out the container image at quay.io, by following [quay.io/biocontainers/fastqc](https://quay.io/biocontainers/fastqc). Choose a tag, and pull it with `apptainer pull`.
+
+??? done "Answer"
+    It's up to you which tag you choose. The tag with the latest version is `0.12.1--hdfd78af_0`.
+
+    ```sh
+    apptainer pull docker://quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0
+    ```
+
+!!! tip "Apptainer images at galaxy.org"
+    Most (if not all) biocontainer images are available as apptainer (singularity) image at [https://depot.galaxyproject.org/singularity/](https://depot.galaxyproject.org/singularity/). You can simply download them with `wget` or `curl`, e.g.:
+
+    ```sh
+    wget https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0
+    ```
 
 Let's test the image. Download some sample reads first:
 
@@ -281,7 +293,7 @@ Now you can simply run the image as an executable preceding the commands you wou
 
 ```sh
 cd
-./fastqc_0.11.9--hdfd78af_1.sif fastqc ./reads/ecoli_*.fastq.gz
+./fastqc_0.12.1--hdfd78af_0.sif fastqc ./reads/ecoli_*.fastq.gz
 ```
 
 This will result in `html` files in the directory `./reads`. These are quality reports for the sequence reads. If you'd like to view them, you can download them with `scp` or e.g. [FileZilla](https://filezilla-project.org/), and view them with your local browser.
