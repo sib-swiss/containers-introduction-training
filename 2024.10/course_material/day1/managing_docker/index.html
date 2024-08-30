@@ -1,0 +1,1241 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../introduction_containers/">
+      
+      
+        <link rel="next" href="../dockerfiles/">
+      
+      
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
+    
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "LearningResource",
+    "@id": "https://sib-swiss.github.io/containers-introduction-training",
+    "http://purl.org/dc/terms/conformsTo": {
+        "@type": "CreativeWork",
+        "@id": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE"
+    },
+    "description": "Course on containers for reproducible research",
+    "keywords": "container, docker, apptainer, reproducible",
+    "name": " Docker and Apptainer for reproducible research: getting started with containers ",
+
+    "abstract": "Reproducible analysis in bioinformatics goes beyond good documentation and sharing code. Often, analyses depend on an entire environment with many different programs, libraries and settings. For the sake of reproducibility, but also for productivity, you might want to store, reuse, and share your environments using container software such as Docker and Apptainer. Containerization is a lightweight and scalable way of working with such isolated environments. For example, with Docker you can develop, store and manage environments based on Linux operating systems which can run in mostly any computer. Often, bioinformatic calculations also require large memory and CPU resources, therefore you might want to use a shared computer environment (e.g. a HPC cluster). However, to run Docker you need to have privileged rights (i.e. as root), which is not the case for Apptainer, a program that enables you to run environments from a wide range of resources (including Docker) in a safe manner without the need for privileged access. Combining Apptainer and Docker thus makes you extremely flexible in how, when and where you use your computer environments and those of others. To introduce you to working with containers in the context of bioinformatics research, we will take a practical approach with several hands-on exercises to go through the basics of using, developing and sharing containers.",
+    "audience": "Biologists, bioinformaticians and computational biologists",
+    "author": [
+        {
+            "@type": "Person",
+            "name": "Geert van Geest",
+            "email": "geert.vangeest@sib.swiss"
+        },
+        {
+            "@type": "Person",
+            "name": "Patricia Palagi"
+        },
+        {
+            "@type": "Organization",
+            "name": "SIB Swiss Institute of Bioinformatics"
+        }
+    ],
+    "identifier": "https://doi.org/10.5281/zenodo.6787081",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "teaches": [
+        "Understand the basic concepts and terminology associated with virtualization with containers",
+        "Be able to customize, store and share a containerized environment with Docker",
+        "Understand the essential differences between Docker and Apptainer",
+        "Be able to use Apptainer to run containers on a shared computer environment (e.g. a HPC cluster)"
+    ]
+}
+</script>
+
+    
+      
+        <title>Managing containers and images - Introduction to containers</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  <!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://matomo.sib.swiss/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '220']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+              </button>
+            
+            
+  <b>Issues, questions or feedback? &#128591; &#128640; </b> Use the "Questions and Answers" section at the bottom &#128071; of every page
+
+          </div>
+          
+            <script>var content,el=document.querySelector("[data-md-component=announce]");el&&(content=el.querySelector(".md-typeset"),__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0))</script>
+          
+        </aside>
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../../..">
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Introduction to containers" class="md-header__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to containers
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Managing containers and images
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Introduction to containers" class="md-nav__button md-logo" aria-label="Introduction to containers" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to containers
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-introduction-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-introduction-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../precourse/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Precourse preparations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../course_schedule/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course schedule
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Course material
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Course material
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction_containers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to containers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Managing containers and images
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Managing containers and images
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restarting-an-exited-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restarting an exited container
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a new image
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing containers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pushing-to-dockerhub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pushing to dockerhub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-a-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mounting a directory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-managing-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extra: Managing permissions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dockerfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Working with dockerfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apptainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running containers with apptainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restarting-an-exited-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restarting an exited container
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a new image
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing containers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pushing-to-dockerhub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pushing to dockerhub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-a-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mounting a directory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-managing-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extra: Managing permissions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+  
+                  
+
+  
+  
+
+
+  <h1>Managing containers and images</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Explain the concept of layers in the context of docker containers and images</li>
+<li>Use the command line to restart and re-attach to an exited container</li>
+<li>Create a new image with <code>docker commit</code></li>
+<li>List locally available images with <code>docker image ls</code></li>
+<li>Run a command inside a container non-interactively</li>
+<li>Use <code>docker image inspect</code> to get more information on an image</li>
+<li>Use the command line to prune dangling images and stopped containers</li>
+<li>Rename and tag a docker image</li>
+<li>Push a newly created image to dockerhub</li>
+<li>Use the option <code>--mount</code> to bind mount a host directory to a container</li>
+</ul>
+<h2 id="material">Material</h2>
+<p><a class="md-button" href="../../../assets/pdf/managing_docker.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y7eCm9NOHYg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<ul>
+<li><a href="https://docs.docker.com/get-started/overview/">Overview of how docker works</a></li>
+<li><a href="https://docs.docker.com/storage/bind-mounts/">More on bind mounts</a></li>
+<li><a href="https://docs.docker.com/storage/volumes/">Docker volumes in general</a></li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<h3 id="restarting-an-exited-container">Restarting an exited container</h3>
+<p>If you would like to go back to your container with the <code>figlet</code> installation, you could try to run again:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command. Is your <code>figlet</code> installation still there? Why?</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Check the status of your containers:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>-a
+</code></pre></div>
+</div>
+<details class="done">
+<summary>Answer</summary>
+<p>No, the installation is gone. Another container was created from the same ubuntu image, without the <code>figlet</code> installation.
+Running the command <code>docker container ls -a</code> results in:</p>
+<div class="highlight"><pre><span></span><code>CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
+8d7c4c611b70   ubuntu    &quot;/bin/bash&quot;   About a minute ago   Up About a minute                    kind_mendel
+27f7d11608de   ubuntu    &quot;/bin/bash&quot;   27 minutes ago       Exited (0) 2 minutes ago             great_moser
+</code></pre></div>
+<p>In this case the container <code>great_moser</code> contains the <code>figlet</code> installation. But we have exited that container. We created a new container (<code>kind_mendel</code> in this case) with a fresh environment created from the original <code>ubuntu</code> image.</p>
+</details>
+<p>To restart your first created container, you&rsquo;ll have to look up its name. You can find it in the Docker dashboard, or with <code>docker container ls -a</code>.</p>
+<div class="admonition hint">
+<p class="admonition-title">Container names</p>
+<p>The container name is the funny combination of two words separated by <code>_</code>, e.g.: <code>nifty_sinoussi</code>. Alternatively you can use the container ID (the first column of the output of <code>docker container ls</code>)</p>
+</div>
+<p>To restart a container you can use:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>start<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span>
+</code></pre></div>
+<p>And after that to re-attach to the shell:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>attach<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span>
+</code></pre></div>
+<p>And you&rsquo;re back in the container shell.</p>
+<p><strong>Exercise:</strong> Run the <code>docker start</code> and <code>docker attach</code> commands for the container that is supposed to contain the <code>figlet</code> installation. Is the installation of <code>figlet</code> still there?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>yes:</p>
+<div class="highlight"><pre><span></span><code>figlet<span class="w"> </span><span class="s1">&#39;try some more text!&#39;</span>
+</code></pre></div>
+<p>Should give you output.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title"><code>docker attach</code> and <code>docker exec</code></p>
+<p>In addition to <code>docker attach</code>, you can also &ldquo;re-attach&rdquo; a container with <code>docker exec</code>. However, these two are quite different. While <code>docker attach</code> gets you back to your stopped shell process, <code>docker exec</code> creates a new one (more information on <a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec">stackoverflow</a>). The command <code>docker exec</code> enables you therefore to have multiple shells open in the same container. That can be convenient if you have one shell open with a program running in the foreground, and another one for e.g. monitoring. An example for using <code>docker exec</code> on a running container:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span>/bin/bash
+</code></pre></div>
+<p>Note that  <code>docker exec</code> requires a CMD, it doesn&rsquo;t use the default.</p>
+</div>
+<h3 id="creating-a-new-image">Creating a new image</h3>
+<p>You can store your changes and create a new image based on the <code>ubuntu</code> image like this:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>commit<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+<p><strong>Exercise:</strong> Exit the container shell and run the above command  in your local terminal (replace <code>[CONTAINER NAME]</code> with the name of the container containing the <code>figlet</code> installation). Check out <code>docker image ls</code>. What have we just created?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>A new image called <code>ubuntu-figlet</code> based on the status of the container.
+The output of <code>docker image ls</code> should look like:</p>
+<div class="highlight"><pre><span></span><code>REPOSITORY                        TAG       IMAGE ID       CREATED         SIZE
+ubuntu-figlet                     latest    e08b999c7978   4 seconds ago   101MB
+ubuntu                            latest    f63181f19b2f   29 hours ago    72.9MB
+</code></pre></div>
+</details>
+<p>Now you can generate a new container based on the new image:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+<p><strong>Exercise:</strong> Run the above command. Is the <code>figlet</code> installation in the created container?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>yes</p>
+</details>
+<h3 id="commands">Commands</h3>
+<p>The second positional argument of <code>docker run</code> can be a command followed by its arguments. So, we could run a container non-interactively (without <code>-it</code>), and just let it run a single command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>ubuntu-figlet<span class="w"> </span>figlet<span class="w"> </span><span class="s1">&#39;non-interactive run&#39;</span>
+</code></pre></div>
+<p>Resulting in just the output of the <code>figlet</code> command.</p>
+<p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
+<p><strong>Exercise:</strong> Have a look at the output of <code>docker image inspect</code>, particularly at <code>"Config"</code> (ignore <code>"ContainerConfig"</code> for now). What is the default command (<code>CMD</code>) of the ubuntu image?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):</p>
+<div class="highlight"><pre><span></span><code><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="s">&quot;/bin/bash&quot;</span>
+<span class="p p-Indicator">]</span><span class="err">,</span>
+</code></pre></div>
+<p>In the case of the ubuntu the default command is <code>bash</code>, returning a shell in <code>bash</code> (i.e. <em>Bourne again shell</em>). Adding the options <code>-i</code> and <code>-t</code> (<code>-it</code>) to your <code>docker run</code> command will therefore result in an interactive <code>bash</code> shell. You can modify this default behaviour. More on that later, when we will work on <a href="../dockerfiles/">Dockerfiles</a>.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">The difference between <code>Config</code> and <code>ContainerConfig</code></p>
+<p>The configuration at <code>Config</code> represents the image, the configuration at <code>ContainerConfig</code> the last step during the build of the image, i.e. the last layer. More info e.g. at <a href="https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect">this post at stackoverflow</a>.</p>
+</div>
+<h3 id="removing-containers">Removing containers</h3>
+<p>In the meantime, with every call of <code>docker run</code> we have created a new container (check your containers with <code>docker container ls -a</code>). You probably don&rsquo;t want to remove those one-by-one. These two commands are very useful to clean up your Docker cache:</p>
+<ul>
+<li><code>docker container prune</code>: removes stopped containers</li>
+<li><code>docker image prune</code>: removes dangling images (i.e. images without a name)</li>
+</ul>
+<p>So, remove your stopped containers with:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>prune
+</code></pre></div>
+<p>Unless you&rsquo;re developing further on a container, or you&rsquo;re using it for an analysis, you probably want to get rid of it once you have exited the container. You can do this with adding <code>--rm</code> to your <code>docker run</code> command, e.g.:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>ubuntu-figlet<span class="w"> </span>figlet<span class="w"> </span><span class="s1">&#39;non-interactive run&#39;</span>
+</code></pre></div>
+<h3 id="pushing-to-dockerhub">Pushing to dockerhub</h3>
+<p>Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.</p>
+<p>Before pushing an image to dockerhub, <code>docker</code> has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: <code>user/imagename</code>. We can rename an image with <code>docker tag</code> (which is a bit of misleading name for the command). So we could push to dockerhub like this:</p>
+<div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
+docker push [USER NAME]/ubuntu-figlet
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">If on Linux</p>
+<p>If you are on Linux and haven&rsquo;t connected to docker hub before, you will have login first. To do that, run:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>login
+</code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">How docker makes money</p>
+<p>All images pushed to dockerhub are open to the world. With a free account you can have one image on dockerhub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to dockerhub, you can store images locally with <a href="https://docs.docker.com/engine/reference/commandline/save/"><code>docker save</code></a>.</p>
+</div>
+<p>We didn&rsquo;t specify the tag for our new image. That&rsquo;s why <code>docker tag</code> gave it the default tag called <code>latest</code>. Pushing an image without a tag will overwrite the current image with the tag <code>latest</code> (more on (not) using <code>latest</code> <a href="https://vsupalov.com/docker-latest-tag/">here</a>). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to dockerhub:</p>
+<div class="highlight"><pre><span></span><code>docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet:v1
+docker push [USER NAME]/ubuntu-figlet:v1
+</code></pre></div>
+<h3 id="mounting-a-directory">Mounting a directory</h3>
+<p>For many analyses you do calculations with files or scripts that are on your host (local) computer. But how do you make them available to a docker container? You can do that in several ways, but here we will use bind-mount. You can bind-mount a directory with <code>-v</code> (<code>--volume</code>) or <code>--mount</code>. Most old-school <code>docker</code> users will use <code>-v</code>, but <code>--mount</code> syntax is easier to understand and now recommended, so we will use the latter here:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/host/source/path,target<span class="o">=</span>/path/in/container<span class="w"> </span><span class="se">\</span>
+<span class="o">[</span>IMAGE<span class="o">]</span>
+</code></pre></div>
+<p>The target directory will be created if it does not yet exist. The source directory should exist.</p>
+<div class="admonition note">
+<p class="admonition-title">MobaXterm users</p>
+<p>You can specify your local path with the Windows syntax (e.g. <code>C:\Users\myusername</code>). However, you will have to use forward slashes (<code>/</code>) instead of backward slashes (<code>\</code>). Therefore, mounting a directory would look like:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/myusername,target<span class="o">=</span>/path/in/container<span class="w"> </span><span class="se">\</span>
+<span class="o">[</span>IMAGE<span class="o">]</span>
+</code></pre></div>
+<p>Do not use autocompletion or variable substitution (e.g. <code>$PWD</code>) in MobaXterm, since these point to &lsquo;emulated&rsquo; paths, and are not passed properly to the docker command.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Using docker from Windows PowerShell</p>
+<p>Most of the syntax for <code>docker</code> is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by <code>\</code> instead of <code>/</code>. Also, line breaks are not escaped by <code>\</code> but by `.</p>
+</div>
+<p><strong>Exercise:</strong> Mount a host (local) directory to a target directory <code>/working_dir</code> in a container created from the <code>ubuntu-figlet</code> image and run it interactively. Check whether the target directory has been created.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>e.g. on Mac OS this would be:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+-it<span class="w"> </span><span class="se">\</span>
+--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/Users/myusername/working_dir,target<span class="o">=</span>/working_dir/<span class="w"> </span><span class="se">\</span>
+ubuntu-figlet
+</code></pre></div>
+<p>This creates a directory called <code>working_dir</code> in the root directory (<code>/</code>):</p>
+<div class="highlight"><pre><span></span><code>root@8d80a8698865:/# ls
+bin   dev  home  lib32  libx32  mnt  proc  run   srv  tmp  var
+boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
+</code></pre></div>
+</details>
+<p>This mounted directory is both available for the host (locally) and for the container. You can therefore e.g. copy files in there, and write output generated by the container.</p>
+<p><strong>Exercise:</strong> Write the output of <code>figlet "testing mounted dir"</code> to a file in <code>/working_dir</code>. Check whether it is available on the host (locally) in the source directory.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can write the output of <code>figlet</code> to a file like this:
+<div class="highlight"><pre><span></span><code>figlet<span class="w"> </span><span class="s1">&#39;some string&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>file.txt
+</code></pre></div></p>
+</div>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code>root@8d80a8698865:/# figlet &#39;testing mounted dir&#39; &gt; /working_dir/figlet_output.txt
+</code></pre></div>
+<p>This should create a file in both your host (local) source directory and the target directory in the container called <code>figlet_output.txt</code>.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Using files on the host</p>
+<p>This of course also works the other way around. If you would have a file on the host with e.g. a text, you can copy it into your mounted directory, and it will be available to the container.</p>
+</div>
+<h3 id="extra-managing-permissions">Extra: Managing permissions</h3>
+<p>Depending on your system, the user ID and group ID will be taken over from the user inside the container. If the user inside the container is root, this will be root. That&rsquo;s a bit inconvenient if you just want to run the container as a regular user (for example in certain circumstances your container could write in <code>/</code>). To do that, use the <code>-u</code> option, and specify the group ID and user ID like this:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-u<span class="w"> </span><span class="o">[</span>uid<span class="o">]</span>:<span class="o">[</span>gid<span class="o">]</span>
+</code></pre></div>
+<p>So, e.g.:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+-it<span class="w"> </span><span class="se">\</span>
+-u<span class="w"> </span><span class="m">1000</span>:1000<span class="w"> </span><span class="se">\</span>
+--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>/Users/myusername/working_dir,target<span class="o">=</span>/working_dir/<span class="w"> </span><span class="se">\</span>
+ubuntu-figlet
+</code></pre></div>
+<p>If you want docker to take over your current uid and gid, you can use:</p>
+<div class="highlight"><pre><span></span><code>docker run -u &quot;$(id -u):$(id -g)&quot;
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">This behaviour is different on MacOS and MobaXterm</p>
+<p>On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
+</div>
+<p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux</label><label for="__tabbed_1_2">MacOS</label><label for="__tabbed_1_3">MobaXterm</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id<span class="w"> </span>-g<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
+uid=1000 gid=1000 groups=1000
+</code></pre></div>
+<p>So, I have taken over uid 1000 and gid 1000.</p>
+<div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ cd /data
+I have no name!@e808d7c36e7c:/data$ figlet &#39;uid set&#39; &gt; uid_set.txt
+I have no name!@e808d7c36e7c:/data$ ls -lh
+-rw-r--r-- 1 1000 1000 0 Mar  400 13:37 uid_set.txt
+</code></pre></div>
+<p>So the file belongs to user 1000, and group 1000.</p>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>ubuntu@ip-172-31-33-21:~$ ls -lh
+-rw-r--r-- 1 ubuntu ubuntu 400 Mar  5 13:37 uid_set.txt
+</code></pre></div>
+<p>Which makes sense:</p>
+<div class="highlight"><pre><span></span><code>ubuntu@ip-172-31-33-21:~$ id
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu)
+</code></pre></div>
+<p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data<span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre></div>
+<p>So, uid and gid are <code>root</code>.</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# cd /data
+root@fface8afb220:/data# figlet &#39;uid unset&#39; &gt; uid_unset.txt
+root@fface8afb220:/data# ls -lh
+-rw-r--r-- 1 1000 1000 400 Mar  5 13:37 uid_set.txt
+-rw-r--r-- 1 root root 400 Mar  5 13:40 uid_unset.txt
+</code></pre></div>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>ubuntu@ip-172-31-33-21:~$ ls -lh
+-rw-r--r-- 1 ubuntu ubuntu 0 Mar  5 13:37 uid_set.txt
+-rw-r--r-- 1 root   root   0 Mar  5 13:40 uid_unset.txt
+</code></pre></div>
+<p>So, the uid and gid 0 (root:root) are taken over.</p>
+</div>
+<div class="tabbed-block">
+<p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting my current directory:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id<span class="w"> </span>-g<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<p><div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
+uid=503 gid=20(dialout) groups=20(dialout)
+</code></pre></div>
+So, the container has taken over uid 503 and group 20</p>
+<div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ cd /data
+I have no name!@e808d7c36e7c:/data$ figlet &#39;uid set&#39; &gt; uid_set.txt
+I have no name!@e808d7c36e7c:/data$ ls -lh
+-rw-r--r--  1 503 dialout    400 Mar  5 13:11 uid_set.txt
+</code></pre></div>
+<p>So the file belongs to user 503, and the group <code>dialout</code>.</p>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>mac-34392:~ geertvangeest$ ls -lh
+-rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
+</code></pre></div>
+<p>Which are the same as inside the container:</p>
+<div class="highlight"><pre><span></span><code>mac-34392:~ geertvangeest$ echo &quot;$(id -u):$(id -g)&quot;
+503:20
+</code></pre></div>
+<p>The <code>uid</code> 503 was nameless in the docker container. However the group 20 already existed in the ubuntu container, and was named <code>dialout</code>.</p>
+<p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="nv">$PWD</span>,target<span class="o">=</span>/data<span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre></div>
+<p>So, inside the container I am <code>root</code>.
+Creating new files will lead to ownership of <code>root</code> inside the container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# cd /data
+root@fface8afb220:/data# figlet &#39;uid unset&#39; &gt; uid_unset.txt
+root@fface8afb220:/data# ls -lh
+-rw-r--r--  1 503 dialout    400 Mar  5 13:11 uid_set.txt
+-rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
+</code></pre></div>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>mac-34392:~ geertvangeest$ ls -lh
+-rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:11 uid_set.txt
+-rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:15 uid_unset.txt
+</code></pre></div>
+<p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
+</div>
+<div class="tabbed-block">
+<p><strong>Running <code>ubuntu-figlet</code> interactively while taking over <code>uid</code> and <code>gid</code> and mounting to a  specfied directory:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/geert/data,target<span class="o">=</span>/data<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id<span class="w"> </span>-g<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<p><div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ id
+uid=1003 gid=513 groups=513
+</code></pre></div>
+So, the container has taken over uid 1003 and group 513</p>
+<div class="highlight"><pre><span></span><code>I have no name!@e808d7c36e7c:/$ cd /data
+I have no name!@e808d7c36e7c:/data$ figlet &#39;uid set&#39; &gt; uid_set.txt
+I have no name!@e808d7c36e7c:/data$ ls -lh
+-rw-r--r--  1 1003 513    400 Mar  5 13:11 uid_set.txt
+</code></pre></div>
+<p>So the file belongs to user 1003, and the group 513.</p>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ ls -lh
+-rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+</code></pre></div>
+<p>Which are the same as inside the container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ echo &quot;$(id -u):$(id -g)&quot;
+1003:513
+</code></pre></div>
+<p><strong>Running <code>ubuntu-figlet</code> interactively without taking over <code>uid</code> and <code>gid</code>:</strong></p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span>C:/Users/geert/data,target<span class="o">=</span>/data<span class="w"> </span>ubuntu-figlet
+</code></pre></div>
+Inside container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre></div>
+<p>So, inside the container I am <code>root</code>.
+Creating new files will lead to ownership of <code>root</code> inside the container:</p>
+<div class="highlight"><pre><span></span><code>root@fface8afb220:/# cd /data
+root@fface8afb220:/data# figlet &#39;uid unset&#39; &gt; uid_unset.txt
+root@fface8afb220:/data# ls -lh
+-rw-r--r--  1 1003 503    400 Mar  5 13:11 uid_set.txt
+-rw-r--r--  1 root root    400 Mar  5 13:25 uid_unset.txt
+</code></pre></div>
+<p>Outside container:</p>
+<div class="highlight"><pre><span></span><code>/home/mobaxterm/data$ ls -lh
+-rwx------   1 geert  UserGrp     400 Mar  5 14:11 uid_set.txt
+-rwx------   1 geert  UserGrp     400 Mar  5 14:15 uid_unset.txt
+</code></pre></div>
+<p>So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.</p>
+</div>
+</div>
+</div>
+</details>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+
+  <!-- Giscus -->
+  <h2>Questions & Answers</h2>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="sib-swiss/containers-introduction-training"
+            data-repo-id="MDEwOlJlcG9zaXRvcnkzMzE4OTA0MzA="
+            data-category="Q&A"
+            data-category-id="DIC_kwDOE8g-_s4CSEuU"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+    </script>
+  <!-- Synchronize Giscus theme with palette -->
+  <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    /* Set palette on initial load */
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "dark" : "light"
+      giscus.setAttribute("data-theme", theme)
+
+
+    }
+
+    /* Register event handlers after documented loaded */
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      if (ref) {
+        ref.addEventListener("change", function() {
+          var palette = __md_get("__palette")
+          if (palette && typeof palette.color === "object") {
+            var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+            /* Instruct Giscus to change theme */
+            var frame = document.querySelector(".giscus-frame")
+            frame.contentWindow.postMessage(
+              { giscus: { setConfig: { theme } } },
+              "https://giscus.app"
+            )
+          }
+        })
+      }
+    })
+  </script>
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 SIB Swiss institute of Bioinformatics – <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      
+    
+  </body>
+</html>
