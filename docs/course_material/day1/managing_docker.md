@@ -1,1 +1,1 @@
-../../../containers-introduction-training/docs/course_material/managing_docker.md
+../../../containers-introduction-training/docs/course_material/day1/managing_docker.md

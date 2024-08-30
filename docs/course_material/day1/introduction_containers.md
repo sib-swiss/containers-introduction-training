@@ -1,1 +1,1 @@
-../../../containers-introduction-training/docs/course_material/introduction_containers.md
+../../../containers-introduction-training/docs/course_material/day1/introduction_containers.md
