@@ -1,0 +1,3 @@
+[submodule "containers-introduction-training"]
+	path = containers-introduction-training
+	url = https://github.com/sib-swiss/containers-introduction-training
