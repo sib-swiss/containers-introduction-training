@@ -26,21 +26,56 @@
 
 If you are enrolled in the course, you have received an e-mail with an IP, username, private key and password. To do the Apptainer exercises we will login to a remote server. Below you can find instructions on how to login.
 
+VScode is a code editor that can be used to edit files and run commands locally, but also on a remote server. In this subchapter we will set up VScode to work remotely.
 
-Login to the remote server with the following command:
+!!! note "If not working with VScode"
+    If you are not working with VScode, you can login to the remote server with the following command:
 
-```sh
-# replace username with your username and ip_address with the ip address you received
-ssh -i key_username.pem username@ip_address
-```
-
-!!! note "Key permissions"
-    If you're on Linux/Mac you might have to set the permissions for the ssh key:
-    
     ```sh
-    chmod 400 key_username.pem
+    ssh -i key_username.pem
     ```
 
+    If you want to edit files directly on the server, you can mount a directory with `sshfs`. 
+
+!!! note "Required installations"
+    For this exercise it is easiest if you use [VScode](https://code.visualstudio.com/download). In addition you would need to have followed the instructions to set up remote-ssh:
+    
+    - [OpenSSH compatible client](https://code.visualstudio.com/docs/remote/troubleshooting#_installing-a-supported-ssh-client). This is usually pre-installed on your OS. You can check whether the command `ssh` exists. 
+    - The Remote-SSH extension. To install, open VSCode and click on the extensions icon (four squares) on the left side of the window. Search for `Remote-SSH` and click on `Install`.
+
+=== "Windows"
+    Open a PowerShell and `cd` to the directory where you have stored your private key. After that, move it to `~\.ssh`:
+
+    ```powershell
+    mv .\key_username.pem ~\.ssh
+    ```
+
+=== "mac OS/Linux"
+    Open a terminal, and `cd` to the directory where you have stored your private key. After that, change the file permissions of the key and move it to `~/.ssh`:
+
+    ```sh
+    chmod 400 key_username.pem
+    mv key_username.pem ~/.ssh
+    ```
+
+Open VScode and click on the green or blue button in the bottom left corner. Select `Connect to Host...`, and then on `Configure SSH Host...`. Specify a the location for the config file. Use the same directory as where your keys are stored (so `~/.ssh`). A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and specify the correct IP at `HostName`):
+
+=== "Windows"
+    ```
+    Host sib_course_remote
+        User username
+        HostName 123.456.789.123
+        IdentityFile ~\.ssh\key_username.pem
+    ```
+=== "MacOS/Linux"
+    ```
+    Host sib_course_remote
+        User username
+        HostName 123.456.789.123
+        IdentityFile ~/.ssh/key_username.pem
+    ```
+
+Save and close the config file. Now click again the green or blue button in the bottom left corner. Select `Connect to Host...`, and then on `sib_course_remote`. You will be asked which operating system is used on the remote. Specify 'Linux'. 
 
 ### Pulling an image
 

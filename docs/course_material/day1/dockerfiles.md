@@ -196,107 +196,149 @@ CMD figlet My image works!
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
 === "R"
-    In the exercises will use a simple script called `search_biomart_datasets.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R), or copy-paste it:
+    In the exercises will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R), or copy-paste it:
 
-    ```R title="search_biomart_datasets.R"
+    ```R title="test_deseq2.R"
     #!/usr/bin/env Rscript
 
-    library(biomaRt)
-    library(optparse)
+    # load packages required for this script
+    write("Loading packages required for this script", stderr())
+    suppressPackageStartupMessages({
+        library(DESeq2)
+        library(optparse)
+    })
 
+    # load dependency packages for testing installations
+    write("Loading dependency packages for testing installations", stderr())
+    suppressPackageStartupMessages({
+        library(apeglm)
+        library(IHW)
+        library(limma)
+        library(data.table)
+        library(ggplot2)
+        library(ggrepel)
+        library(pheatmap)
+        library(RColorBrewer)
+        library(scales)
+        library(stringr)
+    })
+
+    # parse options with optparse
     option_list <- list(
-        make_option(c("--pattern"),
-            type = "character",
-            help = "Search pattern [default = %default]",
-            default = "mouse"
+        make_option(c("--rows"),
+            type = "integer",
+            help = "Number of rows in dummy matrix [default = %default]",
+            default = 100
         )
     )
 
     opt_parser <- OptionParser(
         option_list = option_list,
-        description = "Searches biomaRt ensembl datasets"
+        description = "Runs DESeq2 on dummy data"
     )
     opt <- parse_args(opt_parser)
 
-    ensembl <- useEnsembl(biomart = "ensembl")
-    searchDatasets(mart = ensembl, pattern = opt$pattern)
+    # create a random dummy count matrix
+    cnts <- matrix(rnbinom(n = opt$row * 10, mu = 100, size = 1 / 0.5), ncol = 10)
+    cond <- factor(rep(1:2, each = 5))
+
+    # object construction
+    dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~cond)
+
+    # standard analysis
+    dds <- DESeq(dds)
+    res <- results(dds)
+
+    # print results to stdout
+    print(res)
+
     ```
     
     
     After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
-    chmod +x search_biomart_datasets.R
+    chmod +x test_deseq2.R
     ```
-    It is a relatively simple script that searches for datasets in ensembl with `biomaRt` based on a pattern that is specified by the user. An example for execution would be:
+    It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:
 
     ```sh
-    ./search_biomart_datasets.R --pattern "mouse"
+    ./test_deseq2.R --rows 75
     ```
 
-    Returning a list with all mouse datasets:
+    Giving a list of results from DESeq2 on a dummy dataset with 75 rows.
+
+    Here, `--rows` is a optional arguments that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
 
     ```
-                            dataset                                      description
-    94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
-    109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
-    111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
-    112    mspretus_gene_ensembl              Algerian mouse genes (SPRET_EiJ_v1)
-    149   pmbairdii_gene_ensembl Northern American deer mouse genes (HU_Pman_2.1)
-                version
-    94  CAROLI_EIJ_v1.1
-    109 PAHARI_EIJ_v1.1
-    111         MUSP714
-    112    SPRET_EiJ_v1
-    149     HU_Pman_2.1
+        baseMean log2FoldChange     lfcSE         stat    pvalue      padj
+        <numeric>      <numeric> <numeric>    <numeric> <numeric> <numeric>
+    1     66.1249       0.281757  0.727668     0.387206  0.698604  0.989804
+    2     76.9682       0.305763  0.619209     0.493796  0.621451  0.989804
+    3     64.7843      -0.694525  0.479445    -1.448603  0.147448  0.931561
+    4    123.0252       0.631247  0.688564     0.916758  0.359269  0.931561
+    5     93.2002      -0.453430  0.686043    -0.660936  0.508653  0.941951
+    ...       ...            ...       ...          ...       ...       ...
+    96    64.0177    0.757585137  0.682683  1.109718054  0.267121  0.931561
+    97   114.3689   -0.580010850  0.640313 -0.905823841  0.365029  0.931561
+    98    79.9620    0.000100617  0.612442  0.000164288  0.999869  0.999869
+    99    92.6614    0.563514308  0.716109  0.786910869  0.431334  0.939106
+    100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
     ```
 
-    From the script you can see it has two dependencies: `biomaRt` and `optparse`. If we want to run it inside a container, we would have to install these. We do this in the `Dockerfile` below. We give the the following instructions:
+    From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below. We give it the following instructions:
 
-    - use the [R base container](https://hub.docker.com/_/r-base) version 4.4.0
-    - install the package `optparse` from CRAN (`r-cran-optparse`) and `biomaRt` from Bioconductor (`r-bioc-biomart`) with `apt-get`. 
-    - copy the script `search_biomart_datasets.R` to `/opt` inside the container:
+    - use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
+    - install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r). 
+    - copy the script `test_deseq2.R` to `/opt` inside the container:
 
     ```dockerfile
-    FROM r-base:4.4.0
+    FROM rocker/r2u:jammy
 
-    RUN apt-get update
-    RUN apt-get install -y \
-        r-cran-optparse \
-        r-bioc-biomart
+    RUN install2.r \
+        DESeq2 \
+        optparse \
+        apeglm \
+        IHW \
+        limma \
+        data.table \
+        ggrepel \
+        pheatmap \
+        stringr
 
-    COPY search_biomart_datasets.R /opt 
+    COPY test_deseq2.R /opt 
     ```
 
     !!! note
         In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
 
     !!! note "R image stack"
-        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` is possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` or `install2.r` are possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
 
-    **Exercise:** Download the `search_biomart_datasets.R` and build the image with `docker build`. After that, execute the script inside the container. 
+    **Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. Name the image `deseq2`. After that, start an interactive session and execute the script inside the container. 
 
     !!! hint
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
+
 
     ??? done "Answer"
         Build the container:
 
         === "x86_64 / AMD64"
             ```sh
-            docker build -t search_biomart_datasets .
+            docker build -t deseq2 .
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
             DOCKER_DEFAULT_PLATFORM=linux/amd64
-            docker build -t search_biomart_datasets .
+            docker build -t deseq2 .
             ```
 
         Run the container:
 
         ```sh
-        docker run -it --rm search_biomart_datasets /bin/bash
+        docker run -it --rm deseq2 /bin/bash
         ```
 
         Inside the container we look up the script:
@@ -306,12 +348,12 @@ Often containers are built for a specific purpose. For example, you can use a co
         ls
         ```
 
-        This should return `search_biomart_datasets.R`. 
+        This should return `test_deseq2.R`. 
 
         Now you can execute it from inside the container:
 
         ```sh
-        ./search_biomart_datasets.R --pattern sapiens
+        ./test_deseq2.R --rows 100
         ```
 
     That's kind of nice. We can ship our R script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
@@ -320,14 +362,20 @@ Often containers are built for a specific purpose. For example, you can use a co
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
     ```dockerfile
-    FROM r-base:4.4.0
+    FROM rocker/r2u:jammy
 
-    RUN apt-get update
-    RUN apt-get install -y \
-        r-cran-optparse \
-        r-bioc-biomart
+    RUN install2.r \
+        DESeq2 \
+        optparse \
+        apeglm \
+        IHW \
+        limma \
+        data.table \
+        ggrepel \
+        pheatmap \
+        stringr
 
-    COPY search_biomart_datasets.R /opt 
+    COPY test_deseq2.R /opt 
 
     ENV PATH=/opt:$PATH
     ```
@@ -335,13 +383,13 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note
         The `ENV` instruction can be used to set any variable. 
 
-    **Exercise**: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute `search_biomart_datasets.R` from anywhere?)
+    **Exercise**: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute `test_deseq2.R` from anywhere?)
 
     ??? done "Answer"
         After re-building we start an interactive session:
 
         ```sh
-        docker run -it --rm search_biomart_datasets /bin/bash
+        docker run -it --rm deseq2 /bin/bash
         ```
 
         The path is upated, `/opt` is appended to the beginning of the variable:
@@ -359,16 +407,16 @@ Often containers are built for a specific purpose. For example, you can use a co
         Now you can try to execute it from the root directory (or any other):
 
         ```sh
-        search_biomart_datasets.R --pattern "(C|c)ow"
+        test_deseq2.R
         ```
 
     Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
     ```sh
-    docker run --rm search_biomart_datasets search_biomart_datasets.R --pattern "(R|r)at"
+    docker run --rm deseq2 test_deseq2.R --rows 100
     ```
 
-    Now it will directly print the output of `search_biomart_datasets.R` to stdout. 
+    Now it will directly print the output of `test_deseq2.R` to stdout. 
 
     In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
@@ -378,38 +426,44 @@ Often containers are built for a specific purpose. For example, you can use a co
     Let's try it out:
 
     ```dockerfile
-    FROM r-base:4.4.0
+    FROM rocker/r2u:jammy
 
-    RUN apt-get update
-    RUN apt-get install -y \
-        r-cran-optparse \
-        r-bioc-biomart
+    RUN install2.r \
+        DESeq2 \
+        optparse \
+        apeglm \
+        IHW \
+        limma \
+        data.table \
+        ggrepel \
+        pheatmap \
+        stringr
 
-    COPY search_biomart_datasets.R /opt 
+    COPY test_deseq2.R /opt 
 
     ENV PATH=/opt:$PATH
 
     # note that if you want to be able to combine the two
     # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["search_biomart_datasets.R"]
+    ENTRYPOINT ["test_deseq2.R"]
 
     # default option (if positional arguments are not specified)
-    CMD ["--pattern", "mouse"]
+    CMD ["--rows", "100"]
     ```
 
-    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different pattern to `--pattern`. How do the commands look?
+    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different number of rows to `--rows`. How do the commands look?
 
     ??? done "Answer"
         Just running the container non-interactively would be:
 
         ```sh
-        docker run --rm search_biomart_datasets
+        docker run --rm deseq2
         ```
 
         Passing a different argument (i.e. overwriting `CMD`) would be:
 
         ```sh
-        docker run --rm search_biomart_datasets --pattern "sapiens"
+        docker run --rm deseq2 --rows 200
         ```
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
@@ -426,8 +480,8 @@ Often containers are built for a specific purpose. For example, you can use a co
         Pushing it to dockerhub: 
 
         ```sh
-        docker tag search_biomart_datasets [USER NAME]/search_biomart_datasets:v1
-        docker push [USER NAME]/search_biomart_datasets:v1
+        docker tag deseq2 [USER NAME]/deseq2:v1
+        docker push [USER NAME]/deseq2:v1
         ```
 
     ### Extra: Get information on your image with `docker inspect`
@@ -436,43 +490,42 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ```yaml
     "Config": {
-            "Hostname": "",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                "LC_ALL=en_US.UTF-8",
-                "LANG=en_US.UTF-8",
-                "R_BASE_VERSION=4.4.0"
-            ],
-            "Cmd": [
-                "--pattern",
-                "mouse"
-            ],
-            "ArgsEscaped": true,
-            "Image": "",
-            "Volumes": null,
-            "WorkingDir": "/opt",
-            "Entrypoint": [
-                "search_biomart_datasets.R"
-            ],
-            "OnBuild": null,
-            "Labels": {
-                "org.opencontainers.image.authors": "Dirk Eddelbuettel <edd@debian.org>",
-                "org.opencontainers.image.licenses": "GPL-2.0-or-later",
-                "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
-                "org.opencontainers.image.vendor": "Rocker Project"
-            }
+        "Hostname": "",
+        "Domainname": "",
+        "User": "",
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+            "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LC_ALL=en_US.UTF-8",
+            "LANG=en_US.UTF-8",
+            "DEBIAN_FRONTEND=noninteractive",
+            "TZ=UTC"
+        ],
+        "Cmd": [
+            "--rows",
+            "100"
+        ],
+        "ArgsEscaped": true,
+        "Image": "",
+        "Volumes": null,
+        "WorkingDir": "/opt",
+        "Entrypoint": [
+            "test_deseq2.R"
+        ],
+        "OnBuild": null,
+        "Labels": {
+            "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+            "org.label-schema.license": "GPL-2.0",
+            "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+            "org.label-schema.vendor": "Rocker Project"
         }
+    }
     ```
-
-    ### Extra: Adding metadata to your image
 
     You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
@@ -490,39 +543,45 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Dockerfile` would look like:
 
         ```dockerfile
-        FROM r-base:4.4.0
+        FROM rocker/r2u:jammy
 
         LABEL org.opencontainers.image.created="2023-04-12" \
-            org.opencontainers.image.authors="Geert van Geest" \
-            org.opencontainers.image.description="Container to search ensembl datasets with biomart"
+                org.opencontainers.image.authors="Geert van Geest" \
+                org.opencontainers.image.description="Container with DESeq2 and friends"
 
-        RUN apt-get update
-        RUN apt-get install -y \
-            r-cran-optparse \
-            r-bioc-biomart
+        RUN install2.r \
+            DESeq2 \
+            optparse \
+            apeglm \
+            IHW \
+            limma \
+            data.table \
+            ggrepel \
+            pheatmap \
+            stringr
 
         WORKDIR /opt
 
-        COPY search_biomart_datasets.R .
+        COPY test_deseq2.R .
 
         ENV PATH=/opt:$PATH
 
         # note that if you want to be able to combine the two
         # both ENTRYPOINT and CMD need to written in the exec form
-        ENTRYPOINT ["search_biomart_datasets.R"]
+        ENTRYPOINT ["test_deseq2.R"]
 
         # default option (if positional arguments are not specified)
-        CMD ["--pattern", "mouse"]
+        CMD ["--rows", "100"]
 
         ```
 
         The `Config` record in the output of `docker inspect` was updated with:
 
         ```yaml
-         "Labels": {
+            "Labels": {
                 "org.opencontainers.image.authors": "Geert van Geest",
                 "org.opencontainers.image.created": "2023-04-12",
-                "org.opencontainers.image.description": "Container to search ensembl datasets with biomart",
+                "org.opencontainers.image.description": "Container with DESeq2 and friends",
                 "org.opencontainers.image.licenses": "GPL-2.0-or-later",
                 "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
                 "org.opencontainers.image.vendor": "Rocker Project"

@@ -1,17 +1,30 @@
-FROM r-base:4.4.0
+FROM rocker/r2u:jammy
 
-RUN apt-get update
-RUN apt-get install -y \
-    r-cran-optparse \
-    r-bioc-biomart
+LABEL org.opencontainers.image.created="2024-10-12" \
+    org.opencontainers.image.authors="Geert van Geest" \
+    org.opencontainers.image.description="Container with DESeq2 and friends"
 
-COPY search_biomart_datasets.R /opt 
+# install DESeq2 and friends
+RUN install2.r \
+    DESeq2 \
+    optparse \
+    apeglm \
+    IHW \
+    limma \
+    data.table \
+    ggrepel \
+    pheatmap \
+    stringr
+
+WORKDIR /opt
+
+COPY test_deseq2.R .
 
 ENV PATH=/opt:$PATH
 
 # note that if you want to be able to combine the two
 # both ENTRYPOINT and CMD need to written in the exec form
-ENTRYPOINT ["search_biomart_datasets.R"]
+ENTRYPOINT ["test_deseq2.R"]
 
 # default option (if positional arguments are not specified)
-CMD ["--pattern", "mouse"]
+CMD ["--rows", "100"]
