@@ -15,8 +15,7 @@
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-* [Apptainer documentation](https://sylabs.io/guides/3.7/user-guide/)
-* [Apptainer hub](https://apptainer-hub.org/)
+* [Apptainer documentation](https://apptainer.org/docs/user/latest/)
 * [An article on Docker vs Apptainer](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
 * [Using conda and containers with snakemake](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#containerization-of-conda-based-workflows)
 
