@@ -14,7 +14,7 @@ RUN install2.r \
     data.table \
     ggrepel \
     pheatmap \
-    stringr
+    stringr 
 
 WORKDIR /opt
 
