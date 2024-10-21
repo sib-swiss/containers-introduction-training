@@ -113,7 +113,7 @@ CMD figlet My image works!
     === "ARM64 (MacOS M1 chip)"
         ```sh
         DOCKER_DEFAULT_PLATFORM=linux/amd64
-        docker build ubuntu-figlet:v3 .
+        docker build -t ubuntu-figlet:v3 .
         ```
 
     The command `docker inspect ubuntu-figlet:v3` will give:
