@@ -162,28 +162,28 @@ apptainer run [IMAGE NAME].sif [COMMAND]
 
     ```
     === "R"
-        Pulling the `search_biomart_datasets` image:
+        Pulling the `deseq2` image:
 
         ```sh
-        apptainer pull docker://[USER NAME]/search_biomart_datasets:v1
+        apptainer pull docker://[USER NAME]/deseq2:v1
         ```
 
         Running it without command:
 
         ```sh
-        ./search_biomart_datasets_v1.sif
+        ./deseq2.sif
         ```
 
         Running with a command:
 
         ```sh
-        ./search_biomart_datasets_v1.sif --pattern sapiens
+        ./deseq2.sif --pattern sapiens
         ```
 
         To overwrite both entrypoint and the command:
 
         ```sh
-        apptainer exec search_biomart_datasets_v1.sif search_biomart_datasets.R --pattern "(R|r)at"
+        apptainer exec deseq2.sif deseq2.R --pattern "(R|r)at"
         ```
         
     === "Python"
