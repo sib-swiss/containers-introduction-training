@@ -546,60 +546,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -716,60 +662,6 @@
   <a href="#build-an-image-for-your-own-script" class="md-nav__link">
     <span class="md-ellipsis">
       Build an image for your own script
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
     </span>
   </a>
   
@@ -906,7 +798,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nv">DOCKER_DEFAULT_PLATFORM</span><span class="o">=</span>linux/amd64
-docker<span class="w"> </span>build<span class="w"> </span>ubuntu-figlet:v3<span class="w"> </span>.
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ubuntu-figlet:v3<span class="w"> </span>.
 </code></pre></div>
 </div>
 </div>
@@ -969,63 +861,102 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">R</label><label for="__tabbed_4_2">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>In the exercises will use a simple script called <code>search_biomart_datasets.R</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/search_biomart_datasets.R">here</a>, or copy-paste it:</p>
-<div class="highlight"><span class="filename">search_biomart_datasets.R</span><pre><span></span><code><span class="c1">#!/usr/bin/env Rscript</span>
+<p>In the exercises will use a simple script called <code>test_deseq2.R</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R">here</a>, or copy-paste it:</p>
+<div class="highlight"><span class="filename">test_deseq2.R</span><pre><span></span><code><span class="c1">#!/usr/bin/env Rscript</span>
 
-<span class="nf">library</span><span class="p">(</span><span class="n">biomaRt</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
+<span class="c1"># load packages required for this script</span>
+<span class="nf">write</span><span class="p">(</span><span class="s">&quot;Loading packages required for this script&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">stderr</span><span class="p">())</span>
+<span class="nf">suppressPackageStartupMessages</span><span class="p">({</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">DESeq2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
+<span class="p">})</span>
 
+<span class="c1"># load dependency packages for testing installations</span>
+<span class="nf">write</span><span class="p">(</span><span class="s">&quot;Loading dependency packages for testing installations&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">stderr</span><span class="p">())</span>
+<span class="nf">suppressPackageStartupMessages</span><span class="p">({</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">apeglm</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">IHW</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">limma</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">ggrepel</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">pheatmap</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">RColorBrewer</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">scales</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="c1"># parse options with optparse</span>
 <span class="n">option_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
-<span class="w">    </span><span class="nf">make_option</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;--pattern&quot;</span><span class="p">),</span>
-<span class="w">        </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;character&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Search pattern [default = %default]&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mouse&quot;</span>
+<span class="w">    </span><span class="nf">make_option</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;--rows&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;integer&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Number of rows in dummy matrix [default = %default]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">opt_parser</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">OptionParser</span><span class="p">(</span>
 <span class="w">    </span><span class="n">option_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">option_list</span><span class="p">,</span>
-<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Searches biomaRt ensembl datasets&quot;</span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Runs DESeq2 on dummy data&quot;</span>
 <span class="p">)</span>
 <span class="n">opt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">(</span><span class="n">opt_parser</span><span class="p">)</span>
 
-<span class="n">ensembl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">useEnsembl</span><span class="p">(</span><span class="n">biomart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ensembl&quot;</span><span class="p">)</span>
-<span class="nf">searchDatasets</span><span class="p">(</span><span class="n">mart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ensembl</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">opt</span><span class="o">$</span><span class="n">pattern</span><span class="p">)</span>
+<span class="c1"># create a random dummy count matrix</span>
+<span class="n">cnts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">rnbinom</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">opt</span><span class="o">$</span><span class="n">row</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">0.5</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span>
+<span class="n">cond</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">))</span>
+
+<span class="c1"># object construction</span>
+<span class="n">dds</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">DESeqDataSetFromMatrix</span><span class="p">(</span><span class="n">cnts</span><span class="p">,</span><span class="w"> </span><span class="nf">DataFrame</span><span class="p">(</span><span class="n">cond</span><span class="p">),</span><span class="w"> </span><span class="o">~</span><span class="n">cond</span><span class="p">)</span>
+
+<span class="c1"># standard analysis</span>
+<span class="n">dds</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">DESeq</span><span class="p">(</span><span class="n">dds</span><span class="p">)</span>
+<span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">results</span><span class="p">(</span><span class="n">dds</span><span class="p">)</span>
+
+<span class="c1"># print results to stdout</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </code></pre></div>
 <p>After you have downloaded it, make sure to set the permissions to executable:</p>
-<p><div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>search_biomart_datasets.R
+<p><div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>test_deseq2.R
 </code></pre></div>
-It is a relatively simple script that searches for datasets in ensembl with <code>biomaRt</code> based on a pattern that is specified by the user. An example for execution would be:</p>
-<div class="highlight"><pre><span></span><code>./search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;mouse&quot;</span>
+It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:</p>
+<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">75</span>
 </code></pre></div>
-<p>Returning a list with all mouse datasets:</p>
-<div class="highlight"><pre><span></span><code>                        dataset                                      description
-94      mcaroli_gene_ensembl             Ryukyu mouse genes (CAROLI_EIJ_v1.1)
-109     mpahari_gene_ensembl              Shrew mouse genes (PAHARI_EIJ_v1.1)
-111 mspicilegus_gene_ensembl                     Steppe mouse genes (MUSP714)
-112    mspretus_gene_ensembl              Algerian mouse genes (SPRET_EiJ_v1)
-149   pmbairdii_gene_ensembl Northern American deer mouse genes (HU_Pman_2.1)
-            version
-94  CAROLI_EIJ_v1.1
-109 PAHARI_EIJ_v1.1
-111         MUSP714
-112    SPRET_EiJ_v1
-149     HU_Pman_2.1
+<p>Giving a list of results from DESeq2 on a dummy dataset with 75 rows.</p>
+<p>Here, <code>--rows</code> is a optional arguments that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:</p>
+<div class="highlight"><pre><span></span><code>    baseMean log2FoldChange     lfcSE         stat    pvalue      padj
+    &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
+1     66.1249       0.281757  0.727668     0.387206  0.698604  0.989804
+2     76.9682       0.305763  0.619209     0.493796  0.621451  0.989804
+3     64.7843      -0.694525  0.479445    -1.448603  0.147448  0.931561
+4    123.0252       0.631247  0.688564     0.916758  0.359269  0.931561
+5     93.2002      -0.453430  0.686043    -0.660936  0.508653  0.941951
+...       ...            ...       ...          ...       ...       ...
+96    64.0177    0.757585137  0.682683  1.109718054  0.267121  0.931561
+97   114.3689   -0.580010850  0.640313 -0.905823841  0.365029  0.931561
+98    79.9620    0.000100617  0.612442  0.000164288  0.999869  0.999869
+99    92.6614    0.563514308  0.716109  0.786910869  0.431334  0.939106
+100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
 </code></pre></div>
-<p>From the script you can see it has two dependencies: <code>biomaRt</code> and <code>optparse</code>. If we want to run it inside a container, we would have to install these. We do this in the <code>Dockerfile</code> below. We give the the following instructions:</p>
+<p>From the script you can see it has <code>DESeq2</code> and <code>optparse</code> as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the <code>Dockerfile</code> below. We give it the following instructions:</p>
 <ul>
-<li>use the <a href="https://hub.docker.com/_/r-base">R base container</a> version 4.4.0</li>
-<li>install the package <code>optparse</code> from CRAN (<code>r-cran-optparse</code>) and <code>biomaRt</code> from Bioconductor (<code>r-bioc-biomart</code>) with <code>apt-get</code>. </li>
-<li>copy the script <code>search_biomart_datasets.R</code> to <code>/opt</code> inside the container:</li>
+<li>use the <a href="https://hub.docker.com/r/rocker/r2u">r2u base image</a> version jammy</li>
+<li>install the package <code>DESeq2</code>, <code>optparse</code> and some additional packages we will need later on. We perform the installations with <code>install2.r</code>, which is a helper command that is present inside most rocker images. More info <a href="https://rocker-project.org/use/extending.html#install2.r">here</a>. </li>
+<li>copy the script <code>test_deseq2.R</code> to <code>/opt</code> inside the container:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-cran-optparse<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-bioc-biomart
+<span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
-<span class="k">COPY</span><span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>/opt<span class="w"> </span>
+<span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1033,9 +964,9 @@ It is a relatively simple script that searches for datasets in ensembl with <cod
 </div>
 <div class="admonition note">
 <p class="admonition-title">R image stack</p>
-<p>The most used R image stack is from the <a href="https://rocker-project.org/">rocker project</a>. It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with <code>apt-get</code> is possible. To understand more about how to install R packages in different containers, check it this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
+<p>The most used R image stack is from the <a href="https://rocker-project.org/">rocker project</a>. It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with <code>apt-get</code> or <code>install2.r</code> are possible. To understand more about how to install R packages in different containers, check it this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
 </div>
-<p><strong>Exercise:</strong> Download the <code>search_biomart_datasets.R</code> and build the image with <code>docker build</code>. After that, execute the script inside the container. </p>
+<p><strong>Exercise:</strong> Download the <code>test_deseq2.R</code> and build the image with <code>docker build</code>. Name the image <code>deseq2</code>. After that, start an interactive session and execute the script inside the container. </p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
@@ -1046,26 +977,26 @@ It is a relatively simple script that searches for datasets in ensembl with <cod
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">x86_64 / AMD64</label><label for="__tabbed_5_2">ARM64 (MacOS M1 chip)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>search_biomart_datasets<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>deseq2<span class="w"> </span>.
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nv">DOCKER_DEFAULT_PLATFORM</span><span class="o">=</span>linux/amd64
-docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>search_biomart_datasets<span class="w"> </span>.
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>deseq2<span class="w"> </span>.
 </code></pre></div>
 </div>
 </div>
 </div>
 <p>Run the container:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>search_biomart_datasets<span class="w"> </span>/bin/bash
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>/bin/bash
 </code></pre></div>
 <p>Inside the container we look up the script:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/opt
 ls
 </code></pre></div>
-<p>This should return <code>search_biomart_datasets.R</code>. </p>
+<p>This should return <code>test_deseq2.R</code>. </p>
 <p>Now you can execute it from inside the container:</p>
-<div class="highlight"><pre><span></span><code>./search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span>sapiens
+<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">100</span>
 </code></pre></div>
 </details>
 <p>That&rsquo;s kind of nice. We can ship our R script inside our container. However, we don&rsquo;t want to run it interactively every time. So let&rsquo;s make some changes to make it easy to run it as an executable. For example, we can add <code>/opt</code> to the global <code>$PATH</code> variable with <code>ENV</code>. </p>
@@ -1073,14 +1004,20 @@ ls
 <p class="admonition-title">The <code>$PATH</code> variable</p>
 <p>The path variable is a special variable that consists of a list of path seperated by colons (<code>:</code>). These paths are searched if you are trying to run an executable. More info this topic at e.g. <a href="https://en.wikipedia.org/wiki/PATH_(variable)">wikipedia</a>. </p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-cran-optparse<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-bioc-biomart
+<span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
-<span class="k">COPY</span><span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>/opt<span class="w"> </span>
+<span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 
 <span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
 </code></pre></div>
@@ -1088,11 +1025,11 @@ ls
 <p class="admonition-title">Note</p>
 <p>The <code>ENV</code> instruction can be used to set any variable. </p>
 </div>
-<p><strong>Exercise</strong>: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute <code>search_biomart_datasets.R</code> from anywhere?)</p>
+<p><strong>Exercise</strong>: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute <code>test_deseq2.R</code> from anywhere?)</p>
 <details class="done">
 <summary>Answer</summary>
 <p>After re-building we start an interactive session:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>search_biomart_datasets<span class="w"> </span>/bin/bash
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>/bin/bash
 </code></pre></div>
 <p>The path is upated, <code>/opt</code> is appended to the beginning of the variable:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="nv">$PATH</span>
@@ -1101,45 +1038,51 @@ ls
 <div class="highlight"><pre><span></span><code>/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 </code></pre></div>
 <p>Now you can try to execute it from the root directory (or any other):</p>
-<div class="highlight"><pre><span></span><code>search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(C|c)ow&quot;</span>
+<div class="highlight"><pre><span></span><code>test_deseq2.R
 </code></pre></div>
 </details>
 <p>Instead of starting an interactive session with <code>/bin/bash</code> we can now more easily run the script non-interactively:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>search_biomart_datasets<span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(R|r)at&quot;</span>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">100</span>
 </code></pre></div>
-<p>Now it will directly print the output of <code>search_biomart_datasets.R</code> to stdout. </p>
+<p>Now it will directly print the output of <code>test_deseq2.R</code> to stdout. </p>
 <p>In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use <code>ENTRYPOINT</code>. <code>ENTRYPOINT</code> is similar to <code>CMD</code>, but has two important differences:</p>
 <ul>
 <li><code>ENTRYPOINT</code> can not be overwritten by the positional arguments (i.e. <code>docker run image [CMD]</code>), but has to be overwritten by <code>--entrypoint</code>. </li>
 <li>The positional arguments (or <code>CMD</code>) are pasted to the <code>ENTRYPOINT</code> command. This means that you can use <code>ENTRYPOINT</code> as the executable and the positional arguments (or <code>CMD</code>) as the options. </li>
 </ul>
 <p>Let&rsquo;s try it out:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-cran-optparse<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-bioc-biomart
+<span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
-<span class="k">COPY</span><span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>/opt<span class="w"> </span>
+<span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 
 <span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
 
 <span class="c"># note that if you want to be able to combine the two</span>
 <span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
-<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;search_biomart_datasets.R&quot;</span><span class="p">]</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;test_deseq2.R&quot;</span><span class="p">]</span>
 
 <span class="c"># default option (if positional arguments are not specified)</span>
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--pattern&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mouse&quot;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--rows&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">]</span>
 </code></pre></div>
-<p><strong>Exercise</strong>: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different pattern to <code>--pattern</code>. How do the commands look?</p>
+<p><strong>Exercise</strong>: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different number of rows to <code>--rows</code>. How do the commands look?</p>
 <details class="done">
 <summary>Answer</summary>
 <p>Just running the container non-interactively would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>search_biomart_datasets
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2
 </code></pre></div>
 <p>Passing a different argument (i.e. overwriting <code>CMD</code>) would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>search_biomart_datasets<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;sapiens&quot;</span>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>--rows<span class="w"> </span><span class="m">200</span>
 </code></pre></div>
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
@@ -1151,49 +1094,49 @@ ls
 <details class="done">
 <summary>Answer</summary>
 <p>Pushing it to dockerhub: </p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>search_biomart_datasets<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
-docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>deseq2<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
+docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
 </code></pre></div>
 </details>
-<h3 id="extra-get-information-on-your-image-with-docker-inspect">Extra: Get information on your image with <code>docker inspect</code></h3>
+<p><h3> Extra: Get information on your image with <code>docker inspect</code> </h3></p>
 <p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Config&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
-<span class="w">        </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Domainname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;User&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStdout&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStderr&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Tty&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;OpenStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;StdinOnce&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Env&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;LC_ALL=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;LANG=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;R_BASE_VERSION=4.4.0&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;--pattern&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;mouse&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;ArgsEscaped&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Image&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Volumes&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;WorkingDir&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/opt&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Entrypoint&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;search_biomart_datasets.R&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;OnBuild&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.authors&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Dirk</span><span class="nv"> </span><span class="s">Eddelbuettel</span><span class="nv"> </span><span class="s">&lt;edd@debian.org&gt;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.licenses&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;GPL-2.0-or-later&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.source&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;https://github.com/rocker-org/rocker&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.vendor&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Rocker</span><span class="nv"> </span><span class="s">Project&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Domainname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;User&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStdout&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStderr&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Tty&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;OpenStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;StdinOnce&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Env&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;LC_ALL=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;LANG=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;DEBIAN_FRONTEND=noninteractive&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;TZ=UTC&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;--rows&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;100&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;ArgsEscaped&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Image&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Volumes&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;WorkingDir&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/opt&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Entrypoint&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;test_deseq2.R&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;OnBuild&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
+<span class="w">        </span><span class="s">&quot;maintainer&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Dirk</span><span class="nv"> </span><span class="s">Eddelbuettel</span><span class="nv"> </span><span class="s">&lt;edd@debian.org&gt;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.license&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;GPL-2.0&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.vcs-url&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;https://github.com/rocker-org/&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.vendor&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Rocker</span><span class="nv"> </span><span class="s">Project&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </code></pre></div>
-<h3 id="extra-adding-metadata-to-your-image">Extra: Adding metadata to your image</h3>
 <p>You can annotate your <code>Dockerfile</code> and the image by using the instruction <code>LABEL</code>. You can give it any key and value with <code>&lt;key&gt;=&lt;value&gt;</code>. However, it is recommended to use the <a href="https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md">Open Container Initiative (OCI) keys</a>.</p>
 <p><strong>Exercise</strong>: Annotate our <code>Dockerfile</code> with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with <code>docker inspect</code>. </p>
 <div class="admonition note">
@@ -1205,42 +1148,48 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <details class="done">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">r-base:4.4.0</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
 <span class="k">LABEL</span><span class="w"> </span>org.opencontainers.image.created<span class="o">=</span><span class="s2">&quot;2023-04-12&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>org.opencontainers.image.description<span class="o">=</span><span class="s2">&quot;Container to search ensembl datasets with biomart&quot;</span>
+<span class="w">        </span>org.opencontainers.image.authors<span class="o">=</span><span class="s2">&quot;Geert van Geest&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>org.opencontainers.image.description<span class="o">=</span><span class="s2">&quot;Container with DESeq2 and friends&quot;</span>
 
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
-<span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-cran-optparse<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>r-bioc-biomart
+<span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/opt</span>
 
-<span class="k">COPY</span><span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>.
+<span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>.
 
 <span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt:<span class="nv">$PATH</span>
 
 <span class="c"># note that if you want to be able to combine the two</span>
 <span class="c"># both ENTRYPOINT and CMD need to written in the exec form</span>
-<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;search_biomart_datasets.R&quot;</span><span class="p">]</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;test_deseq2.R&quot;</span><span class="p">]</span>
 
 <span class="c"># default option (if positional arguments are not specified)</span>
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--pattern&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mouse&quot;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--rows&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">]</span>
 </code></pre></div>
 <p>The <code>Config</code> record in the output of <code>docker inspect</code> was updated with:</p>
-<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
 <span class="w">        </span><span class="s">&quot;org.opencontainers.image.authors&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Geert</span><span class="nv"> </span><span class="s">van</span><span class="nv"> </span><span class="s">Geest&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">        </span><span class="s">&quot;org.opencontainers.image.created&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;2023-04-12&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;org.opencontainers.image.description&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Container</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">search</span><span class="nv"> </span><span class="s">ensembl</span><span class="nv"> </span><span class="s">datasets</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">biomart&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.opencontainers.image.description&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Container</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">DESeq2</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">friends&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">        </span><span class="s">&quot;org.opencontainers.image.licenses&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;GPL-2.0-or-later&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">        </span><span class="s">&quot;org.opencontainers.image.source&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;https://github.com/rocker-org/rocker&quot;</span><span class="p p-Indicator">,</span>
 <span class="w">        </span><span class="s">&quot;org.opencontainers.image.vendor&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Rocker</span><span class="nv"> </span><span class="s">Project&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 </details>
-<h3 id="extra-building-an-image-with-a-browser-interface">Extra: Building an image with a browser interface</h3>
+<p><h3> Extra: Building an image with a browser interface </h3></p>
 <p>In this exercise, we will use a different base image (<code>rocker/rstudio:4</code>), and we&rsquo;ll install the same packages. <a href="https://posit.co/download/rstudio-server/">Rstudio server</a> is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/rstudio:4</span>
 
@@ -1448,7 +1397,7 @@ ls
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1
 </code></pre></div>
 </details>
-<h3 id="extra-get-information-on-your-image-with-docker-inspect_1">Extra: Get information on your image with <code>docker inspect</code></h3>
+<p><h3> Extra: Get information on your image with <code>docker inspect</code> </h3></p>
 <p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Config&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
 <span class="w">        </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
@@ -1484,7 +1433,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">        </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span>
 <span class="w">    </span><span class="p p-Indicator">}</span><span class="err">,</span>
 </code></pre></div>
-<h3 id="extra-adding-metadata-to-your-image_1">Extra: Adding metadata to your image</h3>
+<p><h3> Extra: Adding metadata to your image </h3></p>
 <p>You can annotate your <code>Dockerfile</code> and the image by using the instruction <code>LABEL</code>. You can give it any key and value with <code>&lt;key&gt;=&lt;value&gt;</code>. However, it is recommended to use the <a href="https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md">Open Container Initiative (OCI) keys</a>.</p>
 <p><strong>Exercise</strong>: Annotate our <code>Dockerfile</code> with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with <code>docker inspect</code>. </p>
 <div class="admonition note">
@@ -1526,7 +1475,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">        </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 </details>
-<h3 id="extra-building-an-image-with-a-browser-interface_1">Extra: Building an image with a browser interface</h3>
+<p><h3> Extra: Building an image with a browser interface </h3></p>
 <p>In this exercise, we will use a different base image from the <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html">jupyter docker image stack</a>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">jupyter/base-notebook:python-3.9</span>
 
