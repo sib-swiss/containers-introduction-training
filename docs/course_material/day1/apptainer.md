@@ -295,7 +295,7 @@ During the lecture you have learned that apptainer takes over the user privilege
 
 ### A bioinformatics example (extra)
 
-All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the namespace for the latest fastqc image. 
+All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the docker command to obtain the fastqc image. 
 
 **Exercise:** Check out the container image at quay.io, by following [quay.io/biocontainers/fastqc](https://quay.io/biocontainers/fastqc). Choose a tag, and pull it with `apptainer pull`.
 
