@@ -21,7 +21,7 @@ To make your images shareable and adjustable, it's good practice to work with a 
 You can generate an image from a `Dockerfile` using the command `docker build`. A `Dockerfile` has its own syntax for giving instructions. Luckily, they are rather simple. The script always contains a line starting with `FROM` that takes the image name from which the new image will be built. After that you usually want to run some commands to e.g. configure and/or install software. The instruction to run these commands during building starts with `RUN`.  In our `figlet` example that would be:
 
 ```dockerfile
-FROM ubuntu:jammy-20240427
+FROM ubuntu:jammy-20250415.1
 RUN apt-get update
 RUN apt-get install figlet
 ```
@@ -95,7 +95,7 @@ What has happened? What is the name of the build image?
 As you might remember the second positional argument of `docker run` is a command (i.e. `docker run IMAGE [CMD]`). If you leave it empty, it uses the default command. You can change the default command in the `Dockerfile` with an instruction starting with `CMD`. For example:
 
 ```dockerfile
-FROM ubuntu:jammy-20240427
+FROM ubuntu:jammy-20250415.1
 RUN apt-get update
 RUN apt-get install figlet
 CMD figlet My image works!
@@ -168,7 +168,7 @@ CMD figlet My image works!
     A `Dockerfile` with shell notation:
 
     ```dockerfile
-    FROM ubuntu:jammy-20240427
+    FROM ubuntu:jammy-20250415.1
     RUN apt-get update
     RUN apt-get install figlet
     CMD figlet My image works!
@@ -177,7 +177,7 @@ CMD figlet My image works!
     A `Dockerfile` with exec notation:
 
     ```dockerfile
-    FROM ubuntu:jammy-20240427
+    FROM ubuntu:jammy-20250415.1
     RUN apt-get update
     RUN apt-get install figlet
     CMD ["/bin/sh", "-c", "figlet My image works!"]
@@ -268,7 +268,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     Giving a list of results from DESeq2 on a dummy dataset with 75 rows.
 
-    Here, `--rows` is a optional arguments that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
+    Here, `--rows` is an optional argument that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
 
     ```
         baseMean log2FoldChange     lfcSE         stat    pvalue      padj
