@@ -7,6 +7,10 @@ suppressPackageStartupMessages({
     library(optparse)
 })
 
+# workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
+# this can probably be removed in the future
+setOldClass("ExpData")
+
 # load dependency packages for testing installations
 write("Loading dependency packages for testing installations", stderr())
 suppressPackageStartupMessages({
