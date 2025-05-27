@@ -871,6 +871,10 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
 <span class="p">})</span>
 
+<span class="c1"># workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112</span>
+<span class="c1"># this can probably be removed in the future</span>
+<span class="nf">setOldClass</span><span class="p">(</span><span class="s">&quot;ExpData&quot;</span><span class="p">)</span>
+
 <span class="c1"># load dependency packages for testing installations</span>
 <span class="nf">write</span><span class="p">(</span><span class="s">&quot;Loading dependency packages for testing installations&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">stderr</span><span class="p">())</span>
 <span class="nf">suppressPackageStartupMessages</span><span class="p">({</span>
