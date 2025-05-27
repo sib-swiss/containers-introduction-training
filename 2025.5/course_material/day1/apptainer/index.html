@@ -887,13 +887,13 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
 </code></pre></div>
 <p>Running it without command:</p>
-<div class="highlight"><pre><span></span><code>./deseq2.sif
+<div class="highlight"><pre><span></span><code>./deseq2_v1.sif
 </code></pre></div>
 <p>Running with a command:</p>
-<div class="highlight"><pre><span></span><code>./deseq2.sif<span class="w"> </span>--pattern<span class="w"> </span>sapiens
+<div class="highlight"><pre><span></span><code>./deseq2_v1.sif<span class="w"> </span>--rows<span class="w"> </span><span class="m">200</span>
 </code></pre></div>
 <p>To overwrite both entrypoint and the command:</p>
-<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deseq2.sif<span class="w"> </span>deseq2.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(R|r)at&quot;</span>
+<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deseq2_v1.sif<span class="w"> </span>test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">200</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
