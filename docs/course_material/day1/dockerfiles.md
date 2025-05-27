@@ -208,6 +208,10 @@ Often containers are built for a specific purpose. For example, you can use a co
         library(optparse)
     })
 
+    # workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
+    # this can probably be removed in the future
+    setOldClass("ExpData")
+
     # load dependency packages for testing installations
     write("Loading dependency packages for testing installations", stderr())
     suppressPackageStartupMessages({
@@ -251,6 +255,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     # print results to stdout
     print(res)
+
 
     ```
     
