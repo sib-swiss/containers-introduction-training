@@ -171,19 +171,19 @@ apptainer run [IMAGE NAME].sif [COMMAND]
         Running it without command:
 
         ```sh
-        ./deseq2.sif
+        ./deseq2_v1.sif
         ```
 
         Running with a command:
 
         ```sh
-        ./deseq2.sif --pattern sapiens
+        ./deseq2_v1.sif --rows 200
         ```
 
         To overwrite both entrypoint and the command:
 
         ```sh
-        apptainer exec deseq2.sif deseq2.R --pattern "(R|r)at"
+        apptainer exec deseq2_v1.sif test_deseq2.R --rows 200
         ```
         
     === "Python"
