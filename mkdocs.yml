@@ -18,6 +18,8 @@ theme:
     repo: fontawesome/brands/github
   features:
     - announce.dismiss
+    - navigation.top
+    - navigation.footer
 
 extra:
   version:

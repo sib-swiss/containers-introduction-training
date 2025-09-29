@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block announce %}
-  <b>Issues, questions or feedback? &#128591; &#128640; </b> Use the "Questions and Answers" section at the bottom &#128071; of every page
-{% endblock %}
-
 {% block site_meta %}
 {{ super() }}
 <script type="application/ld+json">
@@ -46,62 +42,6 @@
     ]
 }
 </script>
-{% endblock %}
-
-{% block content %}
-  {{ super() }}
-
-  <!-- Giscus -->
-  <h2>Questions & Answers</h2>
-
-    <script src="https://giscus.app/client.js"
-            data-repo="sib-swiss/containers-introduction-training"
-            data-repo-id="MDEwOlJlcG9zaXRvcnkzMzE4OTA0MzA="
-            data-category="Q&A"
-            data-category-id="DIC_kwDOE8g-_s4CSEuU"
-            data-mapping="pathname"
-            data-strict="0"
-            data-reactions-enabled="1"
-            data-emit-metadata="0"
-            data-input-position="top"
-            data-theme="preferred_color_scheme"
-            data-lang="en"
-            crossorigin="anonymous"
-            async>
-    </script>
-  <!-- Synchronize Giscus theme with palette -->
-  <script>
-    var giscus = document.querySelector("script[src*=giscus]")
-
-    /* Set palette on initial load */
-    var palette = __md_get("__palette")
-    if (palette && typeof palette.color === "object") {
-      var theme = palette.color.scheme === "slate" ? "dark" : "light"
-      giscus.setAttribute("data-theme", theme)
-
-
-    }
-
-    /* Register event handlers after documented loaded */
-    document.addEventListener("DOMContentLoaded", function() {
-      var ref = document.querySelector("[data-md-component=palette]")
-      if (ref) {
-        ref.addEventListener("change", function() {
-          var palette = __md_get("__palette")
-          if (palette && typeof palette.color === "object") {
-            var theme = palette.color.scheme === "slate" ? "dark" : "light"
-
-            /* Instruct Giscus to change theme */
-            var frame = document.querySelector(".giscus-frame")
-            frame.contentWindow.postMessage(
-              { giscus: { setConfig: { theme } } },
-              "https://giscus.app"
-            )
-          }
-        })
-      }
-    })
-  </script>
 {% endblock %}
 
 {% block outdated %}
