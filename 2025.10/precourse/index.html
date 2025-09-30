@@ -654,10 +654,8 @@
 <p class="admonition-title">If installing Docker is a problem</p>
 <p>During the course, we can give only limited support for installation issues. If you do not manage to install Docker before the course, you can still do almost all exercises on <a href="https://labs.play-with-docker.com/">Play with Docker</a>. A Docker login is required.</p>
 </div>
-<p>In addition to your local computer, we will be working on an Amazon Web Services (<a href="https://aws.amazon.com/]">AWS</a>)  Elastic Cloud (EC2) server. Our Ubuntu server behaves like a &lsquo;normal&rsquo; remote server, and can be approached through <code>ssh</code> with a username, key and IP address. All participants will be granted access to a personal home directory.</p>
-<p>Before the course, make sure you can work on a remote server. In MacOS and Linux you can use your terminal for this. On windows, you can use the terminal of the WSL (Windows Subsystem for Linux) or use <a href="https://mobaxterm.mobatek.net/" title="get MobaXterm">MobaXterm</a>.</p>
 <h3 id="ssh-connections">SSH connections</h3>
-<p>In addition to your local computer, you will be working on an Amazon Web Services (<a href="https://aws.amazon.com/">AWS</a>) Elastic Cloud (EC2) <a href="https://aws.amazon.com/ec2/">server</a>. This Ubuntu server behaves like a &lsquo;normal&rsquo; remote server, and can be approached through <a href="https://man7.org/linux/man-pages/man1/ssh.1.html"><code>ssh</code></a>. If you are enrolled in the course, you have received an e-mail with an IP address, username, private key and password to grant you access to a personal home directory on the server.</p>
+<p>In addition to your local computer, you will be working on an Amazon Web Services (<a href="https://aws.amazon.com/">AWS</a>) Elastic Cloud (EC2) <a href="https://aws.amazon.com/ec2/">server</a>. This Ubuntu server behaves like a &lsquo;normal&rsquo; remote server, and can be approached through <a href="https://man7.org/linux/man-pages/man1/ssh.1.html"><code>ssh</code></a>. If you are enrolled in the course, you have access to a shared document containing instruction to retrieve your username and private ssh key, granting you access to a personal home directory on the server.</p>
 <details class="tip">
 <summary>If you want to know more about <code>ssh</code></summary>
 <p>If you are not familiar with <code>ssh</code>, you can check the <a href="https://zah.uni-heidelberg.de/it-guide/ssh-tutorial-linux">Heidelberg University tutorial</a> for information on how to set it up and use it.</p>
@@ -671,7 +669,7 @@
 </code></pre></div></p>
 </div>
 <div class="tabbed-block">
-<p>Open a terminal, and <code>cd</code> to the directory where you have stored your private key. Then change the permissions of the key file and move it to <code>~/.ssh</code>:
+<p>Open a terminal, <code>cd</code> to the directory where you have stored your private key (<code>key_username.pem</code> file), change the permissions of the key file and move it to <code>~/.ssh</code>:
 <div class="highlight"><pre><span></span><code>chmod<span class="w"> </span><span class="m">400</span><span class="w"> </span>key_username.pem
 mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 </code></pre></div></p>
@@ -682,22 +680,25 @@ mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 <ul>
 <li>Open VScode and click on the green or blue button in the bottom left corner</li>
 <li>Select <code>Connect to Host...</code> and then <code>Configure SSH Hosts...</code></li>
-<li>Specify a location for the SSH config file. Use the same directory as where your keys are stored (so <code>~/.ssh/config</code>)</li>
+<li>Specify a location for the SSH config file (preferably the same directory as where your keys are stored): <code>~/.ssh/config</code></li>
 <li>
-<p>A skeleton config file will be provided. Edit it, so it looks like this (replace <code>username</code> with your username, and specify the correct IP at <code>HostName</code>):</p>
+<p>A skeleton config file will be provided. Edit it, so it looks like this (replace <code>username</code> with your username, and make sure the IP address in <code>HostName</code> match what the one given in the shared document):</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Windows</label><label for="__tabbed_2_2">MacOS/Linux</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>Host sib_course_remote
+<p><div class="highlight"><pre><span></span><code>Host sib_course_remote
     User username
-    HostName 18.195.170.182
+    HostName 18.195.137.58
     IdentityFile ~\.ssh\key_username.pem
 </code></pre></div>
+Note: if you are working with the Windows SSH executable (for example <code>C:\WINDOWS\System32\OpenSSH\ssh.exe</code>), you may have to use the full path of the key file instead of a relative one in <code>IdentityFile</code>:
+<div class="highlight"><pre><span></span><code>    IdentityFile C:\Users\&lt;windows_username&gt;\.ssh\key_username.pem
+</code></pre></div></p>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>Host sib_course_remote
     User username
-    HostName 18.195.170.182
+    HostName 18.195.137.58
     IdentityFile ~/.ssh/key_username.pem
 </code></pre></div>
 </div>
@@ -717,7 +718,7 @@ mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 <details class="info">
 <summary>If you are not working with VScode</summary>
 <p>If you are not working with VScode, you can login to the remote server with the following command in a terminal:
-<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem<span class="w"> </span>username@18.195.170.182
+<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem<span class="w"> </span>username@18.195.137.58
 </code></pre></div>
 If you want to edit files directly on the server, you can mount a directory with <code>sshfs</code>.</p>
 </details>
