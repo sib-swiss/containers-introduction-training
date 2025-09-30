@@ -2,13 +2,17 @@
 
 ## Teachers 
 
-- Joana Carlevaro-Fita [:custom-orcid:](https://orcid.org/0000-0002-1674-2055)
-- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+* Joana Carlevaro-Fita [:custom-orcid:](https://orcid.org/0000-0002-1674-2055)
+* Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+* Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+* Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
 
 ## Authors
 
-- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
-- Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
+* Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+* Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+* Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
+* Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 
 ## Attribution
 
