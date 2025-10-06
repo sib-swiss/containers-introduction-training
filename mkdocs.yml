@@ -4,10 +4,10 @@ nav:
     - Precourse preparations: precourse.md
     - Course schedule: course_schedule.md
     - Course material:
-      - Introduction to containers: course_material/day1/introduction_containers.md
-      - Managing containers and images: course_material/day1/managing_docker.md
-      - Working with dockerfiles: course_material/day1/dockerfiles.md
-      - Running containers with apptainer: course_material/day1/apptainer.md
+      - Introduction to containers: course_material/introduction_containers.md
+      - Managing containers and images: course_material/managing_docker.md
+      - Working with dockerfiles: course_material/dockerfiles.md
+      - Running containers with apptainer: course_material/apptainer.md
 
 theme:
   name: material
@@ -24,20 +24,13 @@ theme:
 extra:
   version:
     provider: mike
-  # consent:
-  #   title: Cookie consent
-  #   description: >-
-  #     We use cookies to recognize your repeated visits and preferences, as well
-  #     as to measure the effectiveness of our documentation and whether users
-  #     find what they're searching for. With your consent, you're helping us to
-  #     make our documentation better.
   analytics:
     provider: matomo
     base_url: https://matomo.sib.swiss/
     site_id: 220
 
 copyright: >
-  Copyright &copy; 2021-2025 SIB Swiss institute of Bioinformatics –
+  Copyright &copy; 2021-2025 SIB Swiss Institute of Bioinformatics -
   <a href="#__consent">Change cookie settings</a>
 
 # Repository

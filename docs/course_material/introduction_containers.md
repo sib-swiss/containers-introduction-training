@@ -10,11 +10,11 @@
 
 **General introduction:**
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/general_introduction.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/general_introduction.pdf){: .md-button }
 
 **Introduction to containers:**
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/introduction_containers.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/introduction_containers.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Qfh80DlF1_4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 

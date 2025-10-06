@@ -11,7 +11,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/apptainer.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/apptainer.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -22,7 +22,7 @@
 ## Exercises
 
 !!! info "Important"
-    This last part should be done on the remote server that has apptainer installed. If you haven't set up a VScode SSH connection to the server yet, you can find instructions [here](../../precourse.md#ssh-connections).
+    This last part should be done on the remote server that has apptainer installed. If you haven't set up a VScode SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connections).
 
 ### Pulling an image
 

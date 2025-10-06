@@ -15,7 +15,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/managing_docker.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/managing_docker.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y7eCm9NOHYg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
