@@ -67,7 +67,13 @@ Finally:
 * Click again on the green or blue button in the bottom left corner
 * Select `Connect to Host...`, and then `sib_course_remote`. You will be asked which operating system is used on the remote. Choose `Linux`
 
-You can also find a video tutorial below:
+
+!!! warning "Server availability"
+    Please note that, for cost reasons, the server will be **started the morning of the course** (or the evening before, at the earliest), and will be **stopped the day after the course ends**, so you will not be able to connect before or after these dates. Likewise, if you need to retrieve data from the server, please do it before it is stopped.
+
+#### Video tutorial
+
+You can find a video tutorial to configure SSH connections in VScode below:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/cOopQQIL8JU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ??? info "If you are not working with VScode"
