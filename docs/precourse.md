@@ -17,6 +17,9 @@ Install Docker on your local computer and create an account on [dockerhub](https
 
 In addition to your local computer, you will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/)) Elastic Cloud (EC2) [server](https://aws.amazon.com/ec2/). This Ubuntu server behaves like a 'normal' remote server, and can be approached through [`ssh`](https://man7.org/linux/man-pages/man1/ssh.1.html). If you are enrolled in the course, you have access to a shared document containing instruction to retrieve your username and private ssh key, granting you access to a personal home directory on the server.
 
+!!! danger "Server availability"
+    Please note that, for cost reasons, the server will be **started the morning of the course** (or the evening before, at the earliest), and will be **stopped the day after the course ends**, so you will not be able to connect before or after these dates. Likewise, if you need to retrieve data from the server, please do it before it is stopped.
+
 ??? tip "If you want to know more about `ssh`"
     If you are not familiar with `ssh`, you can check the [Heidelberg University tutorial](https://zah.uni-heidelberg.de/it-guide/ssh-tutorial-linux) for information on how to set it up and use it.
 
@@ -66,10 +69,6 @@ Finally:
 * Save and close the config file
 * Click again on the green or blue button in the bottom left corner
 * Select `Connect to Host...`, and then `sib_course_remote`. You will be asked which operating system is used on the remote. Choose `Linux`
-
-
-!!! warning "Server availability"
-    Please note that, for cost reasons, the server will be **started the morning of the course** (or the evening before, at the earliest), and will be **stopped the day after the course ends**, so you will not be able to connect before or after these dates. Likewise, if you need to retrieve data from the server, please do it before it is stopped.
 
 #### Video tutorial
 
