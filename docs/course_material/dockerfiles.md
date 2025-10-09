@@ -27,7 +27,7 @@ RUN apt-get install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
-    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20240427`). We could also have written:
+    At the `FROM` statement in the the above `Dockerfile` you see that we have added a specific tag to the image (i.e. `jammy-20250415.1`). We could also have written:
 
     ```dockerfile
     FROM ubuntu
@@ -853,7 +853,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         Pushing it to dockerhub: 
 
         ```sh
-        docker tag daterage [USER NAME]/daterange:v1
+        docker tag daterange [USER NAME]/daterange:v1
         docker push [USER NAME]/daterange:v1
         ```
 

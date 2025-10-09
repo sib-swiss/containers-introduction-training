@@ -18,6 +18,7 @@ theme:
     repo: fontawesome/brands/github
   features:
     - announce.dismiss
+    - content.code.copy
     - navigation.top
     - navigation.footer
 
