@@ -78,7 +78,7 @@ docker container ls -a
     In Docker dashboard you can see that the shell is running:
 
     <figure>
-      <img src="../../../assets/images/running_container_dashboard.png" width="300"/>
+      <img src="../assets/images/running_container_dashboard.png" width="300"/>
     </figure>
 
     The output of `docker container ls -a` is:
