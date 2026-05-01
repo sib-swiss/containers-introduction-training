@@ -74,6 +74,11 @@
       
       <link rel="stylesheet" href="../../assets/stylesheets/modern/main.1e981d71.min.css">
       
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
       
 
 
@@ -102,7 +107,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -168,6 +180,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -793,7 +831,7 @@ docker<span class="w"> </span>build<span class="w"> </span>.
 <p>The command <code>docker build</code> takes a directory as input (providing <code>.</code> means the current directory). This directory should contain the <code>Dockerfile</code>, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.</p>
 </div>
 <p>What has happened? What is the name of the build image?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>A new image was created based on the <code>Dockerfile</code>. You can check it with: <code>docker image ls</code>, which gives something like:</p>
 <div class="highlight"><pre><span></span><code>REPOSITORY                        TAG       IMAGE ID       CREATED             SIZE
@@ -804,11 +842,11 @@ ubuntu                            latest    f63181f19b2f   30 hours ago        7
 <p>It has created an image without a name or tag. That&rsquo;s a bit inconvenient.</p>
 </details>
 <p><strong>Exercise:</strong> Build a new image with a specific name. You can do that with adding the option <code>-t</code> to <code>docker build</code>. Before that, remove the nameless image.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>An image without a name is usually a &ldquo;dangling image&rdquo;. You can remove those with <code>docker image prune</code>.</p>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Remove the nameless image with <code>docker image prune</code>.</p>
 <p>After that, rebuild an image with a name:</p>
@@ -834,7 +872,7 @@ docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </
 <span class="k">CMD</span><span class="w"> </span>figlet<span class="w"> </span>My<span class="w"> </span>image<span class="w"> </span>works!
 </code></pre></div>
 <p><strong>Exercise:</strong> Build a new image based on the above <code>Dockerfile</code>. Can you validate the change using <code>docker image inspect</code>? Can you overwrite this default with <code>docker run</code>?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Copy the new line to your <code>Dockerfile</code>, and build the new image like this:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">x86_64 / AMD64</label><label for="__tabbed_3_2">ARM64 (MacOS M1 chip)</label></div>
@@ -897,7 +935,7 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 </code></pre></div>
 </div>
 <p><strong>Exercise:</strong> Now push our created image (with a version tag) to docker hub. We will use it later for the <a href="../apptainer/"><code>apptainer</code> exercises</a>.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>ubuntu-figlet:v3<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/ubuntu-figlet:v3
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/ubuntu-figlet:v3
@@ -1018,11 +1056,11 @@ It is a relatively simple script that runs DESeq2 on a dummy dataset. An example
 <p>The most used R image stack is from the <a href="https://rocker-project.org/">rocker project</a>. It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with <code>apt-get</code> or <code>install2.r</code> are possible. To understand more about how to install R packages in different containers, check it this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
 </div>
 <p><strong>Exercise:</strong> Download the <code>test_deseq2.R</code> and build the image with <code>docker build</code>. Name the image <code>deseq2</code>. After that, start an interactive session and execute the script inside the container. </p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Build the container:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">x86_64 / AMD64</label><label for="__tabbed_5_2">ARM64 (MacOS M1 chip)</label></div>
@@ -1077,7 +1115,7 @@ ls
 <p>The <code>ENV</code> instruction can be used to set any variable. </p>
 </div>
 <p><strong>Exercise</strong>: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute <code>test_deseq2.R</code> from anywhere?)</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>After re-building we start an interactive session:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>/bin/bash
@@ -1127,7 +1165,7 @@ ls
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--rows&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">]</span>
 </code></pre></div>
 <p><strong>Exercise</strong>: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different number of rows to <code>--rows</code>. How do the commands look?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Just running the container non-interactively would be:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2
@@ -1142,7 +1180,7 @@ ls
 <p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
 </div>
 <p><strong>Exercise</strong>: Push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Pushing it to dockerhub: </p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>deseq2<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
@@ -1196,7 +1234,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <div class="highlight"><pre><span></span><code><span class="k">LABEL</span><span class="w"> </span><span class="nv">keyx</span><span class="o">=</span><span class="s2">&quot;valuex&quot;</span><span class="w"> </span><span class="nv">keyy</span><span class="o">=</span><span class="s2">&quot;valuey&quot;</span>
 </code></pre></div>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
@@ -1255,7 +1293,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 </code></pre></div>
 <p>This will create an image from the existing <code>rstudio</code> image. It will also install <code>libz-dev</code> with <code>apt-get</code>, <code>BiocManager</code> with <code>install2.r</code> and <code>biomaRt</code> with an R command. Despiste we&rsquo;re installing the same packages, the installation steps need to be different from the <code>r-base</code> image. This is because in the <code>rocker/rstudio</code> images R is installed from source, and therefore you can&rsquo;t install packages with <code>apt-get</code>. More information on how to install R packages in R containers in this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
 <p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">x86_64 / AMD64</label><label for="__tabbed_6_2">ARM64 (MacOS M1 chip)</label></div>
 <div class="tabbed-content">
@@ -1335,11 +1373,11 @@ rstudio-server
 <p>In order to use <code>COPY</code>, the file that needs to be copied needs to be in the same directory as the <code>Dockerfile</code> or one of its subdirectories.</p>
 </div>
 <p><strong>Exercise:</strong> Download the <code>daterange.py</code> and build the image with <code>docker build</code>. After that, execute the script inside the container. </p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Build the container:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">x86_64 / AMD64</label><label for="__tabbed_7_2">ARM64 (MacOS M1 chip)</label></div>
@@ -1385,7 +1423,7 @@ ls
 <p>The <code>ENV</code> instruction can be used to set any variable. </p>
 </div>
 <p><strong>Exercise</strong>: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute <code>daterange.py</code> from anywhere?)</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>After re-building we start an interactive session:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>daterange<span class="w"> </span>/bin/bash
@@ -1426,7 +1464,7 @@ ls
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;20220226&quot;</span><span class="p">]</span>
 </code></pre></div>
 <p><strong>Exercise</strong>: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to <code>--date</code>. How do the commands look?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Just running the container non-interactively would be:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>daterange
@@ -1441,7 +1479,7 @@ ls
 <p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
 </div>
 <p><strong>Exercise</strong>: Push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Pushing it to dockerhub: </p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>daterange<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1
@@ -1493,7 +1531,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <div class="highlight"><pre><span></span><code><span class="k">LABEL</span><span class="w"> </span><span class="nv">keyx</span><span class="o">=</span><span class="s2">&quot;valuex&quot;</span><span class="w"> </span><span class="nv">keyy</span><span class="o">=</span><span class="s2">&quot;valuey&quot;</span>
 </code></pre></div>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>The <code>Dockerfile</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9.16</span>
@@ -1538,7 +1576,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <p>We have specified here that jupyter lab should use port 8888. However, this <strong>inside</strong> the container. We can not connect to it yet with our browser.</p>
 </div>
 <p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">x86_64 / AMD64</label><label for="__tabbed_8_2">ARM64 (MacOS M1 chip)</label></div>
 <div class="tabbed-content">

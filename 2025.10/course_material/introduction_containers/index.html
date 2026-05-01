@@ -74,6 +74,11 @@
       
       <link rel="stylesheet" href="../../assets/stylesheets/modern/main.1e981d71.min.css">
       
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
       
 
 
@@ -102,7 +107,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -168,6 +180,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -691,7 +729,7 @@
 </code></pre></div>
 <p>This will give you an interactive shell into the created container (this interactivity was invoked by the options <code>-i</code> and <code>-t</code>) .</p>
 <p><strong>Exercise:</strong> Check out the operating system of the container by typing <code>cat /etc/os-release</code> in the container&rsquo;s shell. Are we really in an ubuntu environment?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Yes:</p>
 <div class="highlight"><pre><span></span><code>root@33bd068de5e2:/# cat /etc/os-release
@@ -715,7 +753,7 @@ LOGO=ubuntu-logo
 <p>If the image <code>ubuntu</code> was not on your computer yet, <code>docker</code> will search and try to get them from <a href="https://hub.docker.com/">dockerhub</a>, and download it.</p>
 </div>
 <p><strong>Exercise:</strong> Run the command <code>whoami</code> in the docker container. Who are you?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>The command <code>whoami</code> returns the current user. In the container <code>whoami</code> will return <code>root</code>. This means you are the <a href="https://en.wikipedia.org/wiki/Superuser"><code>root</code> user</a> i.e. within the container you are admin and can basically change anything.  </p>
 </details>
@@ -723,7 +761,7 @@ LOGO=ubuntu-logo
 <div class="highlight"><pre><span></span><code>docker container ls -a
 </code></pre></div>
 <p><strong>Exercise:</strong> What is the container status?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>In Docker dashboard you can see that the shell is running:</p>
 <p><figure>
@@ -751,7 +789,7 @@ apt-get<span class="w"> </span>install<span class="w"> </span>figlet
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>-a
 </code></pre></div>
 <p><strong>Exercise:</strong> What is the container status?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p><code>docker container ls -a</code> gives:</p>
 <div class="highlight"><pre><span></span><code>CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES

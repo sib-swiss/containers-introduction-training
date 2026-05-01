@@ -74,6 +74,11 @@
       
       <link rel="stylesheet" href="../../assets/stylesheets/modern/main.1e981d71.min.css">
       
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
       
 
 
@@ -102,7 +107,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -168,6 +180,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -857,13 +895,13 @@
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu
 </code></pre></div>
 <p><strong>Exercise:</strong> Run the above command. Is your <code>figlet</code> installation still there? Why?</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>Check the status of your containers:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>-a
 </code></pre></div>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>No, the installation is gone. Another container was created from the same ubuntu image, without the <code>figlet</code> installation.
 Running the command <code>docker container ls -a</code> results in:</p>
@@ -874,7 +912,7 @@ Running the command <code>docker container ls -a</code> results in:</p>
 <p>In this case the container <code>great_moser</code> contains the <code>figlet</code> installation. But we have exited that container. We created a new container (<code>kind_mendel</code> in this case) with a fresh environment created from the original <code>ubuntu</code> image.</p>
 </details>
 <p>To restart your first created container, you&rsquo;ll have to look up its name. You can find it in the Docker dashboard, or with <code>docker container ls -a</code>.</p>
-<div class="admonition hint">
+<div class="admonition info">
 <p class="admonition-title">Container names</p>
 <p>The container name is the funny combination of two words separated by <code>_</code>, e.g.: <code>nifty_sinoussi</code>. Alternatively you can use the container ID (the first column of the output of <code>docker container ls</code>)</p>
 </div>
@@ -886,7 +924,7 @@ Running the command <code>docker container ls -a</code> results in:</p>
 </code></pre></div>
 <p>And you&rsquo;re back in the container shell.</p>
 <p><strong>Exercise:</strong> Run the <code>docker start</code> and <code>docker attach</code> commands for the container that is supposed to contain the <code>figlet</code> installation. Is the installation of <code>figlet</code> still there?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>yes:</p>
 <div class="highlight"><pre><span></span><code>figlet<span class="w"> </span><span class="s1">&#39;try some more text!&#39;</span>
@@ -905,7 +943,7 @@ Running the command <code>docker container ls -a</code> results in:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>commit<span class="w"> </span><span class="o">[</span>CONTAINER<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span>ubuntu-figlet
 </code></pre></div>
 <p><strong>Exercise:</strong> Exit the container shell and run the above command  in your local terminal (replace <code>[CONTAINER NAME]</code> with the name of the container containing the <code>figlet</code> installation). Check out <code>docker image ls</code>. What have we just created?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>A new image called <code>ubuntu-figlet</code> based on the status of the container.
 The output of <code>docker image ls</code> should look like:</p>
@@ -918,7 +956,7 @@ ubuntu                            latest    f63181f19b2f   29 hours ago    72.9M
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu-figlet
 </code></pre></div>
 <p><strong>Exercise:</strong> Run the above command. Is the <code>figlet</code> installation in the created container?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>yes</p>
 </details>
@@ -929,7 +967,7 @@ ubuntu                            latest    f63181f19b2f   29 hours ago    72.9M
 <p>Resulting in just the output of the <code>figlet</code> command.</p>
 <p>In the previous exercises we have run containers without a command as positional argument. This doesn&rsquo;t mean that no command has been run, because the container would do nothing without a command. The default command is stored in the image, and you can find it by <code>docker image inspect [IMAGE NAME]</code>.  </p>
 <p><strong>Exercise:</strong> Have a look at the output of <code>docker image inspect</code>, particularly at <code>"Config"</code> (ignore <code>"ContainerConfig"</code> for now). What is the default command (<code>CMD</code>) of the ubuntu image?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Running <code>docker image inspect ubuntu</code> gives (amongst other information):</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
@@ -995,7 +1033,7 @@ docker push [USER NAME]/ubuntu-figlet:v1
 <p>Most of the syntax for <code>docker</code> is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by <code>\</code> instead of <code>/</code>. Also, line breaks are not escaped by <code>\</code> but by `.</p>
 </div>
 <p><strong>Exercise:</strong> Mount a host (local) directory to a target directory <code>/working_dir</code> in a container created from the <code>ubuntu-figlet</code> image and run it interactively. Check whether the target directory has been created.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>e.g. on Mac OS this would be:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
@@ -1011,13 +1049,13 @@ boot  etc  lib   lib64  media   opt  root  sbin  sys  usr  working_dir
 </details>
 <p>This mounted directory is both available for the host (locally) and for the container. You can therefore e.g. copy files in there, and write output generated by the container.</p>
 <p><strong>Exercise:</strong> Write the output of <code>figlet "testing mounted dir"</code> to a file in <code>/working_dir</code>. Check whether it is available on the host (locally) in the source directory.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>You can write the output of <code>figlet</code> to a file like this:
 <div class="highlight"><pre><span></span><code>figlet<span class="w"> </span><span class="s1">&#39;some string&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>file.txt
 </code></pre></div></p>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <div class="highlight"><pre><span></span><code>root@8d80a8698865:/# figlet &#39;testing mounted dir&#39; &gt; /working_dir/figlet_output.txt
 </code></pre></div>
@@ -1046,7 +1084,7 @@ ubuntu-figlet
 <p>On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set <code>-u</code> as 0:0), i.e. your current ID. More info on <a href="https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes">stackoverflow</a>.</p>
 </div>
 <p><strong>Exercise:</strong> Start an interactive container based on the <code>ubuntu-figlet</code> image, bind-mount a local directory and take over your current <code>uid</code> and <code>gid</code>. Write the output of a <code>figlet</code> command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting <code>-u</code>.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux</label><label for="__tabbed_1_2">MacOS</label><label for="__tabbed_1_3">MobaXterm</label></div>
 <div class="tabbed-content">

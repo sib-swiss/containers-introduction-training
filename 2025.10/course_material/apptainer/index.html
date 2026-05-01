@@ -72,6 +72,11 @@
       
       <link rel="stylesheet" href="../../assets/stylesheets/modern/main.1e981d71.min.css">
       
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
       
 
 
@@ -100,7 +105,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -166,6 +178,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -811,7 +849,7 @@
 <p><strong>Exercise:</strong> On the remote server, pull the docker image that has the adjusted default <code>CMD</code> that we have pushed to dockerhub <a href="../dockerfiles/#using-cmd">in this exercise</a> (<code>ubuntu-figlet-df:v3</code>) with <code>apptainer pull</code>. The syntax is:</p>
 <div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/<span class="o">[</span>IMAGE<span class="w"> </span>NAME<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
 </code></pre></div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p><div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/ubuntu-figlet:v3
 </code></pre></div>
@@ -846,7 +884,7 @@ This will result in a file called <code>ubuntu-figlet_v3.sif</code></p>
 <p class="admonition-title">Entrypoint and apptainer</p>
 <p>The <code>daterange</code> image has an entrypoint set, and <code>apptainer run</code> does not overwrite it. In order to ignore both the entrypoint and cmd use <code>apptainer exec</code>.  </p>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Running it without a command (<code>./ubuntu-figlet_v3.sif</code>) should give:</p>
 <p><div class="highlight"><pre><span></span><code>__  __         _                                                 _        _
@@ -913,13 +951,13 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <div class="highlight"><pre><span></span><code>./ubuntu-figlet_v3.sif<span class="w"> </span><span class="nb">pwd</span>
 </code></pre></div>
 <p><strong>Exercise:</strong> Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>A similar Docker command would look like (run this on your local computer):</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>ubuntu-figlet:v3<span class="w"> </span><span class="nb">pwd</span>
 </code></pre></div>
 </div>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>The output of <code>./ubuntu-figlet_v3.sif pwd</code> is the current directory on the host: i.e. <code>/home/username</code> if you have it in your home directory. The output of <code>docker run --rm ubuntu-figlet:v3 pwd</code> (on the local host) would be <code>/</code>, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).</p>
 </details>
@@ -932,7 +970,7 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <p>To exit the shell type <code>exit</code>.</p>
 </div>
 <p><strong>Exercise:</strong> Can you run <code>figlet</code> inside this shell?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>Yes:
 <div class="highlight"><pre><span></span><code>Apptainer&gt; figlet test
@@ -945,7 +983,7 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 </details>
 <p>During the lecture you have learned that apptainer takes over the user privileges of the user on the host. You can get user information with command like <code>whoami</code>, <code>id</code>, <code>groups</code> etc.</p>
 <p><strong>Exercise:</strong> Run the <code>figlet</code> container interactively. Do you have the same user privileges as if you were on the host? How is that with <code>docker</code>?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>A command like <code>whoami</code> will result in your username printed at stdout:</p>
 <div class="highlight"><pre><span></span><code>Apptainer&gt; whoami
@@ -967,7 +1005,7 @@ uid=0(root) gid=0(root) groups=0(root)
 <h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
 <p>All bioconda packages also have a pre-built container. Have a look at the <a href="https://bioconda.github.io/index.html">bioconda website</a>, and search for <code>fastqc</code>. In the search results, click on the appropriate record (i.e. package &lsquo;fastqc&rsquo;). Now, scroll down and find the docker command to obtain the fastqc image. </p>
 <p><strong>Exercise:</strong> Check out the container image at quay.io, by following <a href="https://quay.io/biocontainers/fastqc">quay.io/biocontainers/fastqc</a>. Choose a tag, and pull it with <code>apptainer pull</code>.</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
 <p>It&rsquo;s up to you which tag you choose. The tag with the latest version is <code>0.12.1--hdfd78af_0</code>.</p>
 <div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0
