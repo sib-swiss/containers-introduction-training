@@ -38,7 +38,7 @@ This will give you an interactive shell into the created container (this interac
 
 **Exercise:** Check out the operating system of the container by typing `cat /etc/os-release` in the container's shell. Are we really in an ubuntu environment?
 
-??? done "Answer"
+??? success "Answer"
     Yes:
 
     ```
@@ -63,7 +63,7 @@ This will give you an interactive shell into the created container (this interac
 
 **Exercise:** Run the command `whoami` in the docker container. Who are you?
 
-??? done "Answer"
+??? success "Answer"
     The command `whoami` returns the current user. In the container `whoami` will return `root`. This means you are the [`root` user](https://en.wikipedia.org/wiki/Superuser) i.e. within the container you are admin and can basically change anything.  
 
 Check out the container panel at the Docker dashboard (the Docker gui) or open another host terminal and type:
@@ -74,7 +74,7 @@ docker container ls -a
 
 **Exercise:** What is the container status?
 
-??? done "Answer"
+??? success "Answer"
     In Docker dashboard you can see that the shell is running:
 
     <figure>
@@ -116,7 +116,7 @@ docker container ls -a
 
 **Exercise:** What is the container status?
 
-??? done "Answer"
+??? success "Answer"
     `docker container ls -a` gives:
 
     ```

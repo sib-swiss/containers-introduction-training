@@ -21,6 +21,20 @@ theme:
     - content.code.copy
     - navigation.top
     - navigation.footer
+  theme:
+  palette: 
+
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: lucide/moon
+        name: Switch to light mode
 
 extra:
   version:

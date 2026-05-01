@@ -34,7 +34,7 @@ Apptainer can take several image formats (e.g. a `docker` image), and convert th
 apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
 ```
 
-??? done "Answer"
+??? success "Answer"
     ```sh
     apptainer pull docker://[USER NAME]/ubuntu-figlet:v3
     ```
@@ -79,7 +79,7 @@ apptainer run [IMAGE NAME].sif [COMMAND]
 !!! note "Entrypoint and apptainer"
     The `daterange` image has an entrypoint set, and `apptainer run` does not overwrite it. In order to ignore both the entrypoint and cmd use `apptainer exec`.  
 
-??? done "Answer"
+??? success "Answer"
     Running it without a command (`./ubuntu-figlet_v3.sif`) should give:
 
     ```
@@ -179,14 +179,14 @@ Running the command `pwd` (full name of current working directory) will therefor
 
 **Exercise:** Run the above command. What is the output? How would the output look like if you would run a similar command with Docker?
 
-!!! hint
+!!! info
     A similar Docker command would look like (run this on your local computer):
 
     ```sh
     docker run --rm ubuntu-figlet:v3 pwd
     ```
 
-??? done "Answer"
+??? success "Answer"
     The output of `./ubuntu-figlet_v3.sif pwd` is the current directory on the host: i.e. `/home/username` if you have it in your home directory. The output of `docker run --rm ubuntu-figlet:v3 pwd` (on the local host) would be `/`, which is the default workdir (root directory) of the container. As we did not mount any host directory, this directory exists only within the container (i.e. separated from the host).
 
 ### Interactive shell
@@ -202,7 +202,7 @@ apptainer shell ubuntu-figlet_v3.sif
 
 **Exercise:** Can you run `figlet` inside this shell?
 
-??? done "Answer"
+??? success "Answer"
     Yes:
     ```
     Apptainer> figlet test
@@ -218,7 +218,7 @@ During the lecture you have learned that apptainer takes over the user privilege
 
 **Exercise:** Run the `figlet` container interactively. Do you have the same user privileges as if you were on the host? How is that with `docker`?
 
-??? done "Answer"
+??? success "Answer"
     A command like `whoami` will result in your username printed at stdout:
 
     ```
@@ -247,7 +247,7 @@ All bioconda packages also have a pre-built container. Have a look at the [bioco
 
 **Exercise:** Check out the container image at quay.io, by following [quay.io/biocontainers/fastqc](https://quay.io/biocontainers/fastqc). Choose a tag, and pull it with `apptainer pull`.
 
-??? done "Answer"
+??? success "Answer"
     It's up to you which tag you choose. The tag with the latest version is `0.12.1--hdfd78af_0`.
 
     ```sh

@@ -35,14 +35,14 @@ docker run -it ubuntu
 
 **Exercise:** Run the above command. Is your `figlet` installation still there? Why?
 
-!!! hint
+!!! info
     Check the status of your containers:
 
     ```sh
     docker container ls -a
     ```
 
-??? done "Answer"
+??? success "Answer"
     No, the installation is gone. Another container was created from the same ubuntu image, without the `figlet` installation.
     Running the command `docker container ls -a` results in:
 
@@ -56,7 +56,7 @@ docker run -it ubuntu
 
 To restart your first created container, you'll have to look up its name. You can find it in the Docker dashboard, or with `docker container ls -a`.
 
-!!! hint "Container names"
+!!! info "Container names"
     The container name is the funny combination of two words separated by `_`, e.g.: `nifty_sinoussi`. Alternatively you can use the container ID (the first column of the output of `docker container ls`)
 
 To restart a container you can use:
@@ -75,7 +75,7 @@ And you're back in the container shell.
 
 **Exercise:** Run the `docker start` and `docker attach` commands for the container that is supposed to contain the `figlet` installation. Is the installation of `figlet` still there?
 
-??? done "Answer"
+??? success "Answer"
     yes:
 
     ```sh
@@ -103,7 +103,7 @@ docker commit [CONTAINER NAME] ubuntu-figlet
 
 **Exercise:** Exit the container shell and run the above command  in your local terminal (replace `[CONTAINER NAME]` with the name of the container containing the `figlet` installation). Check out `docker image ls`. What have we just created?
 
-??? done "Answer"
+??? success "Answer"
     A new image called `ubuntu-figlet` based on the status of the container.
     The output of `docker image ls` should look like:
 
@@ -121,7 +121,7 @@ docker run -it ubuntu-figlet
 
 **Exercise:** Run the above command. Is the `figlet` installation in the created container?
 
-??? done "Answer"
+??? success "Answer"
     yes
 
 ### Commands
@@ -138,7 +138,7 @@ In the previous exercises we have run containers without a command as positional
 
 **Exercise:** Have a look at the output of `docker image inspect`, particularly at `"Config"` (ignore `"ContainerConfig"` for now). What is the default command (`CMD`) of the ubuntu image?
 
-??? done "Answer"
+??? success "Answer"
     Running `docker image inspect ubuntu` gives (amongst other information):
     
     ```yaml
@@ -227,7 +227,7 @@ The target directory will be created if it does not yet exist. The source direct
 
 **Exercise:** Mount a host (local) directory to a target directory `/working_dir` in a container created from the `ubuntu-figlet` image and run it interactively. Check whether the target directory has been created.
 
-??? done "Answer"
+??? success "Answer"
     e.g. on Mac OS this would be:
 
     ```sh
@@ -249,13 +249,13 @@ This mounted directory is both available for the host (locally) and for the cont
 
 **Exercise:** Write the output of `figlet "testing mounted dir"` to a file in `/working_dir`. Check whether it is available on the host (locally) in the source directory.
 
-!!! hint
+!!! info
     You can write the output of `figlet` to a file like this:
     ```sh
     figlet 'some string' > file.txt
     ```
 
-??? done "Answer"
+??? success "Answer"
     ```
     root@8d80a8698865:/# figlet 'testing mounted dir' > /working_dir/figlet_output.txt
     ```
@@ -294,7 +294,7 @@ docker run -u "$(id -u):$(id -g)"
 
 **Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
 
-??? done "Answer"
+??? success "Answer"
     === "Linux"
 
         **Running `ubuntu-figlet` interactively while taking over `uid` and `gid` and mounting my current directory:**

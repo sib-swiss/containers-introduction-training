@@ -58,7 +58,7 @@ RUN apt-get install figlet
 
 What has happened? What is the name of the build image?
 
-??? done "Answer"
+??? success "Answer"
     A new image was created based on the `Dockerfile`. You can check it with: `docker image ls`, which gives something like:
 
     ```
@@ -72,10 +72,10 @@ What has happened? What is the name of the build image?
 
 **Exercise:** Build a new image with a specific name. You can do that with adding the option `-t` to `docker build`. Before that, remove the nameless image.
 
-!!! hint
+!!! info
     An image without a name is usually a "dangling image". You can remove those with `docker image prune`.
 
-??? done "Answer"
+??? success "Answer"
     Remove the nameless image with `docker image prune`.
 
     After that, rebuild an image with a name:
@@ -103,7 +103,7 @@ CMD figlet My image works!
 
 **Exercise:** Build a new image based on the above `Dockerfile`. Can you validate the change using `docker image inspect`? Can you overwrite this default with `docker run`?
 
-??? done "Answer"
+??? success "Answer"
     Copy the new line to your `Dockerfile`, and build the new image like this:
 
     === "x86_64 / AMD64"
@@ -185,7 +185,7 @@ CMD figlet My image works!
 
 **Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`apptainer` exercises](apptainer.md).
 
-??? done "Answer"
+??? success "Answer"
     ```sh
     docker tag ubuntu-figlet:v3 [USER NAME]/ubuntu-figlet:v3
     docker push [USER NAME]/ubuntu-figlet:v3
@@ -323,11 +323,11 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. Name the image `deseq2`. After that, start an interactive session and execute the script inside the container. 
 
-    !!! hint
+    !!! info
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
 
 
-    ??? done "Answer"
+    ??? success "Answer"
         Build the container:
 
         === "x86_64 / AMD64"
@@ -390,7 +390,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise**: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute `test_deseq2.R` from anywhere?)
 
-    ??? done "Answer"
+    ??? success "Answer"
         After re-building we start an interactive session:
 
         ```sh
@@ -458,7 +458,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different number of rows to `--rows`. How do the commands look?
 
-    ??? done "Answer"
+    ??? success "Answer"
         Just running the container non-interactively would be:
 
         ```sh
@@ -480,7 +480,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
 
 
-    ??? done "Answer"
+    ??? success "Answer"
 
         Pushing it to dockerhub: 
 
@@ -543,7 +543,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         LABEL keyx="valuex" keyy="valuey"
         ```
 
-    ??? done "Answer"
+    ??? success "Answer"
 
         The `Dockerfile` would look like:
 
@@ -614,7 +614,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
-    ??? done "Answer"
+    ??? success "Answer"
         === "x86_64 / AMD64"
             ```sh
             docker build -t rstudio-server .
@@ -710,10 +710,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
 
-    !!! hint
+    !!! info
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
 
-    ??? done "Answer"
+    ??? success "Answer"
         Build the container:
 
         === "x86_64 / AMD64"
@@ -767,7 +767,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
 
-    ??? done "Answer"
+    ??? success "Answer"
         After re-building we start an interactive session:
 
         ```sh
@@ -826,7 +826,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
 
-    ??? done "Answer"
+    ??? success "Answer"
         Just running the container non-interactively would be:
 
         ```sh
@@ -848,7 +848,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
 
 
-    ??? done "Answer"
+    ??? success "Answer"
 
         Pushing it to dockerhub: 
 
@@ -910,7 +910,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         LABEL keyx="valuex" keyy="valuey"
         ```
 
-    ??? done "Answer"
+    ??? success "Answer"
 
         The `Dockerfile` would look like:
 
@@ -966,7 +966,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
-    ??? done "Answer"
+    ??? success "Answer"
         === "x86_64 / AMD64"
             ```sh
             docker build -t jupyter-lab .
