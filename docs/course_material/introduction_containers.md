@@ -3,7 +3,7 @@
 **After having completed this chapter you will be able to:**
 
 * Discriminate between an image and a container
-* Run a docker container from dockerhub interactively
+* Run a Docker container from Docker Hub interactively
 * Validate the available containers and their status
 
 ## Material
@@ -23,7 +23,7 @@
 We recommend using a code editor like VScode or Sublime text. If you don't know which one to chose, take VScode as we can provide most support for this editor. 
 
 !!! note "If working on Windows"
-    If you are working on Windows, it is easiest to work with [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10). With VScode use the [WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). Make sure you install the latest versions before you install docker. In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
+    If you are working on Windows, it is easiest to work with [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10). With VScode use the [WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). Make sure you install the latest versions before you install Docker. In principle, you can also use a native shell like PowerShell, but this might result into some issues with bind mounting directories.
 
 !!! note "Work in projects"
     We recommend to work in a project folder. This will make it easier to find your files and to share them with others. You can create a project folder anywhere on your computer. For example, you can create a folder `projects` in your home directory and then create a subfolder `container-course` in it. You can then open this folder in VScode.
@@ -59,9 +59,9 @@ This will give you an interactive shell into the created container (this interac
     ```
 
 !!! note "Where does the image come from?"
-    If the image `ubuntu` was not on your computer yet, `docker` will search and try to get them from [dockerhub](https://hub.docker.com/), and download it.
+    If the image `ubuntu` was not on your computer yet, `docker` will search and try to get them from [Docker Hub](https://hub.docker.com/), and download it.
 
-**Exercise:** Run the command `whoami` in the docker container. Who are you?
+**Exercise:** Run the command `whoami` in the Docker container. Who are you?
 
 ??? success "Answer"
     The command `whoami` returns the current user. In the container `whoami` will return `root`. This means you are the [`root` user](https://en.wikipedia.org/wiki/Superuser) i.e. within the container you are admin and can basically change anything.  

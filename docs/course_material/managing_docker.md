@@ -2,15 +2,15 @@
 
 **After having completed this chapter you will be able to:**
 
-* Explain the concept of layers in the context of docker containers and images
+* Explain the concept of layers in the context of Docker containers and images
 * Use the command line to restart and re-attach to an exited container
 * Create a new image with `docker commit`
 * List locally available images with `docker image ls`
 * Run a command inside a container non-interactively
 * Use `docker image inspect` to get more information on an image
 * Use the command line to prune dangling images and stopped containers
-* Rename and tag a docker image
-* Push a newly created image to dockerhub
+* Rename and tag a Docker image
+* Push a newly created image to Docker Hub
 * Use the option `--mount` to bind mount a host directory to a container
 
 ## Material
@@ -19,7 +19,7 @@
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y7eCm9NOHYg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-* [Overview of how docker works](https://docs.docker.com/get-started/overview/)
+* [Overview of how Docker works](https://docs.docker.com/get-started/overview/)
 * [More on bind mounts](https://docs.docker.com/storage/bind-mounts/)
 * [Docker volumes in general](https://docs.docker.com/storage/volumes/)
 
@@ -171,11 +171,11 @@ Unless you're developing further on a container, or you're using it for an analy
 docker run --rm ubuntu-figlet figlet 'non-interactive run'
 ```
 
-### Pushing to dockerhub
+### Pushing to Docker Hub
 
-Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.
+Now that we have created our first own Docker image, we can store it and share it with the world on Docker Hub. Before we get there, we first have to (re)name and tag it.
 
-Before pushing an image to dockerhub, `docker` has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: `user/imagename`. We can rename an image with `docker tag` (which is a bit of misleading name for the command). So we could push to dockerhub like this:
+Before pushing an image to Docker Hub, `docker` has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: `user/imagename`. We can rename an image with `docker tag` (which is a bit of misleading name for the command). So we could push to Docker Hub like this:
 
 ```
 docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet
@@ -183,16 +183,16 @@ docker push [USER NAME]/ubuntu-figlet
 ```
 
 !!! note "If on Linux"
-    If you are on Linux and haven't connected to docker hub before, you will have login first. To do that, run:
+    If you are on Linux and haven't connected to Docker Hub before, you will have login first. To do that, run:
 
     ```sh
     docker login
     ```
 
-!!! note "How docker makes money"
-    All images pushed to dockerhub are open to the world. With a free account you can have one image on dockerhub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to dockerhub, you can store images locally with [`docker save`](https://docs.docker.com/engine/reference/commandline/save/).
+!!! note "How Docker makes money"
+    All images pushed to Docker Hub are open to the world. With a free account you can have one image on Docker Hub that is private. Paid accounts can have more private images, and are therefore popular for commercial organisations. As an alternative to Docker Hub, you can store images locally with [`docker save`](https://docs.docker.com/engine/reference/commandline/save/).
 
-We didn't specify the tag for our new image. That's why `docker tag` gave it the default tag called `latest`. Pushing an image without a tag will overwrite the current image with the tag `latest` (more on (not) using `latest` [here](https://vsupalov.com/docker-latest-tag/)). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to dockerhub:
+We didn't specify the tag for our new image. That's why `docker tag` gave it the default tag called `latest`. Pushing an image without a tag will overwrite the current image with the tag `latest` (more on (not) using `latest` [here](https://vsupalov.com/docker-latest-tag/)). If you want to maintain multiple versions of your image, you will have to add a tag, and push the image with that tag to Docker Hub:
 
 ```
 docker tag ubuntu-figlet [USER NAME]/ubuntu-figlet:v1
@@ -201,7 +201,7 @@ docker push [USER NAME]/ubuntu-figlet:v1
 
 ### Mounting a directory
 
-For many analyses you do calculations with files or scripts that are on your host (local) computer. But how do you make them available to a docker container? You can do that in several ways, but here we will use bind-mount. You can bind-mount a directory with `-v` (`--volume`) or `--mount`. Most old-school `docker` users will use `-v`, but `--mount` syntax is easier to understand and now recommended, so we will use the latter here:
+For many analyses you do calculations with files or scripts that are on your host (local) computer. But how do you make them available to a Docker container? You can do that in several ways, but here we will use bind-mount. You can bind-mount a directory with `-v` (`--volume`) or `--mount`. Most old-school `docker` users will use `-v`, but `--mount` syntax is easier to understand and now recommended, so we will use the latter here:
 
 ```sh
 docker run \
@@ -220,9 +220,9 @@ The target directory will be created if it does not yet exist. The source direct
     [IMAGE]
     ```
 
-    Do not use autocompletion or variable substitution (e.g. `$PWD`) in MobaXterm, since these point to 'emulated' paths, and are not passed properly to the docker command.
+    Do not use autocompletion or variable substitution (e.g. `$PWD`) in MobaXterm, since these point to 'emulated' paths, and are not passed properly to the Docker command.
 
-!!! note "Using docker from Windows PowerShell"
+!!! note "Using Docker from Windows PowerShell"
     Most of the syntax for `docker` is the same for both PowerShell and UNIX-based systems. However, there are some differences, e.g. in Windows, directories in file paths are separated by `\` instead of `/`. Also, line breaks are not escaped by `\` but by `.
 
 **Exercise:** Mount a host (local) directory to a target directory `/working_dir` in a container created from the `ubuntu-figlet` image and run it interactively. Check whether the target directory has been created.
@@ -283,7 +283,7 @@ docker run \
 ubuntu-figlet
 ```
 
-If you want docker to take over your current uid and gid, you can use:
+If you want Docker to take over your current uid and gid, you can use:
 
 ```
 docker run -u "$(id -u):$(id -g)"
@@ -404,7 +404,7 @@ docker run -u "$(id -u):$(id -g)"
         503:20
         ```
 
-        The `uid` 503 was nameless in the docker container. However the group 20 already existed in the ubuntu container, and was named `dialout`.
+        The `uid` 503 was nameless in the Docker container. However the group 20 already existed in the ubuntu container, and was named `dialout`.
 
         **Running `ubuntu-figlet` interactively without taking over `uid` and `gid`:**
 
@@ -437,7 +437,7 @@ docker run -u "$(id -u):$(id -g)"
         -rw-r--r--   1 geertvangeest  staff     400B Mar  5 14:15 uid_unset.txt
         ```
 
-        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.
+        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running Docker were used.
 
     === "MobaXterm"
 
@@ -508,4 +508,4 @@ docker run -u "$(id -u):$(id -g)"
         -rwx------   1 geert  UserGrp     400 Mar  5 14:15 uid_unset.txt
         ```
 
-        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running docker were used.
+        So, the uid and gid 0 (root:root) are not taken over. Instead, the uid and gid of the user running Docker were used.

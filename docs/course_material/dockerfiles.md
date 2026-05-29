@@ -2,15 +2,15 @@
 
 **After having completed this chapter you will be able to:**
 
-* Build an image based on a dockerfile
-* Use the basic dockerfile syntax
+* Build an image based on a Dockerfile
+* Use the basic Dockerfile syntax
 * Change the default command of an image and validate the change
 * Map ports to a container to display interactive content through a browser
 
 ## Material
 
 * [Official `Dockerfile` reference](https://docs.docker.com/engine/reference/builder/)
-* [Ten simple rules for writing dockerfiles](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316)
+* [Ten simple rules for writing Dockerfiles](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316)
 
 ## Exercises
 
@@ -183,7 +183,7 @@ CMD figlet My image works!
     CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
-**Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`apptainer` exercises](apptainer.md).
+**Exercise:** Now push our created image (with a version tag) to Docker Hub. We will use it later for the [`apptainer` exercises](apptainer.md).
 
 ??? success "Answer"
     ```sh
@@ -476,13 +476,13 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
-    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
+    **Exercise**: Push the image to Docker Hub, so we can use it later with the Apptainer exercises.
 
 
 
     ??? success "Answer"
 
-        Pushing it to dockerhub: 
+        Pushing it to Docker Hub:
 
         ```sh
         docker tag deseq2 [USER NAME]/deseq2:v1
@@ -625,7 +625,7 @@ Often containers are built for a specific purpose. For example, you can use a co
             docker build -t rstudio-server .
             ```
 
-    You can now run a container from the image. However, you will have to tell docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell Docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
     docker run --rm -it -p 8787:8787 rstudio-server
@@ -844,13 +844,13 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
-    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
+    **Exercise**: Push the image to Docker Hub, so we can use it later with the Apptainer exercises.
 
 
 
     ??? success "Answer"
 
-        Pushing it to dockerhub: 
+        Pushing it to Docker Hub:
 
         ```sh
         docker tag daterange [USER NAME]/daterange:v1
@@ -977,14 +977,14 @@ Often containers are built for a specific purpose. For example, you can use a co
             docker build -t jupyter-lab .
             ```
 
-    You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell Docker where to publish port 8888 from the Docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
     docker run --rm -it -p 8888:8888 jupyter-lab
     ```
 
     !!! note "Networking"
-        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+        More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
     By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
 
