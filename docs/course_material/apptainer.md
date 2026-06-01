@@ -24,7 +24,7 @@
 ## Exercises
 
 !!! info "Important"
-    This last part should be done on the remote server that has Apptainer installed. If you haven't set up a VScode SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connections).
+    This last part should be done on the remote server that has Apptainer installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server).
 
 ### Pulling an image
 
