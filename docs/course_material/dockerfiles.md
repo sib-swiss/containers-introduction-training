@@ -16,7 +16,10 @@
 
 ## Exercises
 
-To make your images shareable and adjustable, it's good practice to work with a `Dockerfile`. This is a script with a set of instructions to build your image from an existing image.
+!!! failure "Important"
+    This part should be done locally **on your laptop**.
+
+To make your images shareable and adjustable, it's good practice to work with a `Dockerfile`. Think of a `Dockerfile` as a script with a set of instructions to build your image from an existing image.
 
 ### Basic `Dockerfile`
 

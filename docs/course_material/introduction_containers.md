@@ -22,6 +22,9 @@
 
 ## Exercises
 
+!!! failure "Important"
+    This part should be done locally **on your laptop**.
+
 We recommend using a code editor like VS Code or Sublime text. If you don't know which one to chose, take VS Code as we can provide most support for this editor. If you haven't set up your working environment yet, you can find instructions [here](../precourse.md#software).
 
 !!! note "Work in projects"

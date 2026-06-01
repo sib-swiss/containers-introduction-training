@@ -27,6 +27,9 @@
 
 ## Exercises
 
+!!! failure "Important"
+    This part should be done locally **on your laptop**.
+
 ### Restarting an exited container
 
 If you would like to go back to your container with the `figlet` installation, you could try to run again:
