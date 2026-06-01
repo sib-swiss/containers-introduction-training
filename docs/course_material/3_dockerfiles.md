@@ -188,7 +188,7 @@ CMD figlet My image works!
     CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
-**Exercise:** Now push our created image (with a version tag) to Docker Hub. We will use it later for the [`apptainer` exercises](apptainer.md).
+**Exercise:** Now push our created image (with a version tag) to Docker Hub. We will use it later for the [`apptainer` exercises](4_apptainer.md).
 
 ??? success "Answer"
     ```sh
@@ -206,18 +206,18 @@ Often containers are built for a specific purpose. For example, you can use a co
     ```R title="test_deseq2.R"
     #!/usr/bin/env Rscript
 
-    # load packages required for this script
+    # Load packages required for this script
     write("Loading packages required for this script", stderr())
     suppressPackageStartupMessages({
         library(DESeq2)
         library(optparse)
     })
 
-    # workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
-    # this can probably be removed in the future
+    # Workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
+    # This can probably be removed in the future
     setOldClass("ExpData")
 
-    # load dependency packages for testing installations
+    # Load dependency packages for testing installations
     write("Loading dependency packages for testing installations", stderr())
     suppressPackageStartupMessages({
         library(apeglm)
@@ -232,7 +232,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         library(stringr)
     })
 
-    # parse options with optparse
+    # Parse options with optparse
     option_list <- list(
         make_option(c("--rows"),
             type = "integer",
@@ -247,18 +247,18 @@ Often containers are built for a specific purpose. For example, you can use a co
     )
     opt <- parse_args(opt_parser)
 
-    # create a random dummy count matrix
+    # Create a random dummy count matrix
     cnts <- matrix(rnbinom(n = opt$row * 10, mu = 100, size = 1 / 0.5), ncol = 10)
     cond <- factor(rep(1:2, each = 5))
 
-    # object construction
+    # Object construction
     dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~cond)
 
-    # standard analysis
+    # Standard analysis
     dds <- DESeq(dds)
     res <- results(dds)
 
-    # print results to stdout
+    # Print results to stdout
     print(res)
 
 
@@ -453,11 +453,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ENV PATH=/opt:$PATH
 
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
+    # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
     ENTRYPOINT ["test_deseq2.R"]
 
-    # default option (if positional arguments are not specified)
+    # Default option (if positional arguments are not specified)
     CMD ["--rows", "100"]
     ```
 
@@ -576,11 +575,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ENV PATH=/opt:$PATH
 
-        # note that if you want to be able to combine the two
-        # both ENTRYPOINT and CMD need to written in the exec form
+        # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
         ENTRYPOINT ["test_deseq2.R"]
 
-        # default option (if positional arguments are not specified)
+        # Default option (if positional arguments are not specified)
         CMD ["--rows", "100"]
 
         ```
@@ -660,18 +658,22 @@ Often containers are built for a specific purpose. For example, you can use a co
     ```python title="daterange.py"
     #!/usr/bin/env python3
 
+    # Load libraries required for this script
     import pandas as pd
     import argparse
 
+    # Create argument parser
     parser = argparse.ArgumentParser(description = "Get a daterange")
-
     parser.add_argument('-d', '--date', type=str, required=True, 
                         help='Date. Format: [YYYYMMDD]')
 
+    # Parse arguments
     args = parser.parse_args()
 
+    # Create dates
     dates = pd.date_range(args.date, periods=7)
 
+    # Print dates to stdout
     for d in dates:
         print(d)
     ```
@@ -821,11 +823,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ENV PATH=/opt:$PATH
 
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
+    # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
     ENTRYPOINT ["daterange.py"]
 
-    # default option (if positional arguments are not specified)
+    # Default option (if positional arguments are not specified)
     CMD ["--date", "20220226"]
     ```
 
@@ -935,11 +936,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ENV PATH=/opt:$PATH
 
-        # note that if you want to be able to combine the two
-        # both ENTRYPOINT and CMD need to written in the exec form
+        # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
         ENTRYPOINT ["daterange.py"]
 
-        # default option (if positional arguments are not specified)
+        # Default option (if positional arguments are not specified)
         CMD ["--date", "20220226"]
 
         ```

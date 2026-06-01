@@ -17,7 +17,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/managing_docker.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/2_managing_docker.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y7eCm9NOHYg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -152,7 +152,7 @@ In the previous exercises we have run containers without a command as positional
     ],
     ```
 
-    In the case of the ubuntu the default command is `bash`, returning a shell in `bash` (i.e. *Bourne again shell*). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](dockerfiles.md).
+    In the case of the ubuntu the default command is `bash`, returning a shell in `bash` (i.e. *Bourne again shell*). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](3_dockerfiles.md).
 
 !!! note "The difference between `Config` and `ContainerConfig`"
     The configuration at `Config` represents the image, the configuration at `ContainerConfig` the last step during the build of the image, i.e. the last layer. More info e.g. at [this post at stackoverflow](https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect).

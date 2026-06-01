@@ -4,10 +4,10 @@ nav:
     - Precourse instructions: precourse.md
     - Course schedule: course_schedule.md
     - Course material:
-      - Introduction to containers: course_material/introduction_containers.md
-      - Managing containers and images: course_material/managing_docker.md
-      - Working with Dockerfiles: course_material/dockerfiles.md
-      - Running containers with Apptainer: course_material/apptainer.md
+      - Introduction to containers: course_material/1_introduction_containers.md
+      - Managing containers and images: course_material/2_managing_docker.md
+      - Working with Dockerfiles: course_material/3_dockerfiles.md
+      - Running containers with Apptainer: course_material/4_apptainer.md
 
 theme:
   name: material

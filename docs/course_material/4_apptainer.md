@@ -13,7 +13,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/apptainer.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/4_apptainer.pdf){: .md-button }
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/d3kxtzUutjk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -30,7 +30,7 @@
 
 Apptainer can take several image formats (e.g. a `docker` image), and convert them into it's own `.sif` format. Unlike `docker` this image doesn't live in a local image cache, but it's stored as an actual file.
 
-**Exercise:** On the remote server, pull the Docker image that has the adjusted default `CMD` that we have pushed to Docker Hub [in this exercise](dockerfiles.md#using-cmd) (`ubuntu-figlet-df:v3`) with `apptainer pull`. The syntax is:
+**Exercise:** On the remote server, pull the Docker image that has the adjusted default `CMD` that we have pushed to Docker Hub [in this exercise](3_dockerfiles.md#using-cmd) (`ubuntu-figlet-df:v3`) with `apptainer pull`. The syntax is:
 
 ```sh
 apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
