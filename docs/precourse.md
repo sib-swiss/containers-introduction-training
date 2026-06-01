@@ -14,8 +14,6 @@ Install Docker on your local computer and create an account on [Docker Hub](http
 
 ### Code editor
 
-!!! note "If installing Docker is a problem"
-    During the course, we can give only limited support for installation issues. If you do not manage to install Docker before the course, you can still do almost all exercises on [Play with Docker](https://labs.play-with-docker.com/). A Docker login is required.
 You should have a modern code editor installed. During the course, we can give only limited help for installation and set-up issues, so we will only "officially" support [VScode](https://code.visualstudio.com/download). If you are already very familiar with another combination of modern code editor/command line interface, feel free to use it, but know that support for this will be limited.
 
 !!! note "Other required installations"
