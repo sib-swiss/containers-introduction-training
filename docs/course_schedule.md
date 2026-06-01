@@ -1,3 +1,5 @@
+# Course schedule
+
 | Session   	| Start    	| End      	| Topic                                 	|
 |-----------	|----------	|----------	|---------------------------------------	|
 | Session 1 	| 9:00 AM  	| 10:30 AM 	| Introduction to containers            	|

@@ -1,3 +1,5 @@
+# Managing containers and images
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**

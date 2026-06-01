@@ -1,4 +1,4 @@
-# Course website
+# Introduction to containers for Reproducible Research
 
 ## Teachers 
 

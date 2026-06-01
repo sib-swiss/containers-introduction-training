@@ -1,7 +1,7 @@
 site_name: Introduction to containers
 nav:
     - Home: index.md
-    - Precourse preparations: precourse.md
+    - Precourse instructions: precourse.md
     - Course schedule: course_schedule.md
     - Course material:
       - Introduction to containers: course_material/introduction_containers.md
