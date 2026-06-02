@@ -137,28 +137,28 @@ apptainer run [IMAGE NAME].sif [COMMAND]
         ```
         
     === "Python"
-        Pulling the `daterange.py` image:
+        Pulling the `pydeseq2` image:
 
         ```sh
-        apptainer pull docker://[USER NAME]/daterange:v1
+        apptainer pull docker://[USER NAME]/pydeseq2:v1
         ```
 
         Running it without command:
 
         ```sh
-        ./daterange_v1.sif
+        ./pydeseq2_v1.sif
         ```
 
         Running with a command:
 
         ```sh
-        ./daterange_v1.sif --date 20221005
+        ./pydeseq2_v1.sif --rows 200
         ```
 
         To overwrite both entrypoint and the command:
 
         ```sh
-        apptainer exec daterange_v1.sif daterange.py --date 20221005
+        apptainer exec pydeseq2_v1.sif test_pydeseq2.py --rows 200
         ```
 
 ### Mounting with Apptainer
