@@ -79,7 +79,7 @@ apptainer run [IMAGE NAME].sif [COMMAND]
 **Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the Python or R image you've created in the previous chapter.
 
 !!! note "Entrypoint and apptainer"
-    The `daterange` image has an entrypoint set, and `apptainer run` does not overwrite it. In order to ignore both the entrypoint and cmd use `apptainer exec`.  
+    The `deseq2` and `pydeseq2` images both have an entrypoint set, and `apptainer run` does not overwrite it. In order to ignore both `ENTRYPOINT` and `CMD`, use `apptainer exec`.
 
 ??? success "Answer"
     Running it without a command (`./ubuntu-figlet_v3.sif`) should give:

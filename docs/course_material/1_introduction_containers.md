@@ -95,8 +95,8 @@ docker container ls -a
 Now let's install some software in our `ubuntu` environment. We'll install some simple software called [`figlet`](http://www.figlet.org/). Type into the container shell:
 
 ```sh
-apt-get update
-apt-get install figlet
+apt update
+apt install figlet
 ```
 
 !!! note "This will give some warnings"

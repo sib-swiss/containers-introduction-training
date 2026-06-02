@@ -27,8 +27,8 @@ You can generate an image from a `Dockerfile` using the command `docker build`. 
 
 ```dockerfile
 FROM ubuntu:jammy-20250415.1
-RUN apt-get update
-RUN apt-get install figlet
+RUN apt update
+RUN apt install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
@@ -36,12 +36,11 @@ RUN apt-get install figlet
 
     ```dockerfile
     FROM ubuntu
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     ```
 
     This will automatically pull the image with the tag `latest`. However, if the maintainer of the `ubuntu` images decides to tag another `ubuntu` version as `latest`, rebuilding with the above `Dockerfile` will not give you the same result. Therefore it's always good practice to add the (stable) tag to the image in a `Dockerfile`. More rules on making your `Dockerfiles` more reproducible [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316).
-
 
 **Exercise:** Create a file on your computer called `Dockerfile`, and paste the above instruction lines in that file. Make the directory containing the `Dockerfile` your current directory. Build a new image based on that `Dockerfile` with:
 
@@ -91,7 +90,7 @@ What has happened? What is the name of the build image?
         ```
     === "ARM (MacOS M1 chip)"
         ```sh
-        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        export DOCKER_DEFAULT_PLATFORM=linux/amd64
         docker build -t ubuntu-figlet:v2 .
         ```
 
@@ -101,8 +100,8 @@ As you might remember the second positional argument of `docker run` is a comman
 
 ```dockerfile
 FROM ubuntu:jammy-20250415.1
-RUN apt-get update
-RUN apt-get install figlet
+RUN apt update
+RUN apt install figlet
 CMD figlet My image works!
 ```
 
@@ -117,7 +116,7 @@ CMD figlet My image works!
         ```
     === "ARM64 (MacOS M1 chip)"
         ```sh
-        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        export DOCKER_DEFAULT_PLATFORM=linux/amd64
         docker build -t ubuntu-figlet:v3 .
         ```
 
@@ -174,8 +173,8 @@ CMD figlet My image works!
 
     ```dockerfile
     FROM ubuntu:jammy-20250415.1
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     CMD figlet My image works!
     ```
 
@@ -183,8 +182,8 @@ CMD figlet My image works!
 
     ```dockerfile
     FROM ubuntu:jammy-20250415.1
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
@@ -343,7 +342,7 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            DOCKER_DEFAULT_PLATFORM=linux/amd64
+            export DOCKER_DEFAULT_PLATFORM=linux/amd64
             docker build -t deseq2 .
             ```
 
@@ -1044,7 +1043,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image ([Jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in Python. With the image we are creating, we will be able to run JupyterLab inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image ([Jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in Python. With the image we are creating, we will be able to run JupyterLab inside a container. Check out the `Dockerfile`:
 
     ```dockerfile
     FROM jupyter/base-notebook:x86_64-ubuntu-22.04

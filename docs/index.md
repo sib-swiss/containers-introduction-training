@@ -20,7 +20,7 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 
 ## License & copyright
 
-**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/single-cell-training/master/LICENCE)
+**License:** [CC BY-SA 4.0](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/refs/heads/main/LICENSE.md)
 
 **Copyright:** [SIB Swiss Institute of Bioinformatics](https://www.sib.swiss/)
 
