@@ -90,7 +90,7 @@ And you're back in the container shell.
     Should give you output.
 
 !!! note "`docker attach` and `docker exec`"
-    In addition to `docker attach`, you can also "re-attach" a container with `docker exec`. However, these two are quite different. While `docker attach` gets you back to your stopped shell process, `docker exec` creates a new one (more information on [stackoverflow](https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec)). The command `docker exec` enables you therefore to have multiple shells open in the same container. That can be convenient if you have one shell open with a program running in the foreground, and another one for e.g. monitoring. An example for using `docker exec` on a running container:
+    In addition to `docker attach`, you can also "re-attach" a container with `docker exec`. However, these two are quite different. While `docker attach` gets you back to your stopped shell process, `docker exec` creates a new one (more information on [Stack Overflow](https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec)). The command `docker exec` enables you therefore to have multiple shells open in the same container. That can be convenient if you have one shell open with a program running in the foreground, and another one for e.g. monitoring. An example for using `docker exec` on a running container:
 
     ```sh
     docker exec -it [CONTAINER NAME] /bin/bash
@@ -127,7 +127,7 @@ docker run -it ubuntu-figlet
 **Exercise:** Run the above command. Is the `figlet` installation in the created container?
 
 ??? success "Answer"
-    yes
+    Yes.
 
 ### Commands
 
@@ -155,7 +155,7 @@ In the previous exercises we have run containers without a command as positional
     In the case of the ubuntu the default command is `bash`, returning a shell in `bash` (i.e. *Bourne again shell*). Adding the options `-i` and `-t` (`-it`) to your `docker run` command will therefore result in an interactive `bash` shell. You can modify this default behaviour. More on that later, when we will work on [Dockerfiles](3_dockerfiles.md).
 
 !!! note "The difference between `Config` and `ContainerConfig`"
-    The configuration at `Config` represents the image, the configuration at `ContainerConfig` the last step during the build of the image, i.e. the last layer. More info e.g. at [this post at stackoverflow](https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect).
+    The configuration at `Config` represents the image, the configuration at `ContainerConfig` the last step during the build of the image, i.e. the last layer. More info e.g. at [this post at Stack Overflow](https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect).
 
 ### Removing containers
 
@@ -295,7 +295,7 @@ docker run -u "$(id -u):$(id -g)"
 ```
 
 !!! note "This behaviour is different on MacOS and MobaXterm"
-    On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [stackoverflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
+    On MacOS and in the local shell of MobaXterm the uid and gid are taken over from the user running the container (even if you set `-u` as 0:0), i.e. your current ID. More info on [Stack Overflow](https://stackoverflow.com/questions/43097341/docker-on-macosx-does-not-translate-file-ownership-correctly-in-volumes).
 
 **Exercise:** Start an interactive container based on the `ubuntu-figlet` image, bind-mount a local directory and take over your current `uid` and `gid`. Write the output of a `figlet` command to a file in the mounted directory. Who and which group owns the file inside the container? And outside the container? Answer the same question but now run the container without setting `-u`.
 

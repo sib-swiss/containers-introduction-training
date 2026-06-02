@@ -59,7 +59,7 @@ RUN apt-get install figlet
     If you are using a computer with an Apple M chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M chip (especially if you have sharing in mind), it's best to set the `DOCKER_DEFAULT_PLATFORM` to `linux/amd64` with `export DOCKER_DEFAULT_PLATFORM=linux/amd64`. 
 
 !!! note "The argument of `docker build`"
-    The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.
+    The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (Python, R, shell) scripts that are required to build the image.
 
 What has happened? What is the name of the build image?
 
@@ -201,7 +201,7 @@ CMD figlet My image works!
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
 === "R"
-    In the exercises will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R), or copy-paste it:
+    In the exercises, we will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R), or copy-paste it:
 
     ```R title="test_deseq2.R"
     #!/usr/bin/env Rscript
@@ -232,7 +232,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         library(stringr)
     })
 
-    # Parse options with optparse
+    # Create parsing options list
     option_list <- list(
         make_option(c("--rows"),
             type = "integer",
@@ -241,10 +241,13 @@ Often containers are built for a specific purpose. For example, you can use a co
         )
     )
 
+    # Implement parser with optparse
     opt_parser <- OptionParser(
         option_list = option_list,
         description = "Runs DESeq2 on dummy data"
     )
+
+    # Parse options with optparse
     opt <- parse_args(opt_parser)
 
     # Create a random dummy count matrix
@@ -260,10 +263,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     # Print results to stdout
     print(res)
-
-
     ```
-    
     
     After you have downloaded it, make sure to set the permissions to executable:
 
@@ -453,7 +453,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ENV PATH=/opt:$PATH
 
-    # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
+    # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
     ENTRYPOINT ["test_deseq2.R"]
 
     # Default option (if positional arguments are not specified)
@@ -575,7 +575,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ENV PATH=/opt:$PATH
 
-        # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
+        # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
         ENTRYPOINT ["test_deseq2.R"]
 
         # Default option (if positional arguments are not specified)
@@ -598,7 +598,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
 
     ```dockerfile
     FROM rocker/rstudio:4
@@ -628,18 +628,18 @@ Often containers are built for a specific purpose. For example, you can use a co
             docker build -t rstudio-server .
             ```
 
-    You can now run a container from the image. However, you will have to tell Docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell Docker where to publish port 8787 from the Docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
     docker run --rm -it -p 8787:8787 rstudio-server
     ```
 
     !!! note "Networking"
-        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+        More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of jupyterhub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of JupyterHub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
 
-    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+    We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
 
     ```sh
     docker run \
@@ -653,7 +653,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     By doing this you have a completely isolated and shareable R environment running Rstudio server, but with your local files available to it. Pretty neat right? 
 
 === "Python"
-    In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/daterange.py). Or copy-paste it from here:
+    In the exercises, we will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/daterange.py). Or copy-paste it from here:
 
     ```python title="daterange.py"
     #!/usr/bin/env python3
@@ -754,7 +754,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         ./daterange.py --date 20220226
         ```
 
-    That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
+    That's kind of nice. We can ship our Python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`.
 
     !!! note "The `$PATH` variable"
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
@@ -823,7 +823,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ENV PATH=/opt:$PATH
 
-    # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
+    # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
     ENTRYPOINT ["daterange.py"]
 
     # Default option (if positional arguments are not specified)
@@ -936,7 +936,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ENV PATH=/opt:$PATH
 
-        # Note that if you want to be able to combine the two both ENTRYPOINT and CMD need to written in the exec form
+        # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
         ENTRYPOINT ["daterange.py"]
 
         # Default option (if positional arguments are not specified)
@@ -956,7 +956,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image from the [jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image from the [Jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in Python. With the image we are creating we will be able to run Jupyter lab inside a container.  Check out the `Dockerfile`:
 
     ```dockerfile
     FROM jupyter/base-notebook:python-3.9
@@ -964,10 +964,10 @@ Often containers are built for a specific purpose. For example, you can use a co
     RUN pip install pandas
     ```
 
-    This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
+    This will create an image from the existing `Python` image. It will also install `JupyterLab` with `pip`. As a default command it starts a Jupyter notebook at port 8888.
 
     !!! note "Ports"
-        We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
+        We have specified here that JupyterLab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
@@ -991,9 +991,9 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note "Networking"
         More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing JupyterHub at port 8888 at localhost. You can approach the instance of JupyterHub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
 
-    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+    We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
 
     ```sh
     docker run \
@@ -1004,7 +1004,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     jupyter-lab
     ```
 
-    By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
+    By doing this you have a completely isolated and shareable Python environment running Jupyter Lab, but with your local files available to it. Pretty neat right?
 
     !!! note
         Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html).

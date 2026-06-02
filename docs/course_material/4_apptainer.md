@@ -19,7 +19,7 @@
 
 * [Apptainer documentation](https://apptainer.org/docs/user/latest/)
 * [An article on Docker vs Apptainer](https://pythonspeed.com/articles/containers-filesystem-data-processing/)
-* [Using conda and containers with snakemake](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#containerization-of-conda-based-workflows)
+* [Using conda and containers with Snakemake](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#containerization-of-conda-based-workflows)
 
 ## Exercises
 
@@ -76,7 +76,7 @@ apptainer run [IMAGE NAME].sif [COMMAND]
     However, most applications require `apptainer run`. Especially if you want to provide options like `--bind` (for mounting directories). 
 
 
-**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the python or R image you've created in the previous chapter.
+**Exercise:** Run the `.sif` file without a command, and with a command that runs `figlet`. Do you get expected output? Do the same for the Python or R image you've created in the previous chapter.
 
 !!! note "Entrypoint and apptainer"
     The `daterange` image has an entrypoint set, and `apptainer run` does not overwrite it. In order to ignore both the entrypoint and cmd use `apptainer exec`.  
@@ -247,7 +247,7 @@ During the lecture you have learned that Apptainer takes over the user privilege
 
 All bioconda packages also have a pre-built container. Have a look at the [bioconda website](https://bioconda.github.io/index.html), and search for `fastqc`. In the search results, click on the appropriate record (i.e. package 'fastqc'). Now, scroll down and find the `docker` command to obtain the fastqc image.
 
-**Exercise:** Check out the container image at quay.io, by following [quay.io/biocontainers/fastqc](https://quay.io/biocontainers/fastqc). Choose a tag, and pull it with `apptainer pull`.
+**Exercise:** Check out the container image at [quay.io](https://quay.io/biocontainers/fastqc). Choose a tag, and pull it with `apptainer pull`.
 
 ??? success "Answer"
     It's up to you which tag you choose. The tag with the latest version is `0.12.1--hdfd78af_0`.

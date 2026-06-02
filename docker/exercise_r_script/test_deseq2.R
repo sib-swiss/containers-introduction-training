@@ -1,17 +1,17 @@
 #!/usr/bin/env Rscript
 
-# load packages required for this script
+# Load packages required for this script
 write("Loading packages required for this script", stderr())
 suppressPackageStartupMessages({
     library(DESeq2)
     library(optparse)
 })
 
-# workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
-# this can probably be removed in the future
+# Workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
+# This can probably be removed in the future
 setOldClass("ExpData")
 
-# load dependency packages for testing installations
+# Load dependency packages for testing installations
 write("Loading dependency packages for testing installations", stderr())
 suppressPackageStartupMessages({
     library(apeglm)
@@ -26,7 +26,7 @@ suppressPackageStartupMessages({
     library(stringr)
 })
 
-# parse options with optparse
+# Create parsing options list
 option_list <- list(
     make_option(c("--rows"),
         type = "integer",
@@ -35,22 +35,25 @@ option_list <- list(
     )
 )
 
+# Implement parser with optparse
 opt_parser <- OptionParser(
     option_list = option_list,
     description = "Runs DESeq2 on dummy data"
 )
+
+# Parse options with optparse
 opt <- parse_args(opt_parser)
 
-# create a random dummy count matrix
+# Create a random dummy count matrix
 cnts <- matrix(rnbinom(n = opt$row * 10, mu = 100, size = 1 / 0.5), ncol = 10)
 cond <- factor(rep(1:2, each = 5))
 
-# object construction
+# Object construction
 dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~cond)
 
-# standard analysis
+# Standard analysis
 dds <- DESeq(dds)
 res <- results(dds)
 
-# print results to stdout
+# Print results to stdout
 print(res)
