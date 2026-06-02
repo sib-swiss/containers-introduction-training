@@ -270,15 +270,19 @@ Often containers are built for a specific purpose. For example, you can use a co
     ```sh
     chmod +x test_deseq2.R
     ```
-    It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:
+    It is a relatively simple script that runs DESeq2 on a dummy dataset. To execute it with default parameters, you can use:
+
+    ```sh
+    ./test_deseq2.R
+    ```
+
+    With this command, the dummy dataset will contain 100 rows, the default value as written in the `# Create parsing options list` code block of the script. If you want to run it on a different number of rows, you can use the `--rows` optional argument that specifies the number of rows generated in the input count matrix:
 
     ```sh
     ./test_deseq2.R --rows 75
     ```
 
-    Giving a list of results from DESeq2 on a dummy dataset with 75 rows.
-
-    Here, `--rows` is an optional argument that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
+    When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
 
     ```
         baseMean log2FoldChange     lfcSE         stat    pvalue      padj
@@ -296,11 +300,11 @@ Often containers are built for a specific purpose. For example, you can use a co
     100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
     ```
 
-    From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below. We give it the following instructions:
+    From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below, with the following instructions:
 
-    - use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
-    - install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r). 
-    - copy the script `test_deseq2.R` to `/opt` inside the container:
+    - Use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
+    - Install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r).
+    - Copy the script `test_deseq2.R` to `/opt` inside the container:
 
     ```dockerfile
     FROM rocker/r2u:jammy
@@ -320,17 +324,15 @@ Often containers are built for a specific purpose. For example, you can use a co
     ```
 
     !!! note
-        In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+        In order to use `COPY`, the file that needs to be copied should be in the same directory as the `Dockerfile` or one of its subdirectories.
 
     !!! note "R image stack"
-        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` or `install2.r` are possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
-
+        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with Shiny, Rstudio, tidyverse etc.). The possible installation methods (for example, with `apt` or `install2.r`) depend on the type of image you are using. To understand more about how to install R packages in different containers, check this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
     **Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. Name the image `deseq2`. After that, start an interactive session and execute the script inside the container. 
 
     !!! info
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
-
 
     ??? success "Answer"
         Build the container:
@@ -411,7 +413,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         returns:
 
         ```
-        /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        /opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         ```
 
         Now you can try to execute it from the root directory (or any other):
@@ -428,9 +430,9 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     Now it will directly print the output of `test_deseq2.R` to stdout. 
 
-    In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
+    When you pack your script inside a container, you are building a container specifically for your script, meaning you _almost_ want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
-    * `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+    * `ENTRYPOINT` **can not be overwritten by positional arguments** (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`.
     * The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
 
     Let's try it out:
@@ -482,8 +484,6 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     **Exercise**: Push the image to Docker Hub, so we can use it later with the Apptainer exercises.
 
-
-
     ??? success "Answer"
 
         Pushing it to Docker Hub:
@@ -498,43 +498,51 @@ Often containers are built for a specific purpose. For example, you can use a co
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
     ```yaml
-    "Config": {
-        "Hostname": "",
-        "Domainname": "",
-        "User": "",
-        "AttachStdin": false,
-        "AttachStdout": false,
-        "AttachStderr": false,
-        "Tty": false,
-        "OpenStdin": false,
-        "StdinOnce": false,
-        "Env": [
-            "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-            "LC_ALL=en_US.UTF-8",
-            "LANG=en_US.UTF-8",
-            "DEBIAN_FRONTEND=noninteractive",
-            "TZ=UTC"
-        ],
-        "Cmd": [
-            "--rows",
-            "100"
-        ],
-        "ArgsEscaped": true,
-        "Image": "",
-        "Volumes": null,
-        "WorkingDir": "/opt",
-        "Entrypoint": [
-            "test_deseq2.R"
-        ],
-        "OnBuild": null,
-        "Labels": {
-            "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
-            "org.label-schema.license": "GPL-2.0",
-            "org.label-schema.vcs-url": "https://github.com/rocker-org/",
-            "org.label-schema.vendor": "Rocker Project"
+    [
+        {
+            "Id": "sha256:d19b445510187ef4d0ac77b1842ab906433fb07d8faba954372afa18ea8a51e2",
+            "RepoTags": [
+                "deseq2:latest"
+            ],
+            "RepoDigests": [],
+            "Comment": "buildkit.dockerfile.v0",
+            "Created": "2026-06-02T14:38:18.240243842+02:00",
+            "Config": {
+                "Env": [
+                    "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                    "LC_ALL=en_US.UTF-8",
+                    "LANG=en_US.UTF-8",
+                    "DEBIAN_FRONTEND=noninteractive",
+                    "TZ=UTC"
+                ],
+                "Entrypoint": [
+                    "test_deseq2.R"
+                ],
+                "Cmd": [
+                    "--rows",
+                    "100"
+                ],
+                "Labels": {
+                    "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+                    "org.label-schema.license": "GPL-2.0",
+                    "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+                    "org.label-schema.vendor": "Rocker Project",
+                    "org.opencontainers.image.version": "22.04"
+                },
+                "ArgsEscaped": true
+            },
+            "Architecture": "amd64",
+            "Os": "linux",
+            "Size": 1103316046,
+            # ...
+            "Metadata": {
+                "LastTagTime": "2026-06-02T14:41:00.742210773+02:00"
+            }
         }
-    }
+    ]
     ```
+
+    <h3> Extra: Adding metadata to your image </h3>
 
     You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
@@ -544,7 +552,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
 
         ```dockerfile
-        LABEL keyx="valuex" keyy="valuey"
+        LABEL key_x="value_x" key_y="value_y"
         ```
 
     ??? success "Answer"
@@ -586,34 +594,67 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Config` record in the output of `docker inspect` was updated with:
 
         ```yaml
-            "Labels": {
-                "org.opencontainers.image.authors": "Geert van Geest",
-                "org.opencontainers.image.created": "2023-04-12",
-                "org.opencontainers.image.description": "Container with DESeq2 and friends",
-                "org.opencontainers.image.licenses": "GPL-2.0-or-later",
-                "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
-                "org.opencontainers.image.vendor": "Rocker Project"
-            }
+        "Labels": {
+            "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+            "org.label-schema.license": "GPL-2.0",
+            "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+            "org.label-schema.vendor": "Rocker Project",
+            "org.opencontainers.image.authors": "Geert van Geest",
+            "org.opencontainers.image.created": "2024-10-12",
+            "org.opencontainers.image.description": "Container with DESeq2 and friends",
+            "org.opencontainers.image.version": "22.04"
+        },
         ```
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we will install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in R. With the image we are creating, we will be able to run Rstudio server inside a container. Check out the `Dockerfile`:
 
     ```dockerfile
     FROM rocker/rstudio:4
 
-    RUN apt-get update && \
-        apt-get install -y libz-dev
+    LABEL org.opencontainers.image.created="2024-10-12" \
+        org.opencontainers.image.authors="Geert van Geest" \
+        org.opencontainers.image.description="Container with DESeq2 and friends"
+
+    RUN apt update && apt install -y \
+        fonts-noto \
+        libcurl4-openssl-dev \
+        libfontconfig1-dev \
+        libfreetype6-dev \
+        libfribidi-dev \
+        libharfbuzz-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libtiff5-dev \
+        libxml2-dev \
+        tzdata \
+        && apt clean && apt autoremove && apt purge \
+        && rm -rf /var/lib/apt/lists/*
 
     RUN install2.r \
-        optparse \
         BiocManager
 
-    RUN R -q -e 'BiocManager::install("biomaRt")'
+    RUN R -q -e "BiocManager::install(c( \
+      'DESeq2', \
+      'optparse', \
+      'apeglm', \
+      'IHW', \
+      'limma', \
+      'data.table', \
+      'ggrepel', \
+      'pheatmap', \
+      'stringr' \
+      ))"
+
+    WORKDIR /opt
+
+    COPY test_deseq2.R .
+
+    ENV PATH=/opt:$PATH
     ```
 
-    This will create an image from the existing `rstudio` image. It will also install `libz-dev` with `apt-get`, `BiocManager` with `install2.r` and `biomaRt` with an R command. Despiste we're installing the same packages, the installation steps need to be different from the `r-base` image. This is because in the `rocker/rstudio` images R is installed from source, and therefore you can't install packages with `apt-get`. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+    This will create an image from the existing `rstudio` image. It first installs required system libraries (`libcurl4-openssl-dev`, `libxml2-dev`...) via `apt`, which are needed to compile certain Bioconductor dependencies. It then installs `BiocManager` using `install2.r` (the helper script provided by rocker images) and next uses it to install several R packages (`DESeq2`, `optparse`, `apeglm`...) via an inline R command. Note that R packages themselves cannot be installed with `apt` in `rocker/rstudio` images, because R is compiled from source rather than installed from the system package manager. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
@@ -637,7 +678,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note "Networking"
         More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of JupyterHub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing Rstudio server at port 8787 on localhost. You can approach the instance of Rstudio by typing `localhost:8787` in your browser. You will be asked for a username (`rstudio`) and a password. You can find it in the terminal from which you have started the container.
 
     We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
 
@@ -646,7 +687,7 @@ Often containers are built for a specific purpose. For example, you can use a co
     -it \
     --rm \
     -p 8787:8787 \
-    --mount type=bind,source=/Users/myusername/working_dir,target=/home/rstudio/working_dir \
+    --mount type=bind,source=$(pwd),target=/working_dir/ \
     rstudio-server
     ```
 

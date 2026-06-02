@@ -1,4 +1,4 @@
-# # Use Rocker R with Ubuntu 22 as base image
+# Use Rocker R with Ubuntu 22 as base image
 FROM rocker/r2u:jammy
 
 # Add metadata to image
@@ -27,6 +27,7 @@ COPY test_deseq2.R .
 # Add /opt to PATH so we can execute script directly
 ENV PATH=/opt:$PATH
 
+# Specify entrypoint
 # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD
 # need to written in the exec form
 ENTRYPOINT ["test_deseq2.R"]
