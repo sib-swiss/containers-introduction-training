@@ -1,20 +1,25 @@
+# Working with Dockerfiles
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
 
-* Build an image based on a dockerfile
-* Use the basic dockerfile syntax
+* Build an image based on a Dockerfile
+* Use the basic Dockerfile syntax
 * Change the default command of an image and validate the change
 * Map ports to a container to display interactive content through a browser
 
 ## Material
 
 * [Official `Dockerfile` reference](https://docs.docker.com/engine/reference/builder/)
-* [Ten simple rules for writing dockerfiles](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316)
+* [Ten simple rules for writing Dockerfiles](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316)
 
 ## Exercises
 
-To make your images shareable and adjustable, it's good practice to work with a `Dockerfile`. This is a script with a set of instructions to build your image from an existing image.
+!!! failure "Important"
+    This part should be done locally **on your laptop**.
+
+To make your images shareable and adjustable, it's good practice to work with a `Dockerfile`. Think of a `Dockerfile` as a script with a set of instructions to build your image from an existing image.
 
 ### Basic `Dockerfile`
 
@@ -22,8 +27,8 @@ You can generate an image from a `Dockerfile` using the command `docker build`. 
 
 ```dockerfile
 FROM ubuntu:jammy-20250415.1
-RUN apt-get update
-RUN apt-get install figlet
+RUN apt update
+RUN apt install figlet
 ```
 
 !!! note "On writing reproducible `Dockerfiles`"
@@ -31,12 +36,11 @@ RUN apt-get install figlet
 
     ```dockerfile
     FROM ubuntu
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     ```
 
     This will automatically pull the image with the tag `latest`. However, if the maintainer of the `ubuntu` images decides to tag another `ubuntu` version as `latest`, rebuilding with the above `Dockerfile` will not give you the same result. Therefore it's always good practice to add the (stable) tag to the image in a `Dockerfile`. More rules on making your `Dockerfiles` more reproducible [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008316).
-
 
 **Exercise:** Create a file on your computer called `Dockerfile`, and paste the above instruction lines in that file. Make the directory containing the `Dockerfile` your current directory. Build a new image based on that `Dockerfile` with:
 
@@ -54,7 +58,7 @@ RUN apt-get install figlet
     If you are using a computer with an Apple M chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) `x86_64/AMD64` machines. When building images on a Mac with an M chip (especially if you have sharing in mind), it's best to set the `DOCKER_DEFAULT_PLATFORM` to `linux/amd64` with `export DOCKER_DEFAULT_PLATFORM=linux/amd64`. 
 
 !!! note "The argument of `docker build`"
-    The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (python, R, shell) scripts that are required to build the image.
+    The command `docker build` takes a directory as input (providing `.` means the current directory). This directory should contain the `Dockerfile`, but it can also contain more of the build context, e.g. (Python, R, shell) scripts that are required to build the image.
 
 What has happened? What is the name of the build image?
 
@@ -86,7 +90,7 @@ What has happened? What is the name of the build image?
         ```
     === "ARM (MacOS M1 chip)"
         ```sh
-        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        export DOCKER_DEFAULT_PLATFORM=linux/amd64
         docker build -t ubuntu-figlet:v2 .
         ```
 
@@ -96,8 +100,8 @@ As you might remember the second positional argument of `docker run` is a comman
 
 ```dockerfile
 FROM ubuntu:jammy-20250415.1
-RUN apt-get update
-RUN apt-get install figlet
+RUN apt update
+RUN apt install figlet
 CMD figlet My image works!
 ```
 
@@ -112,7 +116,7 @@ CMD figlet My image works!
         ```
     === "ARM64 (MacOS M1 chip)"
         ```sh
-        DOCKER_DEFAULT_PLATFORM=linux/amd64
+        export DOCKER_DEFAULT_PLATFORM=linux/amd64
         docker build -t ubuntu-figlet:v3 .
         ```
 
@@ -169,8 +173,8 @@ CMD figlet My image works!
 
     ```dockerfile
     FROM ubuntu:jammy-20250415.1
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     CMD figlet My image works!
     ```
 
@@ -178,12 +182,12 @@ CMD figlet My image works!
 
     ```dockerfile
     FROM ubuntu:jammy-20250415.1
-    RUN apt-get update
-    RUN apt-get install figlet
+    RUN apt update
+    RUN apt install figlet
     CMD ["/bin/sh", "-c", "figlet My image works!"]
     ```
 
-**Exercise:** Now push our created image (with a version tag) to docker hub. We will use it later for the [`apptainer` exercises](apptainer.md).
+**Exercise:** Now push our created image (with a version tag) to Docker Hub. We will use it later for the [`apptainer` exercises](4_apptainer.md).
 
 ??? success "Answer"
     ```sh
@@ -196,23 +200,23 @@ CMD figlet My image works!
 Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction `COPY`. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose **R** or **Python** below. 
 
 === "R"
-    In the exercises will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R), or copy-paste it:
+    In the exercises, we will use a simple script called `test_deseq2.R`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_r_script/test_deseq2.R), or copy-paste it:
 
     ```R title="test_deseq2.R"
     #!/usr/bin/env Rscript
 
-    # load packages required for this script
+    # Load packages required for this script
     write("Loading packages required for this script", stderr())
     suppressPackageStartupMessages({
         library(DESeq2)
         library(optparse)
     })
 
-    # workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
-    # this can probably be removed in the future
+    # Workaround for issue 112: https://github.com/thelovelab/DESeq2/issues/112
+    # This can probably be removed in the future
     setOldClass("ExpData")
 
-    # load dependency packages for testing installations
+    # Load dependency packages for testing installations
     write("Loading dependency packages for testing installations", stderr())
     suppressPackageStartupMessages({
         library(apeglm)
@@ -227,7 +231,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         library(stringr)
     })
 
-    # parse options with optparse
+    # Create parsing options list
     option_list <- list(
         make_option(c("--rows"),
             type = "integer",
@@ -236,44 +240,48 @@ Often containers are built for a specific purpose. For example, you can use a co
         )
     )
 
+    # Implement parser with optparse
     opt_parser <- OptionParser(
         option_list = option_list,
         description = "Runs DESeq2 on dummy data"
     )
+
+    # Parse options with optparse
     opt <- parse_args(opt_parser)
 
-    # create a random dummy count matrix
+    # Create a random dummy count matrix
     cnts <- matrix(rnbinom(n = opt$row * 10, mu = 100, size = 1 / 0.5), ncol = 10)
     cond <- factor(rep(1:2, each = 5))
 
-    # object construction
+    # Object construction
     dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~cond)
 
-    # standard analysis
+    # Standard analysis
     dds <- DESeq(dds)
     res <- results(dds)
 
-    # print results to stdout
+    # Print results to stdout
     print(res)
-
-
     ```
-    
     
     After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
     chmod +x test_deseq2.R
     ```
-    It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:
+    It is a relatively simple script that runs DESeq2 on a dummy dataset. To execute it with default parameters, you can use:
+
+    ```sh
+    ./test_deseq2.R
+    ```
+
+    With this command, the dummy dataset will contain 100 rows, the default value as written in the `# Create parsing options list` code block of the script. If you want to run it on a different number of rows, you can use the `--rows` optional argument that specifies the number of rows generated in the input count matrix:
 
     ```sh
     ./test_deseq2.R --rows 75
     ```
 
-    Giving a list of results from DESeq2 on a dummy dataset with 75 rows.
-
-    Here, `--rows` is an optional argument that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
+    When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
 
     ```
         baseMean log2FoldChange     lfcSE         stat    pvalue      padj
@@ -291,11 +299,11 @@ Often containers are built for a specific purpose. For example, you can use a co
     100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
     ```
 
-    From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below. We give it the following instructions:
+    From the script you can see it has `DESeq2` and `optparse` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below, with the following instructions:
 
-    - use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
-    - install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r). 
-    - copy the script `test_deseq2.R` to `/opt` inside the container:
+    - Use the [r2u base image](https://hub.docker.com/r/rocker/r2u) version jammy
+    - Install the package `DESeq2`, `optparse` and some additional packages we will need later on. We perform the installations with `install2.r`, which is a helper command that is present inside most rocker images. More info [here](https://rocker-project.org/use/extending.html#install2.r).
+    - Copy the script `test_deseq2.R` to `/opt` inside the container:
 
     ```dockerfile
     FROM rocker/r2u:jammy
@@ -315,17 +323,15 @@ Often containers are built for a specific purpose. For example, you can use a co
     ```
 
     !!! note
-        In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+        In order to use `COPY`, the file that needs to be copied should be in the same directory as the `Dockerfile` or one of its subdirectories.
 
     !!! note "R image stack"
-        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with `apt-get` or `install2.r` are possible. To understand more about how to install R packages in different containers, check it this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
-
+        The most used R image stack is from the [rocker project](https://rocker-project.org/). It contains many different base images (e.g. with Shiny, Rstudio, tidyverse etc.). The possible installation methods (for example, with `apt` or `install2.r`) depend on the type of image you are using. To understand more about how to install R packages in different containers, check this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
     **Exercise:** Download the `test_deseq2.R` and build the image with `docker build`. Name the image `deseq2`. After that, start an interactive session and execute the script inside the container. 
 
     !!! info
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
-
 
     ??? success "Answer"
         Build the container:
@@ -336,7 +342,7 @@ Often containers are built for a specific purpose. For example, you can use a co
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
-            DOCKER_DEFAULT_PLATFORM=linux/amd64
+            export DOCKER_DEFAULT_PLATFORM=linux/amd64
             docker build -t deseq2 .
             ```
 
@@ -406,7 +412,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         returns:
 
         ```
-        /opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        /opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         ```
 
         Now you can try to execute it from the root directory (or any other):
@@ -423,9 +429,9 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     Now it will directly print the output of `test_deseq2.R` to stdout. 
 
-    In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
+    When you pack your script inside a container, you are building a container specifically for your script, meaning you _almost_ want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
-    * `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+    * `ENTRYPOINT` **can not be overwritten by positional arguments** (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`.
     * The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
 
     Let's try it out:
@@ -448,11 +454,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     ENV PATH=/opt:$PATH
 
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
+    # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
     ENTRYPOINT ["test_deseq2.R"]
 
-    # default option (if positional arguments are not specified)
+    # Default option (if positional arguments are not specified)
     CMD ["--rows", "100"]
     ```
 
@@ -476,13 +481,11 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
-    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
-
-
+    **Exercise**: Push the image to Docker Hub, so we can use it later with the Apptainer exercises.
 
     ??? success "Answer"
 
-        Pushing it to dockerhub: 
+        Pushing it to Docker Hub:
 
         ```sh
         docker tag deseq2 [USER NAME]/deseq2:v1
@@ -494,43 +497,51 @@ Often containers are built for a specific purpose. For example, you can use a co
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
     ```yaml
-    "Config": {
-        "Hostname": "",
-        "Domainname": "",
-        "User": "",
-        "AttachStdin": false,
-        "AttachStdout": false,
-        "AttachStderr": false,
-        "Tty": false,
-        "OpenStdin": false,
-        "StdinOnce": false,
-        "Env": [
-            "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-            "LC_ALL=en_US.UTF-8",
-            "LANG=en_US.UTF-8",
-            "DEBIAN_FRONTEND=noninteractive",
-            "TZ=UTC"
-        ],
-        "Cmd": [
-            "--rows",
-            "100"
-        ],
-        "ArgsEscaped": true,
-        "Image": "",
-        "Volumes": null,
-        "WorkingDir": "/opt",
-        "Entrypoint": [
-            "test_deseq2.R"
-        ],
-        "OnBuild": null,
-        "Labels": {
-            "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
-            "org.label-schema.license": "GPL-2.0",
-            "org.label-schema.vcs-url": "https://github.com/rocker-org/",
-            "org.label-schema.vendor": "Rocker Project"
+    [
+        {
+            "Id": "sha256:d19b445510187ef4d0ac77b1842ab906433fb07d8faba954372afa18ea8a51e2",
+            "RepoTags": [
+                "deseq2:latest"
+            ],
+            "RepoDigests": [],
+            "Comment": "buildkit.dockerfile.v0",
+            "Created": "2026-06-02T14:38:18.240243842+02:00",
+            "Config": {
+                "Env": [
+                    "PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                    "LC_ALL=en_US.UTF-8",
+                    "LANG=en_US.UTF-8",
+                    "DEBIAN_FRONTEND=noninteractive",
+                    "TZ=UTC"
+                ],
+                "Entrypoint": [
+                    "test_deseq2.R"
+                ],
+                "Cmd": [
+                    "--rows",
+                    "100"
+                ],
+                "Labels": {
+                    "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+                    "org.label-schema.license": "GPL-2.0",
+                    "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+                    "org.label-schema.vendor": "Rocker Project",
+                    "org.opencontainers.image.version": "22.04"
+                },
+                "ArgsEscaped": true
+            },
+            "Architecture": "amd64",
+            "Os": "linux",
+            "Size": 1103316046,
+            # ...
+            "Metadata": {
+                "LastTagTime": "2026-06-02T14:41:00.742210773+02:00"
+            }
         }
-    }
+    ]
     ```
+
+    <h3> Extra: Adding metadata to your image </h3>
 
     You can annotate your `Dockerfile` and the image by using the instruction `LABEL`. You can give it any key and value with `<key>=<value>`. However, it is recommended to use the [Open Container Initiative (OCI) keys](https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md).
 
@@ -540,7 +551,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
 
         ```dockerfile
-        LABEL keyx="valuex" keyy="valuey"
+        LABEL key_x="value_x" key_y="value_y"
         ```
 
     ??? success "Answer"
@@ -571,11 +582,10 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ENV PATH=/opt:$PATH
 
-        # note that if you want to be able to combine the two
-        # both ENTRYPOINT and CMD need to written in the exec form
+        # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
         ENTRYPOINT ["test_deseq2.R"]
 
-        # default option (if positional arguments are not specified)
+        # Default option (if positional arguments are not specified)
         CMD ["--rows", "100"]
 
         ```
@@ -583,34 +593,67 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Config` record in the output of `docker inspect` was updated with:
 
         ```yaml
-            "Labels": {
-                "org.opencontainers.image.authors": "Geert van Geest",
-                "org.opencontainers.image.created": "2023-04-12",
-                "org.opencontainers.image.description": "Container with DESeq2 and friends",
-                "org.opencontainers.image.licenses": "GPL-2.0-or-later",
-                "org.opencontainers.image.source": "https://github.com/rocker-org/rocker",
-                "org.opencontainers.image.vendor": "Rocker Project"
-            }
+        "Labels": {
+            "maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+            "org.label-schema.license": "GPL-2.0",
+            "org.label-schema.vcs-url": "https://github.com/rocker-org/",
+            "org.label-schema.vendor": "Rocker Project",
+            "org.opencontainers.image.authors": "Geert van Geest",
+            "org.opencontainers.image.created": "2024-10-12",
+            "org.opencontainers.image.description": "Container with DESeq2 and friends",
+            "org.opencontainers.image.version": "22.04"
+        },
         ```
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we'll install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image (`rocker/rstudio:4`), and we will install the same packages. [Rstudio server](https://posit.co/download/rstudio-server/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in R. With the image we are creating, we will be able to run Rstudio server inside a container. Check out the `Dockerfile`:
 
     ```dockerfile
     FROM rocker/rstudio:4
 
-    RUN apt-get update && \
-        apt-get install -y libz-dev
+    LABEL org.opencontainers.image.created="2024-10-12" \
+        org.opencontainers.image.authors="Geert van Geest" \
+        org.opencontainers.image.description="Container with DESeq2 and friends"
+
+    RUN apt update && apt install -y \
+        fonts-noto \
+        libcurl4-openssl-dev \
+        libfontconfig1-dev \
+        libfreetype6-dev \
+        libfribidi-dev \
+        libharfbuzz-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libtiff5-dev \
+        libxml2-dev \
+        tzdata \
+        && apt clean && apt autoremove && apt purge \
+        && rm -rf /var/lib/apt/lists/*
 
     RUN install2.r \
-        optparse \
         BiocManager
 
-    RUN R -q -e 'BiocManager::install("biomaRt")'
+    RUN R -q -e "BiocManager::install(c( \
+      'DESeq2', \
+      'optparse', \
+      'apeglm', \
+      'IHW', \
+      'limma', \
+      'data.table', \
+      'ggrepel', \
+      'pheatmap', \
+      'stringr' \
+      ))"
+
+    WORKDIR /opt
+
+    COPY test_deseq2.R .
+
+    ENV PATH=/opt:$PATH
     ```
 
-    This will create an image from the existing `rstudio` image. It will also install `libz-dev` with `apt-get`, `BiocManager` with `install2.r` and `biomaRt` with an R command. Despiste we're installing the same packages, the installation steps need to be different from the `r-base` image. This is because in the `rocker/rstudio` images R is installed from source, and therefore you can't install packages with `apt-get`. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
+    This will create an image from the existing `rstudio` image. It first installs required system libraries (`libcurl4-openssl-dev`, `libxml2-dev`...) via `apt`, which are needed to compile certain Bioconductor dependencies. It then installs `BiocManager` using `install2.r` (the helper script provided by rocker images) and next uses it to install several R packages (`DESeq2`, `optparse`, `apeglm`...) via an inline R command. Note that R packages themselves cannot be installed with `apt` in `rocker/rstudio` images, because R is compiled from source rather than installed from the system package manager. More information on how to install R packages in R containers in this [cheat sheet](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf), or visit [rocker-project.org](https://rocker-project.org/).
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
@@ -625,90 +668,143 @@ Often containers are built for a specific purpose. For example, you can use a co
             docker build -t rstudio-server .
             ```
 
-    You can now run a container from the image. However, you will have to tell docker where to publish port 8787 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell Docker where to publish port 8787 from the Docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
     docker run --rm -it -p 8787:8787 rstudio-server
     ```
 
     !!! note "Networking"
-        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+        More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of jupyterhub by typing `localhost:8787` in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing Rstudio server at port 8787 on localhost. You can approach the instance of Rstudio by typing `localhost:8787` in your browser. You will be asked for a username (`rstudio`) and a password. You can find it in the terminal from which you have started the container.
 
-    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+    We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
 
     ```sh
     docker run \
     -it \
     --rm \
     -p 8787:8787 \
-    --mount type=bind,source=/Users/myusername/working_dir,target=/home/rstudio/working_dir \
+    --mount type=bind,source=$(pwd),target=/working_dir/ \
     rstudio-server
     ```
 
     By doing this you have a completely isolated and shareable R environment running Rstudio server, but with your local files available to it. Pretty neat right? 
 
 === "Python"
-    In the exercises will use a simple script called `daterange.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/daterange.py). Or copy-paste it from here:
+    In the exercises, we will use a simple script called `test_pydeseq2.py`. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_python_script/test_pydeseq2.py), or copy-paste it:
 
-    ```python title="daterange.py"
+    ```python title="test_pydeseq2.py"
     #!/usr/bin/env python3
 
-    import pandas as pd
+    # Import libraries
+    import sys
+
+    # Load packages required for this script
+    print('Loading packages required for this script', file=sys.stderr)
+
+    # ruff: disable[E402]
     import argparse
+    import numpy as np
+    import pandas as pd
+    from pydeseq2.dds import DeseqDataSet
+    from pydeseq2.ds import DeseqStats
+    # ruff: enable[E402]
 
-    parser = argparse.ArgumentParser(description = "Get a daterange")
+    # Create argument parser
+    parser = argparse.ArgumentParser(description='Runs PyDESeq2 on dummy data')
+    parser.add_argument(
+        '--rows',
+        type=int,
+        default=100,
+        help='Number of rows (genes) in dummy matrix [default: %(default)s]',
+    )
 
-    parser.add_argument('-d', '--date', type=str, required=True, 
-                        help='Date. Format: [YYYYMMDD]')
-
+    # Parse arguments
+    print('Parsing arguments', file=sys.stderr)
     args = parser.parse_args()
 
-    dates = pd.date_range(args.date, periods=7)
+    # Create a random dummy count matrix (samples x genes)
+    print('Creating dummy count matrix', file=sys.stderr)
+    counts_df = pd.DataFrame(
+        np.random.negative_binomial(n=2, p=0.02, size=(10, args.rows)),
+        index=[f'sample{i + 1}' for i in range(10)],
+        columns=[f'gene{i + 1}' for i in range(args.rows)],
+    )
 
-    for d in dates:
-        print(d)
+    # Metadata / condition factor
+    metadata = pd.DataFrame(
+        {'condition': ['A'] * 5 + ['B'] * 5}, index=counts_df.index
+    )
+
+    # Run DESeq2 analysis
+    print('Running PyDESeq2', file=sys.stderr)
+    dds = DeseqDataSet(
+        counts=counts_df, metadata=metadata, design_factors='condition'
+    )
+    dds.deseq2()
+
+    # Get results
+    print('Computing results...', file=sys.stderr)
+    stat_res = DeseqStats(dds, contrast=["condition", "B", "A"])
+    stat_res.summary()
     ```
-    
+
     After you have downloaded it, make sure to set the permissions to executable:
 
     ```sh
-    chmod +x daterange.py
+    chmod +x test_pydeseq2.py
     ```
-    
-    Have a look at `daterange.py`. It is a simple script that uses `pandas` and `argparse`. It takes a date (in the format `YYYYMMDD`) as provided by the option `--date`, and returns a list of all dates in the week starting from that date. An example for execution would be:
+
+    It is a relatively simple script that runs PyDESeq2 on a dummy dataset. To execute it with default parameters, you can use:
 
     ```sh
-    ./daterange.py --date 20220226
+    ./test_pydeseq2.py
     ```
 
-    Giving a list of dates starting from 26-FEB-2022:
+    With this command, the dummy dataset will contain 100 rows (genes), the default value as written in the `# Create argument parser` code block of the script. If you want to run it on a different number of rows, you can use the `--rows` optional argument that specifies the number of rows generated in the input count matrix:
 
-    ```
-    2022-02-26 00:00:00
-    2022-02-27 00:00:00
-    2022-02-28 00:00:00
-    2022-03-01 00:00:00
-    2022-03-02 00:00:00
-    2022-03-03 00:00:00
-    2022-03-04 00:00:00
+    ```sh
+    ./test_pydeseq2.py --rows 75
     ```
 
-    From the script, you can see it has the dependecy `pandas`, which is not a [built-in module](https://docs.python.org/3/py-modindex.html). In the `Dockerfile` below we give the instruction to install `pandas` with `pip` and copy `daterange.py` to `/opt` inside the container:
+    When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:
+
+    ```
+    Log2 fold change & Wald test p-value: condition B vs A
+               baseMean  log2FoldChange      lfcSE       stat     pvalue       padj
+    gene1    116.049570       -0.329827   0.517247  -0.637659   0.523695   0.863125
+    gene2     96.296548        1.081284   0.697623   1.549955   0.121152   0.583151
+    gene3     62.700330       -0.336880   0.655994  -0.513541   0.607573   0.863779
+    gene4     80.397130       -0.571927   0.792223  -0.721928   0.470339   0.863125
+    gene5     79.193224        0.300298   0.565743   0.530802   0.595556   0.863125
+    ...             ...             ...        ...        ...        ...        ...
+    gene96    86.569540       -1.052608   0.604778  -1.740485   0.081774   0.583151
+    gene97   100.885090       -1.025317   0.711971  -1.440109   0.149837   0.607309
+    gene98   104.836128       -0.494590   0.766652  -0.645130   0.518843   0.863125
+    gene99    72.800740       -1.096534   0.576206  -1.903025   0.057037   0.471511
+    gene100   71.921340       -0.508122   0.630407  -0.806021   0.420231   0.863125
+    ```
+
+    From the script you can see it has `numpy`, `pandas` and `pydeseq2` as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the `Dockerfile` below, with the following instructions:
+
+    - Use the [official Python base image](https://hub.docker.com/_/python) version 3.13
+    - Install the package `pydeseq2` with `pip` (this will also pull in `numpy` and `pandas` as dependencies)
+    - Copy the script `test_pydeseq2.py` to `/opt` inside the container:
 
     ```dockerfile
-    FROM python:3.9.16
+    FROM python:3.13
 
-    RUN pip install pandas 
+    RUN pip install pydeseq2
 
-    COPY daterange.py /opt 
+    COPY test_pydeseq2.py /opt
     ```
 
     !!! note
-        In order to use `COPY`, the file that needs to be copied needs to be in the same directory as the `Dockerfile` or one of its subdirectories.
+        In order to use `COPY`, the file that needs to be copied should be in the same directory as the `Dockerfile` or one of its subdirectories.
 
-    **Exercise:** Download the `daterange.py` and build the image with `docker build`. After that, execute the script inside the container. 
+    **Exercise:** Download the `test_pydeseq2.py` and build the image with `docker build`. Name the image `pydeseq2`. After that, start an interactive session and execute the script inside the container.
 
     !!! info
         Make an interactive session with the options `-i` and `-t` and use `/bin/bash` as the command. 
@@ -718,18 +814,18 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         === "x86_64 / AMD64"
             ```sh
-            docker build -t daterange .
+            docker build -t pydeseq2 .
             ```
         === "ARM64 (MacOS M1 chip)"
             ```sh
             export DOCKER_DEFAULT_PLATFORM=linux/amd64
-            docker build -t daterange .
+            docker build -t pydeseq2 .
             ```
 
         Run the container:
 
         ```sh
-        docker run -it --rm daterange /bin/bash
+        docker run -it --rm pydeseq2 /bin/bash
         ```
 
         Inside the container we look up the script:
@@ -739,25 +835,25 @@ Often containers are built for a specific purpose. For example, you can use a co
         ls
         ```
 
-        This should return `daterange.py`. 
+        This should return `test_pydeseq2.py`.
 
         Now you can execute it from inside the container:
 
         ```sh
-        ./daterange.py --date 20220226
+        ./test_pydeseq2.py --rows 100
         ```
 
-    That's kind of nice. We can ship our python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`. 
+    That's kind of nice. We can ship our Python script inside our container. However, we don't want to run it interactively every time. So let's make some changes to make it easy to run it as an executable. For example, we can add `/opt` to the global `$PATH` variable with `ENV`.
 
     !!! note "The `$PATH` variable"
         The path variable is a special variable that consists of a list of path seperated by colons (`:`). These paths are searched if you are trying to run an executable. More info this topic at e.g. [wikipedia](https://en.wikipedia.org/wiki/PATH_(variable)). 
 
     ```dockerfile
-    FROM python:3.9.16
+    FROM python:3.13
 
-    RUN pip install pandas 
+    RUN pip install pydeseq2
 
-    COPY daterange.py /opt 
+    COPY test_pydeseq2.py /opt
 
     ENV PATH=/opt:$PATH
     ```
@@ -765,13 +861,13 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note
         The `ENV` instruction can be used to set any variable. 
 
-    **Exercise**: Start an interactive bash session inside the new container. Is the path variable updated? (i.e. can we execute `daterange.py` from anywhere?)
+    **Exercise**: Rebuild the image and start an interactive bash session inside the new image. Is the path variable updated? (i.e. can we execute `test_pydeseq2.py` from anywhere?)
 
     ??? success "Answer"
         After re-building we start an interactive session:
 
         ```sh
-        docker run -it --rm daterange /bin/bash
+        docker run -it --rm pydeseq2 /bin/bash
         ```
 
         The path is upated, `/opt` is appended to the beginning of the variable:
@@ -789,54 +885,53 @@ Often containers are built for a specific purpose. For example, you can use a co
         Now you can try to execute it from the root directory (or any other):
 
         ```sh
-        daterange.py --date 20220226
+        test_pydeseq2.py
         ```
 
     Instead of starting an interactive session with `/bin/bash` we can now more easily run the script non-interactively:
 
     ```sh
-    docker run --rm daterange daterange.py --date 20220226
+    docker run --rm pydeseq2 test_pydeseq2.py --rows 100
     ```
 
-    Now it will directly print the output of `daterange.py` to stdout. 
+    Now it will directly print the output of `test_pydeseq2.py` to stdout.
 
-    In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
+    When you pack your script inside a container, you are building a container specifically for your script, meaning you _almost_ want the container to behave as the program itself. In order to do that, you can use `ENTRYPOINT`. `ENTRYPOINT` is similar to `CMD`, but has two important differences:
 
-    * `ENTRYPOINT` can not be overwritten by the positional arguments (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`. 
+    * `ENTRYPOINT` **can not be overwritten by positional arguments** (i.e. `docker run image [CMD]`), but has to be overwritten by `--entrypoint`.
     * The positional arguments (or `CMD`) are pasted to the `ENTRYPOINT` command. This means that you can use `ENTRYPOINT` as the executable and the positional arguments (or `CMD`) as the options. 
 
     Let's try it out:
 
     ```dockerfile
-    FROM python:3.9.16
+    FROM python:3.13
 
-    RUN pip install pandas 
+    RUN pip install pydeseq2
 
-    COPY daterange.py /opt 
+    COPY test_pydeseq2.py /opt
 
     ENV PATH=/opt:$PATH
 
-    # note that if you want to be able to combine the two
-    # both ENTRYPOINT and CMD need to written in the exec form
-    ENTRYPOINT ["daterange.py"]
+    # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
+    ENTRYPOINT ["test_pydeseq2.py"]
 
-    # default option (if positional arguments are not specified)
-    CMD ["--date", "20220226"]
+    # Default option (if positional arguments are not specified)
+    CMD ["--rows", "100"]
     ```
 
-    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different date to `--date`. How do the commands look?
+    **Exercise**: Re-build, and run the container non-interactively without any positional arguments. After that, try to pass a different number of rows to `--rows`. How do the commands look?
 
     ??? success "Answer"
         Just running the container non-interactively would be:
 
         ```sh
-        docker run --rm daterange
+        docker run --rm pydeseq2
         ```
 
         Passing a different argument (i.e. overwriting `CMD`) would be:
 
         ```sh
-        docker run --rm daterange --date 20210330
+        docker run --rm pydeseq2 --rows 200
         ```
 
         Here, the container behaves as the executable itself to which you can pass arguments. 
@@ -844,17 +939,15 @@ Often containers are built for a specific purpose. For example, you can use a co
     !!! note 
         You can overwrite `ENTRYPOINT` with `--entrypoint` as an argument to `docker run`. 
 
-    **Exercise**: Push the image to dockerhub, so we can use it later with the apptainer exercises.
-
-
+    **Exercise**: Push the image to Docker Hub, so we can use it later with the Apptainer exercises.
 
     ??? success "Answer"
 
-        Pushing it to dockerhub: 
+        Pushing it to Docker Hub:
 
         ```sh
-        docker tag daterange [USER NAME]/daterange:v1
-        docker push [USER NAME]/daterange:v1
+        docker tag pydeseq2 [USER NAME]/pydeseq2:v1
+        docker push [USER NAME]/pydeseq2:v1
         ```
 
     <h3> Extra: Get information on your image with `docker inspect` </h3>
@@ -862,39 +955,40 @@ Often containers are built for a specific purpose. For example, you can use a co
     We have used `docker inspect` already in the previous chapter to find the default `Cmd` of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the `Config` record from the output of `docker inspect`. For our image this looks like:
 
     ```yaml
-    "Config": {
-            "Hostname": "",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                "LANG=C.UTF-8",
-                "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568",
-                "PYTHON_VERSION=3.9.4",
-                "PYTHON_PIP_VERSION=21.1.1",
-                "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/1954f15b3f102ace496a34a013ea76b061535bd2/public/get-pip.py",
-                "PYTHON_GET_PIP_SHA256=f499d76e0149a673fb8246d88e116db589afbd291739bd84f2cd9a7bca7b6993"
+    [
+        {
+            "Id": "sha256:0051b8ea8110afef13bf4e5febea1dc890e7dab817842b39cfabb1c07221b47e",
+            "RepoTags": [
+                "pydeseq2:latest"
             ],
-            "Cmd": [
-                "--date",
-                "20220226"
-            ],
-            "ArgsEscaped": true,
-            "Image": "",
-            "Volumes": null,
-            "WorkingDir": "/opt",
-            "Entrypoint": [
-                "daterange.py"
-            ],
-            "OnBuild": null,
-            "Labels": null
-        },
+            "RepoDigests": [],
+            "Comment": "buildkit.dockerfile.v0",
+            "Created": "2026-06-02T13:52:10.621027918+02:00",
+            "Config": {
+                "Env": [
+                    "PATH=/opt:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                    "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+                    "PYTHON_VERSION=3.13.13",
+                    "PYTHON_SHA256=2ab91ff401783ccca64f75d10c882e957bdfd60e2bf5a72f8421793729b78a71"
+                ],
+                "Entrypoint": [
+                    "test_pydeseq2.py"
+                ],
+                "Cmd": [
+                    "--rows",
+                    "100"
+                ],
+                "ArgsEscaped": true
+            },
+            "Architecture": "amd64",
+            "Os": "linux",
+            "Size": 1721829929,
+            # ...
+            "Metadata": {
+                "LastTagTime": "2026-06-02T13:53:14.094758235+02:00"
+            }
+        }
+    ]
     ```
 
     <h3> Extra: Adding metadata to your image </h3>
@@ -907,7 +1001,7 @@ Often containers are built for a specific purpose. For example, you can use a co
         You can type `LABEL` for each key-value pair, but you can also have it on one line by seperating the key-value pairs by a space, e.g.:
 
         ```dockerfile
-        LABEL keyx="valuex" keyy="valuey"
+        LABEL key_x="value_x" key_y="value_y"
         ```
 
     ??? success "Answer"
@@ -915,27 +1009,25 @@ Often containers are built for a specific purpose. For example, you can use a co
         The `Dockerfile` would look like:
 
         ```dockerfile
-        FROM python:3.9.16
+        FROM python:3.13
 
-        LABEL org.opencontainers.image.created="2022-04-12" \
-            org.opencontainers.image.authors="Geert van Geest" \
-            org.opencontainers.image.description="Great container for getting all dates in a week! \
-            You will never use a calender again"
+        LABEL org.opencontainers.image.created="2026-06-02" \
+            org.opencontainers.image.authors="Antonin Thiébaut" \
+            org.opencontainers.image.description="Container with PyDESeq2 and friends"
 
-        RUN pip install pandas 
+        RUN pip install pydeseq2
 
         WORKDIR /opt
 
-        COPY daterange.py .
+        COPY test_pydeseq2.py .
 
         ENV PATH=/opt:$PATH
 
-        # note that if you want to be able to combine the two
-        # both ENTRYPOINT and CMD need to written in the exec form
-        ENTRYPOINT ["daterange.py"]
+        # Note that if you want to be able to combine the two, both ENTRYPOINT and CMD need to written in the exec form
+        ENTRYPOINT ["test_pydeseq2.py"]
 
-        # default option (if positional arguments are not specified)
-        CMD ["--date", "20220226"]
+        # Default option (if positional arguments are not specified)
+        CMD ["--rows", "100"]
 
         ```
 
@@ -943,26 +1035,36 @@ Often containers are built for a specific purpose. For example, you can use a co
 
         ```yaml
         "Labels": {
-                    "org.opencontainers.image.authors": "Geert van Geest",
-                    "org.opencontainers.image.created": "2022-04-12",
-                    "org.opencontainers.image.description": "Great container for getting all dates in a week!     You will never use a calender again"
-                }
+            "org.opencontainers.image.authors": "Antonin Thiébaut",
+            "org.opencontainers.image.created": "2026-06-02",
+            "org.opencontainers.image.description": "Container with PyDESeq2 and friends"
+        },
         ```
 
     <h3> Extra: Building an image with a browser interface </h3>
 
-    In this exercise, we will use a different base image from the [jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the `Dockerfile`:
+    In this exercise, we will use a different base image ([Jupyter docker image stack](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)). [JupyterLab](https://jupyter.org/) is a nice browser interface that you can use for a.o. (Aspect Oriented) programming in Python. With the image we are creating, we will be able to run JupyterLab inside a container. Check out the `Dockerfile`:
 
     ```dockerfile
-    FROM jupyter/base-notebook:python-3.9
+    FROM jupyter/base-notebook:x86_64-ubuntu-22.04
 
-    RUN pip install pandas
+    LABEL org.opencontainers.image.created="2026-06-02" \
+        org.opencontainers.image.authors="Antonin Thiébaut" \
+        org.opencontainers.image.description="Container with PyDESeq2 and JupyterLab"
+
+    RUN pip install pydeseq2
+
+    WORKDIR /opt
+
+    COPY test_pydeseq2.py .
+
+    ENV PATH=/opt:$PATH
     ```
 
-    This will create an image from the existing `python` image. It will also install `jupyterlab` with `pip`. As a default command it starts a jupyter notebook at port 8888.
+    This will create an image from the existing `Python` image. It will also install `JupyterLab` with `pip`. As a default command it starts a Jupyter notebook at port 8888.
 
     !!! note "Ports"
-        We have specified here that jupyter lab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
+        We have specified here that JupyterLab should use port 8888. However, this **inside** the container. We can not connect to it yet with our browser.
 
     **Exercise:** Build an image based on this `Dockerfile` and give it a meaningful name.
 
@@ -977,29 +1079,31 @@ Often containers are built for a specific purpose. For example, you can use a co
             docker build -t jupyter-lab .
             ```
 
-    You can now run a container from the image. However, you will have to tell docker where to publish port 8888 from the docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
+    You can now run a container from the image. However, you will have to tell Docker where to publish port 8888 from the Docker container with `-p [HOSTPORT:CONTAINERPORT]`. We choose to publish it to the same port number:
 
     ```sh
     docker run --rm -it -p 8888:8888 jupyter-lab
     ```
 
     !!! note "Networking"
-        More info on docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
+        More info on Docker container networking [here](https://docs.docker.com/config/containers/container-networking/)
 
-    By running the above command, a container will be started exposing jupyterhub at port 8888 at localhost. You can approach the instance of jupyterhub by typing `localhost:8888` in your browser. You will be asked for a token. You can find this token in the terminal from which you have started the container.
+    By running the above command, a container will be started exposing JupyterHub at port 8888 on `localhost`. You can approach the instance of JupyterHub by typing `localhost:8888` in your browser. You will be asked for a token; you can find it in the terminal from which you have started the container. You can also find the direct URL to access the notebook without token in the same terminal; it will look like this:
 
-    We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:
+    `http://127.0.0.1:8888/lab?token=e3434591f62012afb9de9d9b370f25540a8d859272dec55d`.
+
+    We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
 
     ```sh
     docker run \
     -it \
     --rm \
     -p 8888:8888 \
-    --mount type=bind,source=/Users/myusername/working_dir,target=/working_dir/ \
+    --mount type=bind,source=$(pwd),target=/working_dir/ \
     jupyter-lab
     ```
 
-    By doing this you have a completely isolated and shareable python environment running jupyter lab, but with your local files available to it. Pretty neat right? 
+    By doing this you have a completely isolated and shareable Python environment running JupyterLab, but with your local files available to it. Pretty neat right?
 
-    !!! note
-        Jupyter has a wide range of pre-built images available [here](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html).
+    !!! note "Jupyter images"
+        Jupyter has a wide range of pre-built images available [here](https://hub.docker.com/u/jupyter).

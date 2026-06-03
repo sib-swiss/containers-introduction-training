@@ -3,7 +3,7 @@
 ./generate_credentials -l ../participant_list.txt -o credentials
 
 # taking ubuntu 22.04 image
-# ubuntu 24.04 image does not allow for the right permissions apptainer
+# ubuntu 24.04 image does not allow for the right permissions Apptainer
 ./multi_instance \
 -o credentials \
 -t c5a.4xlarge \

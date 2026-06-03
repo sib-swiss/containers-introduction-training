@@ -1,14 +1,27 @@
-FROM python:3.9.16
+# Use Python 3.13 as base image
+FROM python:3.13
 
-RUN pip install pandas 
+# Add metadata to image
+LABEL org.opencontainers.image.created="2026-06-02" \
+    org.opencontainers.image.authors="Antonin Thiébaut" \
+    org.opencontainers.image.description="Container with PyDESeq2 and friends"
 
-COPY daterange.py /opt 
+# Install pydeseq2 and friends
+RUN pip install pydeseq2
 
+# Set working directory
+WORKDIR /opt
+
+# Copy Python script inside container
+COPY test_pydeseq2.py .
+
+# Add /opt to PATH so we can execute script directly
 ENV PATH=/opt:$PATH
 
-# note that if you want to be able to combine the two
-# both ENTRYPOINT and CMD need to written in the exec form
-ENTRYPOINT ["daterange.py"]
+# Specify entrypoint
+# Note that if you want to be able to combine the two, both ENTRYPOINT and CMD
+# need to written in the exec form
+ENTRYPOINT ["test_pydeseq2.py"]
 
-# default option (if positional arguments are not specified)
-CMD ["--date", "20220226"]
+# Default option (if positional arguments are not specified)
+CMD ["--rows", "100"]
