@@ -2,7 +2,7 @@
 
 ## Background knowledge: UNIX
 
-As stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20260609_DOCKR). We expect participants to have a basic understanding of working with the command line on UNIX-based systems. You can test your UNIX skills with a quiz [here](https://docs.google.com/forms/d/e/1FAIpQLSd2BEWeOKLbIRGBT_aDEGPce1FOaVYBbhBiaqcaHoBKNB27MQ/viewform?usp=sf_link). If you don't have experience with UNIX command line, or if you're unsure whether you meet the prerequisites, follow our [online UNIX tutorial](https://edu.sib.swiss/pluginfile.php/2878/mod_resource/content/4/couselab-html/content.html).
+As stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20260609_DOCKR), we expect participants to have a basic understanding of working with the command line on UNIX-based systems. You can test your UNIX skills with a quiz [here](https://docs.google.com/forms/d/e/1FAIpQLSd2BEWeOKLbIRGBT_aDEGPce1FOaVYBbhBiaqcaHoBKNB27MQ/viewform?usp=sf_link). If you don't have experience with UNIX command line, or if you're unsure whether you meet the prerequisites, follow our [online UNIX tutorial](https://edu.sib.swiss/pluginfile.php/2878/mod_resource/content/4/couselab-html/content.html).
 
 ## Software
 
@@ -145,7 +145,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~\.ssh\key_username.pem
         ```
         Note: if you are working with the Windows SSH executable (for example `C:\WINDOWS\System32\OpenSSH\ssh.exe`), you may have to use the full path of the key file instead of a relative one in `IdentityFile`:
@@ -156,7 +156,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~/.ssh/key_username.pem
         ```
 
@@ -174,6 +174,6 @@ You can find below a video tutorial showing how to configure SSH connections in 
 ??? info "If you are not working with VS Code"
     If you are not working with VS Code, you can login to the remote server with the following command in a terminal:
     ```sh
-    ssh -i key_username.pem username@18.195.137.58
+    ssh -i key_username.pem username@52.57.40.7
     ```
     If you want to edit files directly on the server, you can mount a directory with `sshfs`.
