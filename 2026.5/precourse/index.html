@@ -1008,7 +1008,7 @@
 
 <h1 id="precourse-instructions">Precourse instructions</h1>
 <h2 id="background-knowledge-unix">Background knowledge: UNIX</h2>
-<p>As stated in the course prerequisites at the <a href="https://www.sib.swiss/training/course/20260609_DOCKR">announcement web page</a>. We expect participants to have a basic understanding of working with the command line on UNIX-based systems. You can test your UNIX skills with a quiz <a href="https://docs.google.com/forms/d/e/1FAIpQLSd2BEWeOKLbIRGBT_aDEGPce1FOaVYBbhBiaqcaHoBKNB27MQ/viewform?usp=sf_link">here</a>. If you don&rsquo;t have experience with UNIX command line, or if you&rsquo;re unsure whether you meet the prerequisites, follow our <a href="https://edu.sib.swiss/pluginfile.php/2878/mod_resource/content/4/couselab-html/content.html">online UNIX tutorial</a>.</p>
+<p>As stated in the course prerequisites at the <a href="https://www.sib.swiss/training/course/20260609_DOCKR">announcement web page</a>, we expect participants to have a basic understanding of working with the command line on UNIX-based systems. You can test your UNIX skills with a quiz <a href="https://docs.google.com/forms/d/e/1FAIpQLSd2BEWeOKLbIRGBT_aDEGPce1FOaVYBbhBiaqcaHoBKNB27MQ/viewform?usp=sf_link">here</a>. If you don&rsquo;t have experience with UNIX command line, or if you&rsquo;re unsure whether you meet the prerequisites, follow our <a href="https://edu.sib.swiss/pluginfile.php/2878/mod_resource/content/4/couselab-html/content.html">online UNIX tutorial</a>.</p>
 <h2 id="software">Software</h2>
 <h3 id="os-and-terminal">OS and terminal</h3>
 <p>During the course exercises you will be mainly interacting with Docker through the command line. If you are using a UNIX or UNIX-like OS (<em>e.g</em> MacOS), you already have a terminal readily usable for the course. If you are working with Windows, although Windows Powershell is suitable for that, we strongly recommend to install a UNIX or &lsquo;UNIX-like&rsquo; terminal. You can get this by using <a href="https://mobaxterm.mobatek.net/" title="get MobaXterm">MobaXterm</a> or <a href="https://docs.microsoft.com/en-us/windows/wsl/install">WSL2</a> (recommended solution).</p>
@@ -1125,7 +1125,7 @@ mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code>Host sib_course_remote
     User username
-    HostName 18.195.137.58
+    HostName 52.57.40.7
     IdentityFile ~\.ssh\key_username.pem
 </code></pre></div>
 Note: if you are working with the Windows SSH executable (for example <code>C:\WINDOWS\System32\OpenSSH\ssh.exe</code>), you may have to use the full path of the key file instead of a relative one in <code>IdentityFile</code>:
@@ -1135,7 +1135,7 @@ Note: if you are working with the Windows SSH executable (for example <code>C:\W
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>Host sib_course_remote
     User username
-    HostName 18.195.137.58
+    HostName 52.57.40.7
     IdentityFile ~/.ssh/key_username.pem
 </code></pre></div>
 </div>
@@ -1156,7 +1156,7 @@ Note: if you are working with the Windows SSH executable (for example <code>C:\W
 <details class="info">
 <summary>If you are not working with VS Code</summary>
 <p>If you are not working with VS Code, you can login to the remote server with the following command in a terminal:
-<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem<span class="w"> </span>username@18.195.137.58
+<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem<span class="w"> </span>username@52.57.40.7
 </code></pre></div>
 If you want to edit files directly on the server, you can mount a directory with <code>sshfs</code>.</p>
 </details>
