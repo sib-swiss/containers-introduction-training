@@ -54,14 +54,14 @@ Install Docker Engine by following the [official instructions](https://docs.dock
 
 ##### macOS
 
-Install Docker Engine by following the [official instructions for MacOS](https://docs.docker.com/desktop/setup/install/mac-install/). Docker Desktop includes the Docker CLI and makes it available in the terminal.
+Install Docker Desktop by following the [official instructions for MacOS](https://docs.docker.com/desktop/setup/install/mac-install/). Docker Desktop includes the Docker CLI and makes it available in the terminal.
 
 ##### Windows
 
-!!! warning "WSL2 and Docker"
-    If possible, we strongly recommend to use WSL2 on Windows and to install Docker Engine with the WSL2 backend. In this case, follow the Linux instructions above.
+!!! failure "WSL2 and Docker"
+    If possible, we strongly recommend to use WSL2 on Windows and to **only** install Docker Engine with the WSL2 backend. In this case, follow the Linux instructions above. <ins>**In any case, do not install Docker Desktop on Windows and Docker Engine on WSL2 at the same time.**</ins>
 
-Install Docker Engine by following the [official instructions for Windows](https://docs.docker.com/desktop/setup/install/windows-install/). Docker Desktop includes the Docker CLI and makes it available for use in PowerShell, Command Prompt, and Windows Terminal.
+Install Docker Desktop by following the [official instructions for Windows](https://docs.docker.com/desktop/setup/install/windows-install/). Docker Desktop includes the Docker CLI and makes it available for use in PowerShell, Command Prompt, and Windows Terminal.
 
 ##### Verify the installation
 
