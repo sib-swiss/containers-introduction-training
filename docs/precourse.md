@@ -136,7 +136,7 @@ Here are instructions on how to use VS Code to connect with SSH to a remote serv
 
 Then:
 
-* Open VS Code and click on the green or blue button in the bottom left corner
+* Open VS Code and click on the button showing the icons `><` n the bottom left corner
 * Select `Connect to Host...` and then `Configure SSH Hosts...`
 * Specify a location for the SSH config file (preferably the same directory as where your keys are stored): `~/.ssh/config`
 * A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and make sure the IP address in `HostName` match what the one given in the shared document):
@@ -163,7 +163,7 @@ Then:
 Finally:
 
 * Save and close the config file
-* Click again on the green or blue button in the bottom left corner
+* Click again on the `><` button in the bottom left corner
 * Select `Connect to Host...`, and then `sib_course_remote`. You will be asked which operating system is used on the remote. Choose `Linux`
 
 #### Video tutorial

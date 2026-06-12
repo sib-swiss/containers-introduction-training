@@ -679,7 +679,7 @@ Often containers are built for a specific purpose. For example, you can use a co
 
     By running the above command, a container will be started exposing Rstudio server at port 8787 on localhost. You can approach the instance of Rstudio by typing `localhost:8787` in your browser. You will be asked for a username (`rstudio`) and a password. You can find it in the terminal from which you have started the container.
 
-    We can make this even more interesting by mounting a local directory to the container running the JupyterLab image:
+    We can make this even more interesting by mounting a local directory to the container running the Rstudio image:
 
     ```sh
     docker run \
